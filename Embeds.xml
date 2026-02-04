@@ -1,0 +1,71 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <!-- 
+        SEQUITO - Universal Sphere UI v8.0.0
+        Orden de carga de archivos
+        NOTA: Este archivo es alternativo al .toc, usar solo uno
+    -->
+
+    <!-- 1. Localizacion -->
+    <Script file="Locales/esMX.lua"/>
+
+    <!-- 2. Datos -->
+    <Script file="Data/Spells.lua"/>
+    <Script file="Data/Speech.lua"/>
+    <Script file="Data/SpellData.lua"/>
+
+    <!-- 3. Core (orden crítico - Constants primero para polyfills) -->
+    <Script file="Core/Constants.lua"/>
+    <Script file="Core/AutoSync.lua"/>
+    <Script file="Core/ContextEngine.lua"/>
+    <Script file="Core/SmartDefaults.lua"/>
+
+    <!-- 4. Modulos (orden critico) -->
+    <Script file="Modules/ModuleConfig.lua"/>
+    <Script file="Modules/Universal.lua"/>
+    <Script file="Modules/MacroGenerator.lua"/>
+    <Script file="Modules/MacroSync.lua"/>
+    <Script file="Modules/RaidSync.lua"/>
+    <Script file="Modules/RaidIntel.lua"/>
+    <Script file="Modules/RaidPanel.lua"/>
+    <Script file="Modules/Options.lua"/>
+    <Script file="Modules/CombatTracker.lua"/>
+    <Script file="Modules/SpecWatcher.lua"/>
+    <Script file="Modules/EventManager.lua"/>
+    <Script file="Modules/Logistics.lua"/>
+    <Script file="Modules/PetManager.lua"/>
+    <Script file="Modules/CCTracker.lua"/>
+    <Script file="Modules/Visuals.lua"/>
+    <Script file="Modules/Runes.lua"/>
+    <Script file="Modules/Menu.lua"/>
+    <Script file="Modules/Mounts.lua"/>
+    <Script file="Modules/RaidAssist.lua"/>
+    <Script file="Modules/RaidAssistUI.lua"/>
+    <Script file="Modules/CooldownMonitor.lua"/>
+    <Script file="Modules/Assignments.lua"/>
+    <Script file="Modules/ReadyChecker.lua"/>
+    <Script file="Modules/TrinketTracker.lua"/>
+    <Script file="Modules/WipeAnalyzer.lua"/>
+    <Script file="Modules/FocusFire.lua"/>
+    <Script file="Modules/CCCoordinator.lua"/>
+    <Script file="Modules/HealerTracker.lua"/>
+    <Script file="Modules/DefensiveAlerts.lua"/>
+    <Script file="Modules/PullGuide.lua"/>
+    <Script file="Modules/DungeonTimer.lua"/>
+    <Script file="Modules/LootCouncil.lua"/>
+    <Script file="Modules/PlayerNotes.lua"/>
+    <Script file="Modules/BuildManager.lua"/>
+    <Script file="Modules/EventCalendar.lua"/>
+    <Script file="Modules/PerformanceStats.lua"/>
+    <Script file="Modules/VotingSystem.lua"/>
+    <Script file="Modules/VersionSync.lua"/>
+    <Script file="Modules/QuickWhisper.lua"/>
+
+    <!-- 5. GUI (debe ir despues de Modulos) -->
+    <Script file="Core/GUI.lua"/>
+    <Include file="Core/Bindings.xml"/>
+
+    <!-- 6. Main (Inicializador) -->
+    <Script file="Sequito.lua"/>
+</Ui>

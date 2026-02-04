@@ -1,0 +1,68 @@
+## Interface: 30350
+## Title: |cFFFF00FFSequito|r
+## Notes: El Sequito del Terror - Addon Universal para TODAS las clases
+## Author: DarckRovert (Ingame: Eljesuita)
+## Version: 8.0.0
+## SavedVariables: SequitoDB, SequitoPlayerNotesDB, SequitoBuildDB, SequitoQuickWhisperDB, SequitoStatsDB, SequitoPositionsDB
+
+# 1. Localizacion (enUS primero como fallback)
+Locales\enUS.lua
+Locales\esMX.lua
+
+# 2. Datos
+Data\Spells.lua
+Data\Speech.lua
+Data\SpellData.lua
+
+# 3. Core (orden crítico - Constants primero para polyfills)
+Core\Constants.lua
+Core\AlertManager.lua
+Core\AutoSync.lua
+Core\ContextEngine.lua
+Core\SmartDefaults.lua
+Core\GUI.lua
+Core\Bindings.xml
+
+# 4. Modulos (orden critico - ModuleConfig PRIMERO)
+Modules\ModuleConfig.lua
+Modules\Universal.lua
+Modules\MacroGenerator.lua
+Modules\MacroSync.lua
+Modules\RaidSync.lua
+# Modules\RaidIntel.lua (Legacy)
+Modules\RaidPanel.lua
+Modules\Options.lua
+Modules\CombatTracker.lua
+Modules\SpecWatcher.lua
+Modules\EventManager.lua
+Modules\Logistics.lua
+Modules\PetManager.lua
+Modules\CCTracker.lua
+Modules\Visuals.lua
+Modules\Runes.lua
+Modules\Menu.lua
+Modules\Mounts.lua
+# Modules\RaidAssist.lua (Legacy)
+# Modules\RaidAssistUI.lua (Legacy)
+Modules\CooldownMonitor.lua
+Modules\Assignments.lua
+Modules\ReadyChecker.lua
+Modules\TrinketTracker.lua
+Modules\WipeAnalyzer.lua
+Modules\FocusFire.lua
+Modules\CCCoordinator.lua
+Modules\HealerTracker.lua
+Modules\DefensiveAlerts.lua
+Modules\PullGuide.lua
+Modules\DungeonTimer.lua
+Modules\LootCouncil.lua
+Modules\PlayerNotes.lua
+Modules\BuildManager.lua
+Modules\EventCalendar.lua
+Modules\PerformanceStats.lua
+Modules\VotingSystem.lua
+Modules\VersionSync.lua
+Modules\QuickWhisper.lua
+
+# 6. Main (Inicializador)
+Sequito.lua
