@@ -1,0 +1,101 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <!-- 
+        SEQUITO - v10.1.0
+        The Final Polish
+    -->
+
+    <!-- 1. Localizacion -->
+    <Script file="Locales/enUS.lua"/>
+    <Script file="Locales/esMX.lua"/>
+
+    <!-- 2. Datos -->
+    <Script file="Data/Spells.lua"/>
+    <Script file="Data/Speech.lua"/>
+    <Script file="Data/SpellData.lua"/>
+
+    <!-- 3. Addon Core -->
+    <Script file="Core/Constants.lua"/>
+    <Script file="Core/Theme.lua"/>
+    <Script file="Core/AlertManager.lua"/>
+    <Script file="Core/AutoSync.lua"/>
+    <Script file="Core/ContextEngine.lua"/>
+    <Script file="Core/SmartDefaults.lua"/>
+
+    <!-- 4. Modules - Core System -->
+    <Script file="Modules/Core/ModuleConfig.lua"/>
+    <Script file="Modules/Core/SequitoData.lua"/>
+    <Script file="Modules/Core/Universal.lua"/>
+    <Script file="Modules/Core/EventManager.lua"/>
+    <Script file="Modules/Core/VersionSync.lua"/>
+    <Script file="Modules/Core/Menu.lua"/>
+    <Script file="Modules/Core/SequitoDashboard.lua"/>
+    <Script file="Modules/Core/MinimapButton.lua"/>
+    <Script file="Modules/Core/Options.lua"/>
+    <Script file="Modules/Core/SequitoConnect.lua"/>
+    <Script file="Modules/Core/SmartCoach.lua"/>
+    <Script file="Modules/Core/SequitoSoulEngine.lua"/>
+    <Script file="Modules/Core/TheOverlord.lua"/>
+    <Script file="Modules/Core/SequitoAudio.lua"/>
+    <Script file="Modules/Core/SequitoRadial.lua"/>
+
+    <!-- 5. Modules - Utility -->
+    <Script file="Modules/Utility/MacroGenerator.lua"/>
+    <Script file="Modules/Utility/MacroSync.lua"/>
+    <Script file="Modules/Utility/BuildManager.lua"/>
+    <Script file="Modules/Utility/Mounts.lua"/>
+    <Script file="Modules/Utility/PetManager.lua"/>
+    <Script file="Modules/Utility/QuickWhisper.lua"/>
+    <Script file="Modules/Utility/PlayerNotes.lua"/>
+    <Script file="Modules/Utility/Runes.lua"/>
+    <Script file="Modules/Utility/EventCalendar.lua"/>
+    <Script file="Modules/Utility/Visuals.lua"/>
+    <Script file="Modules/Utility/SequitoTrade.lua"/>
+
+    <!-- 5.5 Modules - Class -->
+    <Script file="Modules/Class/SequitoCoven.lua"/>
+    <Script file="Modules/Class/SequitoSoulstones.lua"/>
+    <Script file="Modules/Class/SequitoDoTTracker.lua"/>
+
+    <!-- 6. Modules - Raid & Party -->
+    <Script file="Modules/Raid/RaidSync.lua"/>
+    <Script file="Modules/Raid/ConnectTab.lua"/>
+    <Script file="Modules/Raid/RaidIntel.lua"/>
+    <Script file="Modules/Raid/RaidPanel.lua"/>
+    <Script file="Modules/Raid/RaidAssist.lua"/>
+    <Script file="Modules/Raid/RaidAssistUI.lua"/>
+    <Script file="Modules/Raid/Assignments.lua"/>
+    <Script file="Modules/Raid/ReadyChecker.lua"/>
+    <Script file="Modules/Raid/WipeAnalyzer.lua"/>
+    <Script file="Modules/Raid/CooldownMonitor.lua"/>
+    <Script file="Modules/Raid/HealerTracker.lua"/>
+    <Script file="Modules/Raid/PullGuide.lua"/>
+    <Script file="Modules/Raid/DungeonTimer.lua"/>
+    <Script file="Modules/Raid/LootCouncil.lua"/>
+    <Script file="Modules/Raid/SequitoLootGallery.lua"/>
+    <Script file="Modules/Raid/AcademyInspector.lua"/>
+    <Script file="Modules/Raid/AcademyRotation.lua"/>
+    <Script file="Modules/Raid/SequitoAchievements.lua"/>
+    <Script file="Modules/Raid/SequitoPerformance.lua"/>
+    <Script file="Modules/Raid/PerformanceStats.lua"/>
+    <Script file="Modules/Raid/Logistics.lua"/>
+    <Script file="Modules/Raid/VotingSystem.lua"/>
+    <Script file="Modules/Raid/CombatTracker.lua"/>
+
+    <!-- 7. Modules - PvP -->
+    <Script file="Modules/PvP/CCTracker.lua"/>
+    <Script file="Modules/PvP/CCCoordinator.lua"/>
+    <Script file="Modules/PvP/TrinketTracker.lua"/>
+    <Script file="Modules/PvP/FocusFire.lua"/>
+    <Script file="Modules/PvP/DefensiveAlerts.lua"/>
+    <Script file="Modules/PvP/SpecWatcher.lua"/>
+    <Script file="Modules/PvP/SequitoSpy.lua"/>
+
+    <!-- 8. Legacy/External -->
+    <Script file="Core/GUI.lua"/>
+    <Include file="Core/Bindings.xml"/>
+
+    <!-- 9. Main -->
+    <Script file="Sequito.lua"/>
+</Ui>

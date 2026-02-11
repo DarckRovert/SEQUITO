@@ -1,0 +1,98 @@
+## Interface: 30350
+## Title: |cFFFF00FFSequito|r
+## Notes: El Sequito del Terror - Addon Universal para TODAS las clases
+## Author: DarckRovert (Ingame: Eljesuita)
+## Version: 10.2.0
+## SavedVariables: SequitoDB, SequitoPlayerNotesDB, SequitoBuildDB, SequitoQuickWhisperDB, SequitoStatsDB, SequitoPositionsDB, SequitoLootDB
+
+# 1. Localizacion
+Locales\enUS.lua
+Locales\esMX.lua
+
+# 2. Datos
+Data\Spells.lua
+Data\Speech.lua
+Data\SpellData.lua
+
+# 3. Addon Core (Framework)
+Core\Constants.lua
+Core\Theme.lua
+Core\AlertManager.lua
+Core\AlertHub.lua
+Core\AutoSync.lua
+Core\ContextEngine.lua
+Core\SmartDefaults.lua
+Core\ProfileManager.lua
+Core\GUI.lua
+Core\Bindings.xml
+
+# 4. Modules - Core System
+Modules\Core\ModuleConfig.lua
+Modules\Core\SequitoData.lua
+Modules\Core\SequitoPlates.lua
+Modules\Core\Universal.lua
+Modules\Core\EventManager.lua
+Modules\Core\VersionSync.lua
+Modules\Core\Menu.lua
+Modules\Core\SequitoDashboard.lua
+Modules\Core\SequitoRadial.lua
+Modules\Core\MinimapButton.lua
+Modules\Core\Options.lua
+Modules\Core\SequitoConnect.lua
+Modules\Core\SmartCoach.lua
+Modules\Core\SequitoSoulEngine.lua
+Modules\Core\TheOverlord.lua
+Modules\Core\SequitoAudio.lua
+
+# 5. Modules - Utility
+Modules\Utility\MacroGenerator.lua
+Modules\Utility\MacroSync.lua
+Modules\Utility\BuildManager.lua
+Modules\Utility\Mounts.lua
+Modules\Utility\PetManager.lua
+Modules\Utility\QuickWhisper.lua
+Modules\Utility\PlayerNotes.lua
+Modules\Utility\Runes.lua
+Modules\Utility\EventCalendar.lua
+Modules\Utility\Visuals.lua
+Modules\Utility\SequitoTrade.lua
+Modules\Class\SequitoCoven.lua
+Modules\Class\SequitoSoulstones.lua
+Modules\Class\SequitoDoTTracker.lua
+
+# 6. Modules - Raid & Party
+Modules\Raid\RaidSync.lua
+Modules\Raid\ConnectTab.lua
+Modules\Raid\RaidIntel.lua
+Modules\Raid\RaidPanel.lua
+Modules\Raid\RaidAssist.lua
+Modules\Raid\RaidAssistUI.lua
+Modules\Raid\Assignments.lua
+Modules\Raid\ReadyChecker.lua
+Modules\Raid\WipeAnalyzer.lua
+Modules\Raid\CooldownMonitor.lua
+Modules\Raid\HealerTracker.lua
+Modules\Raid\PullGuide.lua
+Modules\Raid\DungeonTimer.lua
+Modules\Raid\LootCouncil.lua
+Modules\Raid\SequitoLootGallery.lua
+Modules\Raid\AcademyInspector.lua
+Modules\Raid\AcademyRotation.lua
+Modules\Raid\SequitoAchievements.lua
+Modules\Raid\SequitoPerformance.lua
+Modules\Raid\PerformanceStats.lua
+Modules\Raid\Logistics.lua
+Modules\Raid\VotingSystem.lua
+Modules\Raid\CombatTracker.lua
+
+# 7. Modules - PvP
+Modules\PvP\CCTracker.lua
+Modules\PvP\CCCoordinator.lua
+Modules\PvP\TrinketTracker.lua
+Modules\PvP\FocusFire.lua
+Modules\PvP\DefensiveAlerts.lua
+Modules\PvP\SpecWatcher.lua
+Modules\PvP\SequitoSpy.lua
+
+# 8. Main (Inicializador)
+Sequito.lua
