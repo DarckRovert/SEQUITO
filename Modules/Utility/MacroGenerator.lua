@@ -551,6 +551,14 @@ end
 -- ===========================================================================
 
 function S.MacroGen:GenerateClassMacros()
+    -- Guarda de combate: En WoW 3.3.5a, CreateMacro, EditMacro y DeleteMacro arrojan ADDON_ACTION_BLOCKED en combate
+    if InCombatLockdown() then
+        self.pendingGeneration = true
+        print("|cFFFFFF00Sequito:|r En combate: las macros se sincronizarán automáticamente al salir de combate.")
+        return
+    end
+    self.pendingGeneration = false
+
     local _, class = UnitClass("player")
     local spec = S.Universal and S.Universal:GetSpec() or 1
     
@@ -612,10 +620,14 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_TALENT_UPDATE") 
 f:RegisterEvent("LEARNED_SPELL_IN_TAB")
-f:RegisterEvent("PLAYER_ENTERING_WORLD") -- Added for login generation
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:RegisterEvent("PLAYER_REGEN_ENABLED") -- Sincronización diferida al salir de combate
 f:SetScript("OnEvent", function(self, event, ...)
-    if S.db and S.db.profile and S.db.profile.AutoMacros then
-       -- Little throttle/delay for login to ensure spells are loaded
+    if event == "PLAYER_REGEN_ENABLED" then
+        if S.MacroGen.pendingGeneration then
+            S.MacroGen:GenerateClassMacros()
+        end
+    elseif S.db and S.db.profile and S.db.profile.AutoMacros then
        if event == "PLAYER_ENTERING_WORLD" then
            C_Timer.After(5, function() S.MacroGen:GenerateClassMacros() end)
        else

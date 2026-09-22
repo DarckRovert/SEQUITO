@@ -130,6 +130,19 @@ function AI:ProcessInspection()
     local missingEnchants = 0
     local missingGems = 0
     
+    -- Detección de Titan's Grip (Guerrero Furia con dos armas de 2 manos) y Cazador
+    local isTitanGrip = false
+    local mhLink = GetInventoryItemLink(unit, 16)
+    local ohLink = GetInventoryItemLink(unit, 17)
+    if mhLink and ohLink then
+        local _, _, _, _, _, _, _, _, mhEquip = GetItemInfo(mhLink)
+        local _, _, _, _, _, _, _, _, ohEquip = GetItemInfo(ohLink)
+        if mhEquip == "INVTYPE_2HWEAPON" and ohEquip == "INVTYPE_2HWEAPON" then
+            isTitanGrip = true
+        end
+    end
+    local isHunter = (self.inspectedClass == "HUNTER")
+    
     for slot = 1, 18 do
         if slot ~= 4 then -- Omitir camisa
             local link = GetInventoryItemLink(unit, slot)
@@ -141,8 +154,21 @@ function AI:ProcessInspection()
                     
                     -- GearScore WotLK
                     local slotWeight = GS_SLOT_WEIGHTS[slot] or 1.0
-                    if equipSlot == "INVTYPE_2HWEAPON" then
-                        slotWeight = 2.0
+                    if slot == 16 or slot == 17 then
+                        if isTitanGrip then
+                            slotWeight = 1.0 -- Normalizar armas 2H a 1.0 para que el total no exceda 2.0
+                        elseif equipSlot == "INVTYPE_2HWEAPON" then
+                            slotWeight = 2.0
+                        end
+                        if isHunter then
+                            slotWeight = slotWeight * 0.5 -- Stat sticks melee para cazadores
+                        end
+                    elseif slot == 18 then
+                        if isHunter then
+                            slotWeight = 2.0 -- El arma a distancia es el arma principal del cazador
+                        else
+                            slotWeight = 0.3164
+                        end
                     end
                     
                     local qualityMod = 1.0

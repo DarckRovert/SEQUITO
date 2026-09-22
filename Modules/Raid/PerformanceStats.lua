@@ -115,9 +115,10 @@ function PS:ProcessCombatLog(...)
     if not currentCombat then return end
     local _, event, _, sourceGUID, _, _, _, destGUID, destName = ...
     local playerGUID = UnitGUID("player")
+    local petGUID = UnitGUID("pet")
     
-    if sourceGUID == playerGUID then
-        if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") then
+    if sourceGUID == playerGUID or (petGUID and sourceGUID == petGUID) then
+        if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") and destName ~= UnitName("pet") then
             currentCombat.target = destName
         end
         

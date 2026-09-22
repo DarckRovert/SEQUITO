@@ -394,6 +394,11 @@ function WA:IsRaidMember(guid)
 end
 
 function WA:RecordDeath(playerName, playerGUID)
+    -- Evitar falsos positivos: si el jugador no está realmente muerto/fantasma (ej. Fingir Muerte de cazador)
+    if not UnitIsDeadOrGhost(playerName) then
+        return
+    end
+
     local deathTime = GetTime() - self.CurrentFight.startTime
     
     -- Obtener últimos daños recibidos
@@ -408,6 +413,11 @@ function WA:RecordDeath(playerName, playerGUID)
         end
     end
     
+    local isSacrifice = false
+    if lastDamage and (lastDamage.spell == "Intervención divina" or lastDamage.spell == "Divine Intervention") then
+        isSacrifice = true
+    end
+    
     local deathInfo = {
         name = playerName,
         guid = playerGUID,
@@ -416,6 +426,7 @@ function WA:RecordDeath(playerName, playerGUID)
         lastSpell = lastDamage and lastDamage.spell or "Desconocido",
         lastDamage = lastDamage and lastDamage.amount or 0,
         usedConsumables = usedConsumables,
+        isTacticalSacrifice = isSacrifice,
         order = #self.CurrentFight.deaths + 1
     }
     
@@ -475,9 +486,19 @@ function WA:AnalyzeWipe()
     local fight = self.CurrentFight
     if #fight.deaths == 0 then return end
     
+    -- Seleccionar primera muerte real (omitiendo sacrificios tácticos de Intervención Divina)
+    local actualFirstDeath = nil
+    for _, d in ipairs(fight.deaths) do
+        if not d.isTacticalSacrifice then
+            actualFirstDeath = d
+            break
+        end
+    end
+    actualFirstDeath = actualFirstDeath or fight.deaths[1]
+    
     -- Análisis Básico
     local analysis = {
-        firstDeath = fight.deaths[1],
+        firstDeath = actualFirstDeath,
         totalDeaths = #fight.deaths,
         duration = fight.duration,
         consumablesUsed = #fight.consumables,
