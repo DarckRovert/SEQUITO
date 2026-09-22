@@ -1,7 +1,7 @@
 # 🛠️ Documentación de Módulos - Sequito
 
 **Versión:** 10.1.0 (The Final Polish)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 

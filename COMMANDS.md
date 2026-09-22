@@ -1,7 +1,7 @@
 # 💬 Lista Completa de Comandos - Sequito
 
 **Versión:** 9.0.0 (Definitive Edition)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -385,7 +385,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ### `/sequito macro get <nombre> <jugador>`
 **Descripción:** Solicita un macro específico de otro jugador.
-**Ejemplo:** `/sequito macro get SeqBurst Eljesuita`
+**Ejemplo:** `/sequito macro get SeqBurst Thesaviour`
 
 ---
 
@@ -582,4 +582,4 @@ Total muertes: 8 | Interrupts: 5
 
 ---
 
-**Creado por DarckRovert (Ingame: Eljesuita)**
+**Creado por DarckRovert (Ingame: Thesaviour)**

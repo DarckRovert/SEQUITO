@@ -45,7 +45,7 @@ Este Código de Conducta se aplica a todos los espacios del proyecto (repositori
 Los casos de comportamiento abusivo, acosador o inaceptable pueden ser reportados al equipo de liderazgo del proyecto contactando a:
 
 - **Correo Electrónico:** [darckrovert@gmail.com](mailto:darckrovert@gmail.com)
-- **Contacto Ingame:** `Eljesuita` (Servidor UltimoWoW)
+- **Contacto Ingame:** `Thesaviour` (Servidor UltimoWoW)
 
 Todas las quejas serán revisadas e investigadas de manera oportuna y confidencial, garantizando la protección de quien realiza el reporte.
 

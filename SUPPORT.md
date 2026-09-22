@@ -27,7 +27,7 @@ Para reportar errores del addon, problemas con perfiles o comportamientos inespe
 
 ### 2. Soporte Ingame (UltimoWoW)
 Si juegas en el servidor UltimoWoW y necesitas orientación directa:
-- **Personaje:** `Eljesuita` (Alianza / Horda)
+- **Personaje:** `Thesaviour` (Alianza / Horda)
 - **Líder del Proyecto:** DarckRovert
 
 ### 3. Correo Electrónico

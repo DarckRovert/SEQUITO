@@ -2,7 +2,7 @@
 
 **Versión:** 1.0.0  
 **Fecha:** Septiembre de 2026  
-**Responsable:** DarckRovert (Ingame: Eljesuita)
+**Responsable:** DarckRovert (Ingame: Thesaviour)
 
 ---
 

@@ -265,5 +265,5 @@ El sistema funciona automáticamente cuando:
 ---
 
 **Versión:** 7.1.0  
-**Autor:** DarckRovert & Eljesuita  
+**Autor:** DarckRovert & Thesaviour  
 **Guild:** UltimoWoW

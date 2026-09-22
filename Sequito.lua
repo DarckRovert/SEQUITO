@@ -8,7 +8,7 @@
     - Sincronizacion de raid (hasta 40 jugadores)
     - Datos estrategicos en tiempo real
     
-    Copyright (c) 2026 DarckRovert (Ingame: Eljesuita)
+    Copyright (c) 2026 DarckRovert (Ingame: Thesaviour)
 ]]--
 
 -- Namespace

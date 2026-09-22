@@ -1,7 +1,7 @@
 # 📦 Guía de Instalación - Sequito
 
 **Versión:** 10.1.0 (The Final Polish)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -252,4 +252,4 @@ Si sigues teniendo problemas:
 
 ---
 
-**Creado por DarckRovert (Ingame: Eljesuita)**
+**Creado por DarckRovert (Ingame: Thesaviour)**

@@ -1,7 +1,7 @@
 # 🔮 Sequito - La Plataforma de Raid Definitiva
 
 **Versión:** 10.1.0 (The Final Polish)  
-**Autor:** DarckRovert (Ingame: Eljesuita)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
 **Clan:** El Sequito del Terror (UltimoWoW)  
 **Compatible con:** World of Warcraft 3.3.5a (WotLK)
 
@@ -159,4 +159,4 @@ En esta versión **v8.0.0**, hemos implementado **14 módulos nuevos** para PvP,
 
 ---
 
-**Creado con ❤️ por DarckRovert (Ingame: Eljesuita) para el clan "El Sequito del Terror"**
+**Creado con ❤️ por DarckRovert (Ingame: Thesaviour) para el clan "El Sequito del Terror"**

@@ -1,7 +1,7 @@
 ## Interface: 30350
 ## Title: |cFFFF00FFSequito|r
 ## Notes: El Sequito del Terror - Addon Universal para TODAS las clases
-## Author: DarckRovert (Ingame: Eljesuita)
+## Author: DarckRovert (Ingame: Thesaviour)
 ## Version: 10.2.0
 ## SavedVariables: SequitoDB, SequitoPlayerNotesDB, SequitoBuildDB, SequitoQuickWhisperDB, SequitoStatsDB, SequitoPositionsDB, SequitoLootDB
 

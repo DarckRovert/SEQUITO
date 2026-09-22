@@ -1,7 +1,7 @@
 # 📚 Guía de Uso - Sequito
 
 **Versión:** 9.0.0 (Definitive Edition)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -358,4 +358,4 @@ Como miembro, puedes:
 
 ---
 
-**Creado por DarckRovert (Ingame: Eljesuita)**
+**Creado por DarckRovert (Ingame: Thesaviour)**

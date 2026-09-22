@@ -1,7 +1,7 @@
 # 🤝 Guía de Contribución - Sequito
 
 **Versión:** 9.0.0 (Definitive Edition)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -548,4 +548,4 @@ Ver [LICENSE.md](LICENSE.md) para detalles.
 
 ---
 
-**Creado por DarckRovert (Ingame: Eljesuita)**
+**Creado por DarckRovert (Ingame: Thesaviour)**

@@ -1,14 +1,14 @@
 # 📜 Licencia - Sequito
 
 **Versión:** 7.1.0  
-**Autor:** DarckRovert (Ingame: Eljesuita)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
 **Año:** 2026
 
 ---
 
 ## MIT License
 
-Copyright (c) 2026 DarckRovert (Ingame: Eljesuita)
+Copyright (c) 2026 DarckRovert (Ingame: Thesaviour)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -255,5 +255,5 @@ Tu apoyo ayuda a mantener este proyecto libre y de código abierto para toda la 
 ---
 
 **Sequito - Addon Universal de Combate**  
-**Copyright (c) 2026 DarckRovert (Ingame: Eljesuita)**  
+**Copyright (c) 2026 DarckRovert (Ingame: Thesaviour)**  
 **Licenciado bajo MIT License**

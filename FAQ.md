@@ -1,7 +1,7 @@
 # ❓ Preguntas Frecuentes (FAQ) - Sequito
 
 **Versión:** 9.0.0 (Definitive Edition)  
-**Autor:** DarckRovert (Ingame: Eljesuita)
+**Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -67,7 +67,7 @@ Sí, Sequito es completamente **gratuito** y de código abierto.
 
 ### ¿Quién creó Sequito?
 
-Sequito fue creado por **DarckRovert** (Ingame: Eljesuita), inspirado en el addon Necrosis.
+Sequito fue creado por **DarckRovert** (Ingame: Thesaviour), inspirado en el addon Necrosis.
 
 ---
 
@@ -559,4 +559,4 @@ Todos los archivos `.lua` son legibles y modificables.
 
 ---
 
-**Creado por DarckRovert (Ingame: Eljesuita)**
+**Creado por DarckRovert (Ingame: Thesaviour)**

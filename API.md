@@ -1,7 +1,7 @@
 # 🔌 API Documentation - Sequito
 
 **Version:** 10.1.0 (The Final Polish)  
-**Author:** DarckRovert (Ingame: Eljesuita)
+**Author:** DarckRovert (Ingame: Thesaviour)
 
 ---
 
@@ -1344,4 +1344,4 @@ Verifica rápidamente si todos están listos.
 
 ---
 
-**Created by DarckRovert (Ingame: Eljesuita)**
+**Created by DarckRovert (Ingame: Thesaviour)**

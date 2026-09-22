@@ -2,7 +2,7 @@
 
 **Versión del Documento:** 1.0.0  
 **Fecha de Entrada en Vigor:** 22 de Septiembre de 2026  
-**Líder del Proyecto / Autor:** DarckRovert (Ingame: Eljesuita)  
+**Líder del Proyecto / Autor:** DarckRovert (Ingame: Thesaviour)  
 **Entorno de Ejecución:** World of Warcraft 3.3.5a (Build 12340)
 
 ---
@@ -25,7 +25,7 @@ El proyecto Sequito se rige bajo un modelo de **Liderazgo Técnico Centralizado 
 ```
        ┌─────────────────────────────────────────┐
        │   Líder del Proyecto (Project Lead)     │
-       │     DarckRovert (Eljesuita)             │
+       │     DarckRovert (Thesaviour)             │
        └────────────────────┬────────────────────┘
                             │
        ┌────────────────────▼────────────────────┐
@@ -40,7 +40,7 @@ El proyecto Sequito se rige bajo un modelo de **Liderazgo Técnico Centralizado 
 ```
 
 ### 2.1. Project Lead (Líder del Proyecto)
-- **Titular:** DarckRovert (Ingame: `Eljesuita`).
+- **Titular:** DarckRovert (Ingame: `Thesaviour`).
 - **Atribuciones:**
   - Control de la visión a largo plazo y roadmap del addon.
   - Aprobación final y fusión (merge) de Pull Requests en la rama `main`.
