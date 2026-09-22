@@ -127,10 +127,9 @@ S.RaidIntel.ImportantCDs = {
     [20707] = { name = "Soulstone", type = "BREZ" },
     
     -- Raid CDs
-    [64843] = { name = "Divine Hymn", type = "HEAL_CD" },
     [64901] = { name = "Hymn of Hope", type = "MANA_CD" },
     [31821] = { name = "Aura Mastery", type = "RAID_CD" },
-    [98008] = { name = "Spirit Link", type = "RAID_CD" },
+    [16190] = { name = "Mana Tide Totem", type = "MANA_CD" },
     
     -- Tank CDs
     [871]   = { name = "Shield Wall", type = "TANK_CD" },
@@ -173,7 +172,7 @@ function S.RaidIntel:OnImportantCD(caster, cdInfo)
     local color = {r=1, g=1, b=0} -- Default Yellow
     
     if cdInfo.type == "BURST" then
-        msg = "¡¡ " .. string.upper(cdInfo.name) .. " !! (" .. caster .. ")"
+        msg = "★ " .. string.upper(cdInfo.name) .. " !! (" .. caster .. ")"
         color = {r=1, g=0.2, b=0.2} -- Red
         PlaySound("RaidWarning")
     elseif cdInfo.type == "BREZ" then
@@ -198,14 +197,28 @@ end
 -- ===========================================================================
 function S.RaidIntel:GetClassCount()
     local counts = {}
+    local numRaid = GetNumRaidMembers()
+    local numParty = GetNumPartyMembers()
     
-    if S.RaidSync and S.RaidSync.RaidData then
-        for name, data in pairs(S.RaidSync.RaidData) do
-            local class = data.class
-            if class then
-                counts[class] = (counts[class] or 0) + 1
+    if numRaid > 0 then
+        for i = 1, numRaid do
+            local _, _, _, _, _, fileName = GetRaidRosterInfo(i)
+            if fileName then
+                counts[fileName] = (counts[fileName] or 0) + 1
             end
         end
+    elseif numParty > 0 then
+        local _, playerClass = UnitClass("player")
+        if playerClass then counts[playerClass] = (counts[playerClass] or 0) + 1 end
+        for i = 1, numParty do
+            local _, partyClass = UnitClass("party" .. i)
+            if partyClass then
+                counts[partyClass] = (counts[partyClass] or 0) + 1
+            end
+        end
+    else
+        local _, playerClass = UnitClass("player")
+        if playerClass then counts[playerClass] = (counts[playerClass] or 0) + 1 end
     end
     
     return counts

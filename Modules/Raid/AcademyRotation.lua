@@ -317,6 +317,57 @@ function AR:CreateHUD()
     return f
 end
 
+-- ============================================================================
+-- PROCS DE COMBATE REACTIVOS (WoW 3.3.5a)
+-- ============================================================================
+local COMBAT_PROCS = {
+    -- Mage
+    ["Buena racha"] = "Piroexplosión",
+    ["Hot Streak"] = "Pyroblast",
+    ["Tromba de proyectiles"] = "Misiles Arcanos",
+    ["Missile Barrage"] = "Arcane Missiles",
+    ["Dedos de Escarcha"] = "Lanza de hielo",
+    ["Fingers of Frost"] = "Ice Lance",
+    
+    -- Paladin
+    ["El arte de la guerra"] = "Exorcismo",
+    ["The Art of War"] = "Exorcism",
+    
+    -- Warrior
+    ["Oleada de sangre"] = "Embate",
+    ["Bloodsurge"] = "Slam",
+    ["Muerte súbita"] = "Ejecutar",
+    ["Sudden Death"] = "Execute",
+    
+    -- Death Knight
+    ["Escarcha blanca"] = "Explosión aullante",
+    ["Rime"] = "Howling Blast",
+    ["Máquina de matar"] = "Golpe de Escarcha",
+    ["Killing Machine"] = "Frost Strike",
+    
+    -- Warlock
+    ["Diezmar"] = "Fuego de alma",
+    ["Decimation"] = "Soul Fire",
+    ["Fricción de lava"] = "Incinerar",
+    ["Molten Core"] = "Incinerate",
+    
+    -- Druid
+    ["Eclipse (Lunar)"] = "Fuego estelar",
+    ["Eclipse (Solar)"] = "Cólera",
+}
+
+function AR:GetActiveProcSpell()
+    for i = 1, 40 do
+        local name = UnitBuff("player", i)
+        if not name then break end
+        local procSpell = COMBAT_PROCS[name]
+        if procSpell then
+            return procSpell, name
+        end
+    end
+    return nil, nil
+end
+
 function AR:ResolveSpellTexture(spellName, fallbackName)
     local name, _, icon = GetSpellInfo(spellName)
     if not icon and fallbackName then
@@ -331,7 +382,13 @@ function AR:UpdateHUD()
     if not rotData then return end
 
     local f = self.HUDFrame
-    f.title:SetText(string.format("|cFF00CCFFRotación Advisor|r - |cFFFFD700%s|r", rotData.name or "Spec"))
+    local activeProcSpell, procAuraName = self:GetActiveProcSpell()
+    
+    if activeProcSpell then
+        f.title:SetText(string.format("|cFF00CCFFRotación|r - |cFF00FF00[PROC: %s]|r", procAuraName or activeProcSpell))
+    else
+        f.title:SetText(string.format("|cFF00CCFFRotación Advisor|r - |cFFFFD700%s|r", rotData.name or "Spec"))
+    end
 
     local firstAvailableFound = false
 
@@ -365,8 +422,20 @@ function AR:UpdateHUD()
             if not onCD then
                 slot.icon:SetDesaturated(false)
                 slot.cdText:SetText("")
-                if not firstAvailableFound then
-                    -- Destacar el siguiente hechizo disponible en la lista de prioridad
+                
+                -- Verificar si este hechizo coincide con un PROC activo de combate
+                local isProcMatch = activeProcSpell and (
+                    spellName:lower():find(activeProcSpell:lower()) or 
+                    (fallbackName and fallbackName:lower():find(activeProcSpell:lower()))
+                )
+
+                if isProcMatch then
+                    -- Brillo verde esmeralda para destacar PROC instantáneo
+                    slot.border:Show()
+                    slot.border:SetVertexColor(0.2, 1.0, 0.4, 1.0)
+                    slot.cdText:SetText("|cFF00FF00PROC!|r")
+                elseif not firstAvailableFound then
+                    -- Destacar el siguiente hechizo disponible en la lista de prioridad estándar
                     slot.border:Show()
                     slot.border:SetVertexColor(1, 0.9, 0.2, 0.9)
                     firstAvailableFound = true

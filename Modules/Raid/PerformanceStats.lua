@@ -113,15 +113,25 @@ end
 
 function PS:ProcessCombatLog(...)
     if not currentCombat then return end
-    local _, event, _, sourceGUID = ...
+    local _, event, _, sourceGUID, _, _, _, destGUID, destName = ...
     local playerGUID = UnitGUID("player")
     
     if sourceGUID == playerGUID then
-        local amount = select(15, ...) or 0
-        if event:find("DAMAGE") then
-            currentCombat.damage = currentCombat.damage + amount
-        elseif event:find("HEAL") then
-            currentCombat.healing = currentCombat.healing + amount
+        if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") then
+            currentCombat.target = destName
+        end
+        
+        if event == "SWING_DAMAGE" then
+            local amount = select(9, ...) or 0
+            currentCombat.damage = currentCombat.damage + (tonumber(amount) or 0)
+        elseif event == "SPELL_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "RANGE_DAMAGE" then
+            local amount = select(12, ...) or 0
+            currentCombat.damage = currentCombat.damage + (tonumber(amount) or 0)
+        elseif event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL" then
+            local amount = select(12, ...) or 0
+            local overheal = select(13, ...) or 0
+            local effectiveHeal = math.max(0, (tonumber(amount) or 0) - (tonumber(overheal) or 0))
+            currentCombat.healing = currentCombat.healing + effectiveHeal
         end
     end
 end

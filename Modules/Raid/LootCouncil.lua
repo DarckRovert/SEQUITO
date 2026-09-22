@@ -108,23 +108,63 @@ function LC:Respond(response)
     self.frame.passBtn:Disable()
 end
 
+function LC:IsOfficer(name)
+    if not name then return false end
+    if name == UnitName("player") then
+        return IsRaidLeader() or IsRaidOfficer() or (GetNumPartyMembers() > 0 and UnitIsPartyLeader("player"))
+    end
+    for i = 1, GetNumRaidMembers() do
+        local n, rank = GetRaidRosterInfo(i)
+        if n == name then
+            return rank >= 1
+        end
+    end
+    if GetNumPartyMembers() > 0 and UnitIsPartyLeader(name) then
+        return true
+    end
+    return false
+end
+
 function LC:RegisterEvents()
     local events = CreateFrame("Frame")
     events:RegisterEvent("LOOT_OPENED")
     events:RegisterEvent("CHAT_MSG_ADDON")
+    events:RegisterEvent("CHAT_MSG_SYSTEM")
     events:SetScript("OnEvent", function(_, event, ...)
         if event == "LOOT_OPENED" then
             LC:OnLootOpened()
         elseif event == "CHAT_MSG_ADDON" then
             LC:OnAddonMessage(...)
+        elseif event == "CHAT_MSG_SYSTEM" then
+            LC:OnSystemMessage(...)
         end
     end)
     RegisterAddonMessagePrefix("SeqLC")
 end
 
+function LC:OnSystemMessage(msg)
+    if not currentSession or not msg then return end
+    
+    -- Interceptar tiradas de dados en esMX, esES y enUS:
+    -- es: "Nombre tira los dados (1-100) y obtiene 85"
+    -- en: "Name rolls 85 (1-100)"
+    local roller, minR, maxR, rollVal = msg:match("([^%s]+)%s+tira los dados%s+%(?(%d+)%-(%d+)%)?%s+y obtiene%s+(%d+)")
+    if not roller then
+        roller, rollVal, minR, maxR = msg:match("([^%s]+)%s+rolls%s+(%d+)%s+%(?(%d+)%-(%d+)%)?")
+    end
+    
+    if roller and rollVal then
+        local rNum = tonumber(rollVal) or 0
+        candidates[roller] = candidates[roller] or { response = "Roll: " .. rNum, voteCount = 0 }
+        candidates[roller].response = "Roll: " .. rNum
+        candidates[roller].roll = rNum
+        self:UpdateDisplay()
+    end
+end
+
 function LC:StartSession(itemLink)
     if not IsRaidLeader() and not IsRaidOfficer() then
-        S:Print(L["LC_ONLY_LEADER"])
+        if S.Print then S:Print(L["LC_ONLY_LEADER"]) end
         return
     end
     
@@ -144,7 +184,11 @@ end
 
 function LC:Vote(playerName, response)
     if not currentSession then return end
-    SendAddonMessage("SeqLC", "VOTE:" .. playerName .. ":" .. response, "RAID")
+    if not self:IsOfficer(UnitName("player")) then
+        if S.Print then S:Print("|cFFFF0000[LootCouncil] Solo oficiales pueden emitir votos.|r") end
+        return
+    end
+    SendAddonMessage("SeqLC", "VOTE:" .. playerName .. ":" .. (response or "VOTE"), "RAID")
 end
 
 function LC:EndSession(winner)
@@ -172,6 +216,8 @@ function LC:UpdateDisplay()
     self.frame.itemIcon:SetTexture(texture)
     self.frame.itemName:SetText(currentSession.item)
     
+    local isOfficer = self:IsOfficer(UnitName("player"))
+    
     -- Actualizar lista de candidatos
     local yOffset = 0
     for name, data in pairs(candidates) do
@@ -180,6 +226,11 @@ function LC:UpdateDisplay()
         row.name:SetText(name)
         row.response:SetText(data.response or "Pendiente")
         row.votes:SetText(tostring(data.voteCount or 0))
+        if isOfficer then
+            row.voteBtn:Show()
+        else
+            row.voteBtn:Hide()
+        end
         row:Show()
         yOffset = yOffset + 25
     end
@@ -200,7 +251,7 @@ function LC:GetCandidateRow(name)
         row.voteBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
         row.voteBtn:SetSize(50, 20)
         row.voteBtn:SetPoint("RIGHT", -5, 0)
-        row.voteBtn:SetText(L["LC_VOTE_BTN"])
+        row.voteBtn:SetText(L["LC_VOTE_BTN"] or "Votar")
         row.voteBtn:SetScript("OnClick", function() LC:Vote(name, "VOTE") end)
         
         self.rows[name] = row
@@ -213,11 +264,20 @@ function LC:OnLootOpened()
     if not (IsRaidLeader() or IsRaidOfficer()) then return end
     if not self:GetOption("enabled") then return end
     
-    -- Escanear loot
+    -- Escanear loot en busca de piezas épicas o legendarias
     local numItems = GetNumLootItems()
-    if numItems > 0 then
-        -- Por ahora solo debug o preparación
-        -- En el futuro: Mostrar ventana para iniciar sesión con items del loot
+    for slot = 1, numItems do
+        if LootSlotIsItem(slot) then
+            local link = GetLootSlotLink(slot)
+            if link then
+                local _, _, quality = GetItemInfo(link)
+                if quality and quality >= 4 and not currentSession then
+                    -- Iniciar automáticamente sesión de LootCouncil para el primer ítem épico
+                    self:StartSession(link)
+                    break
+                end
+            end
+        end
     end
 end
 
@@ -232,12 +292,22 @@ function LC:OnAddonMessage(prefix, msg, channel, sender)
         self:UpdateDisplay()
         self.frame:Show()
     elseif cmd == "NEED" or cmd == "GREED" or cmd == "PASS" then
-        candidates[sender] = {response = cmd, voteCount = 0}
+        candidates[sender] = candidates[sender] or {response = cmd, voteCount = 0}
+        candidates[sender].response = cmd
         self:UpdateDisplay()
     elseif cmd == "VOTE" then
+        if not self:IsOfficer(sender) then return end
         local target, votePayload = strsplit(":", data, 2)
         if target and candidates[target] then
-            candidates[target].voteCount = (candidates[target].voteCount or 0) + 1
+            -- 1 voto por oficial: si ya votó por otro, restar el anterior
+            local prevTarget = votes[sender]
+            if prevTarget and candidates[prevTarget] and prevTarget ~= target then
+                candidates[prevTarget].voteCount = math.max(0, (candidates[prevTarget].voteCount or 1) - 1)
+            end
+            if prevTarget ~= target then
+                votes[sender] = target
+                candidates[target].voteCount = (candidates[target].voteCount or 0) + 1
+            end
             self:UpdateDisplay()
         end
     elseif cmd == "END" then

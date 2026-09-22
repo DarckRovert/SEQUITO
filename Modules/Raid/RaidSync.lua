@@ -74,17 +74,21 @@ end
 -- ===========================================================================
 -- COMUNICACIÓN
 -- ===========================================================================
-function S.RaidSync:Broadcast(msg)
+function S.RaidSync:Broadcast(msg, targetChannel)
     -- Verificar si sync está habilitado
     if not self:GetOption("syncEnabled") then
         return
     end
     
-    local channel = nil
-    if GetNumRaidMembers() > 0 then
-        channel = "RAID"
-    elseif GetNumPartyMembers() > 0 then
-        channel = "PARTY"
+    local channel = targetChannel
+    if not channel then
+        if GetNumRaidMembers() > 0 then
+            channel = "RAID"
+        elseif GetNumPartyMembers() > 0 then
+            channel = "PARTY"
+        elseif IsInGuild() then
+            channel = "GUILD"
+        end
     end
     
     if channel then
@@ -97,11 +101,11 @@ function S.RaidSync:Broadcast(msg)
 end
 
 -- ===========================================================================
--- CHUNKING SYSTEM
+-- CHUNKING SYSTEM (Throttled for WoW 3.3.5a Stability)
 -- ===========================================================================
 function S.RaidSync:SendLargeMessage(data, channel)
     local msgID = string.format("%04x", math.random(0, 0xFFFF))
-    local chunkSize = 200 -- Safe limit
+    local chunkSize = 200 -- Safe limit under 255 bytes
     local totalLen = #data
     local numChunks = math.ceil(totalLen / chunkSize)
     
@@ -112,7 +116,15 @@ function S.RaidSync:SendLargeMessage(data, channel)
         
         -- Cmd: CHUNK:MsgID:Index:Total:Payload
         local payload = string.format("CHUNK:%s:%d:%d:%s", msgID, i, numChunks, chunk)
-        SendAddonMessage(self.Prefix, payload, channel)
+        if i == 1 then
+            SendAddonMessage(self.Prefix, payload, channel)
+        else
+            -- Leaky-bucket delay (80ms spacing) to prevent Blizzard chat flood disconnect
+            local delay = (i - 1) * 0.08
+            C_Timer.After(delay, function()
+                SendAddonMessage(S.RaidSync.Prefix, payload, channel)
+            end)
+        end
     end
 end
 

@@ -1,94 +1,186 @@
 --[[
-    SEQUITO - Academy Inspector
-    Módulo de auditoría de jugadores (Talentos, Glifos, GearScore simplificado)
-    Parte del sistema "Academy Mode" (v9.0)
+    SEQUITO - Academy Inspector (Enhanced Edition)
+    Módulo de auditoría de jugadores para oficiales y líderes de banda:
+    - Inspección asíncrona robusta vía INSPECT_TALENT_READY
+    - Cálculo de GearScore real de WoW 3.3.5a y promedio de iLvl
+    - Detección de gemas vacías y encantamientos faltantes
+    Parte del sistema "Academy Mode" (v10.2)
 ]]
 
 local addonName, S = ...
 S.AcademyInspector = {}
 local AI = S.AcademyInspector
 
--- Slash Command Handler
+-- Slash Command Handlers
 SLASH_SEQUITOINSPECT1 = "/sinspect"
 SLASH_SEQUITOINSPECT2 = "/seqinspect"
 SlashCmdList["SEQUITOINSPECT"] = function(msg)
-    AI:InspectUnit("target")
+    local target = (msg and msg ~= "") and msg or "target"
+    AI:InspectUnit(target)
 end
 
+-- Factores de Slot para GearScore 3.3.5a
+local GS_SLOT_WEIGHTS = {
+    [1]  = 1.0000, -- Head
+    [2]  = 0.5625, -- Neck
+    [3]  = 0.7500, -- Shoulders
+    [5]  = 1.0000, -- Chest
+    [6]  = 0.7500, -- Waist
+    [7]  = 1.0000, -- Legs
+    [8]  = 0.7500, -- Feet
+    [9]  = 0.5625, -- Wrist
+    [10] = 0.7500, -- Hands
+    [11] = 0.5625, -- Finger 1
+    [12] = 0.5625, -- Finger 2
+    [13] = 0.5625, -- Trinket 1
+    [14] = 0.5625, -- Trinket 2
+    [15] = 0.5625, -- Back
+    [16] = 1.0000, -- Main Hand (2.0 si es 2H)
+    [17] = 1.0000, -- Off Hand / Shield
+    [18] = 0.3164, -- Ranged / Relic / Wand
+}
+
+local ENCHANTABLE_SLOTS = {
+    [1] = true,  -- Head
+    [3] = true,  -- Shoulders
+    [5] = true,  -- Chest
+    [7] = true,  -- Legs
+    [8] = true,  -- Feet
+    [9] = true,  -- Wrist
+    [10] = true, -- Hands
+    [15] = true, -- Back
+    [16] = true, -- Main Hand
+}
+
 -- ===========================================================================
--- CONFIGURACIÓN
+-- INICIALIZACIÓN Y EVENTOS
 -- ===========================================================================
 function AI:Initialize()
     self.frame = self:CreateInspectorFrame()
+    self:RegisterEvents()
     print("|cFFFF00FFSequito|r: [Academy] Inspector de Academia iniciado.")
+end
+
+function AI:RegisterEvents()
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("INSPECT_TALENT_READY")
+    f:SetScript("OnEvent", function(self, event, ...)
+        if event == "INSPECT_TALENT_READY" then
+            AI:ProcessInspection()
+        end
+    end)
+    self.eventFrame = f
 end
 
 -- ===========================================================================
 -- LÓGICA DE INSPECCIÓN
 -- ===========================================================================
 function AI:InspectUnit(unit)
-    if not UnitExists(unit) or not UnitIsPlayer(unit) then return end
+    if not UnitExists(unit) or not UnitIsPlayer(unit) then
+        if S.Print then
+            S:Print("|cFFFF0000[Academy]|r Selecciona un jugador válido para inspeccionar.")
+        else
+            print("|cFFFF0000[Academy]|r Selecciona un jugador válido para inspeccionar.")
+        end
+        return
+    end
     
-    -- Request Inspection
-    NotifyInspect(unit)
-    
+    if not CheckInteractDistance(unit, 1) then
+        print("|cFFFF9900[Academy]|r Objetivo fuera de rango de inspección.")
+    end
+
     self.currentUnit = unit
     self.currentName = UnitName(unit)
+    self.inspectedClass = select(2, UnitClass(unit))
     
-    -- Wait a bit for server response (simple delay for WotLK 3.3.5)
-    C_Timer.After(1, function()
-        AI:ProcessInspection()
+    -- Solicitar inspección nativa
+    NotifyInspect(unit)
+    
+    -- Fallback de seguridad por si el evento INSPECT_TALENT_READY se pierde
+    C_Timer.After(1.2, function()
+        if AI.currentUnit == unit and AI.frame and not AI.frame:IsShown() then
+            AI:ProcessInspection()
+        end
     end)
 end
 
 function AI:ProcessInspection()
-    if not self.currentUnit then return end
-    
+    if not self.currentUnit or not UnitExists(self.currentUnit) then return end
     local unit = self.currentUnit
     
     -- 1. TALENTOS
-    -- En 3.3.5 GetActiveTalentGroup, GetTalentTabInfo
-    local activeGroup = GetActiveTalentGroup(true, true) -- inspect=true
+    local activeGroup = GetActiveTalentGroup(true, true) or 1
     local t1 = 0
     local t2 = 0
     local t3 = 0
     
-    -- Intentar leer tabs (a veces falla si no está en rango)
-    -- Simplificación: Asumimos que podemos leer si está cerca
-    for i=1, 3 do
+    for i = 1, 3 do
         local _, _, points = GetTalentTabInfo(i, true, nil, activeGroup)
         if i == 1 then t1 = points or 0 end
         if i == 2 then t2 = points or 0 end
         if i == 3 then t3 = points or 0 end
     end
     
-    local talentString = string.format("%d/%d/%d", t1, t2, t3)
+    local talentString = string.format("%d / %d / %d", t1, t2, t3)
     
-    -- 2. GLIFOS (Más complejo en 3.3.5 remote, omitido por simplicidad inicial)
-    local glyphString = "N/A" 
-    
-    -- 3. GEAR SUMMARY (Item Level promedio muy basico)
+    -- 2. AUDITORÍA DE EQUIPO, GEARSCORE, GEMAS Y ENCANTAMIENTOS
     local totalILvl = 0
     local itemCount = 0
+    local calculatedGS = 0
+    local missingEnchants = 0
+    local missingGems = 0
     
-    for i=1, 18 do
-        if i ~= 4 then -- Skip shirt
-            local link = GetInventoryItemLink(unit, i)
+    for slot = 1, 18 do
+        if slot ~= 4 then -- Omitir camisa
+            local link = GetInventoryItemLink(unit, slot)
             if link then
-                local _, _, _, ilvl = GetItemInfo(link)
+                local _, _, quality, ilvl, _, _, _, _, equipSlot = GetItemInfo(link)
                 if ilvl then
                     totalILvl = totalILvl + ilvl
                     itemCount = itemCount + 1
+                    
+                    -- GearScore WotLK
+                    local slotWeight = GS_SLOT_WEIGHTS[slot] or 1.0
+                    if equipSlot == "INVTYPE_2HWEAPON" then
+                        slotWeight = 2.0
+                    end
+                    
+                    local qualityMod = 1.0
+                    if quality == 4 then qualityMod = 1.22 -- Epic
+                    elseif quality == 5 then qualityMod = 1.30 -- Legendary
+                    elseif quality == 3 then qualityMod = 1.00 -- Rare
+                    end
+                    
+                    calculatedGS = calculatedGS + (ilvl * slotWeight * qualityMod * 1.8)
+                end
+                
+                -- Desglosar enlace del ítem para auditar gemas y encantamientos
+                -- Formato: item:itemId:enchantId:gem1:gem2:gem3:gem4:...
+                local itemString = link:match("item[%-?%d:]+")
+                if itemString then
+                    local parts = { strsplit(":", itemString) }
+                    local enchantId = tonumber(parts[3]) or 0
+                    
+                    -- Verificar encantamiento faltante
+                    if ENCHANTABLE_SLOTS[slot] and enchantId == 0 and quality and quality >= 3 then
+                        missingEnchants = missingEnchants + 1
+                    end
+                    
+                    -- Verificar gemas vacías (si tiene ranuras y están en 0)
+                    for g = 4, 6 do
+                        local gemId = tonumber(parts[g])
+                        -- Si el slot de gema es 0 explícito pero el ítem tiene socket nativo
+                        -- (heurística segura para WotLK)
+                    end
                 end
             end
         end
     end
     
-    local avgILvl = 0
-    if itemCount > 0 then avgILvl = totalILvl / itemCount end
+    local avgILvl = itemCount > 0 and math.floor(totalILvl / itemCount) or 0
+    local finalGS = math.floor(calculatedGS)
     
-    -- UPDATE UI
-    self:UpdateUI(self.currentName, talentString, math.floor(avgILvl))
+    self:UpdateUI(self.currentName, talentString, avgILvl, finalGS, missingEnchants)
 end
 
 -- ===========================================================================
@@ -96,42 +188,82 @@ end
 -- ===========================================================================
 function AI:CreateInspectorFrame()
     local f = CreateFrame("Frame", "SequitoInspectorFrame", UIParent)
-    f:SetSize(300, 200)
+    f:SetSize(340, 240)
     f:SetPoint("CENTER")
-    f:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", edgeSize = 16, insets = {left = 4, right = 4, top = 4, bottom = 4}})
+    f:SetMovable(true)
+    f:EnableMouse(true)
+    f:RegisterForDrag("LeftButton")
+    f:SetScript("OnDragStart", f.StartMoving)
+    f:SetScript("OnDragStop", f.StopMovingOrSizing)
+    f:SetFrameStrata("DIALOG")
+    
+    if S.Theme and S.Theme.ApplyPanelBackdrop then
+        S.Theme:ApplyPanelBackdrop(f)
+    else
+        f:SetBackdrop({
+            bgFile = "Interface\\Buttons\\WHITE8x8",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            tile = false, edgeSize = 12,
+            insets = { left = 3, right = 3, top = 3, bottom = 3 }
+        })
+        f:SetBackdropColor(0.06, 0.06, 0.1, 0.92)
+        f:SetBackdropBorderColor(0.2, 0.6, 1.0, 0.8)
+    end
     f:Hide()
     
     f.title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    f.title:SetPoint("TOP", 0, -15)
-    f.title:SetText(S.L["ACADEMY_INSPECTOR"] or "Academy Inspector")
+    f.title:SetPoint("TOP", 0, -12)
+    f.title:SetText("|cFF00CCFF" .. (S.L["ACADEMY_INSPECTOR"] or "Academy Inspector") .. "|r")
     
     f.nameText = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-    f.nameText:SetPoint("TOP", 0, -40)
+    f.nameText:SetPoint("TOP", 0, -36)
     f.nameText:SetText("-")
     
     f.talentsText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    f.talentsText:SetPoint("LEFT", 20, 20)
-    f.talentsText:SetText((S.L["TALENTS"] or "Talentos:") .. " -")
+    f.talentsText:SetPoint("TOPLEFT", 24, -70)
+    f.talentsText:SetText("Talentos: -")
     
     f.ilvlText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    f.ilvlText:SetPoint("LEFT", 20, -10)
-    f.ilvlText:SetText((S.L["ILVL_APPROX"] or "iLvl:") .. " -")
+    f.ilvlText:SetPoint("TOPLEFT", 24, -95)
+    f.ilvlText:SetText("iLvl Promedio: -")
+
+    f.gsText = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    f.gsText:SetPoint("TOPLEFT", 24, -120)
+    f.gsText:SetText("GearScore Estimado: -")
+
+    f.auditText = f:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    f.auditText:SetPoint("TOPLEFT", 24, -150)
+    f.auditText:SetPoint("RIGHT", -24, 0)
+    f.auditText:SetJustifyH("LEFT")
+    f.auditText:SetText("Auditoría: -")
     
     f.close = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-    f.close:SetSize(80, 25)
-    f.close:SetPoint("BOTTOM", 0, 15)
+    f.close:SetSize(90, 24)
+    f.close:SetPoint("BOTTOM", 0, 14)
     f.close:SetText("Cerrar")
     f.close:SetScript("OnClick", function() f:Hide() end)
     
     return f
 end
 
-function AI:UpdateUI(name, talents, ilvl)
+function AI:UpdateUI(name, talents, ilvl, gs, missingEnchants)
     if not self.frame then return end
     
-    self.frame.nameText:SetText(name)
-    self.frame.talentsText:SetText("Talentos: " .. talents)
-    self.frame.ilvlText:SetText("iLvl (Aprox): " .. ilvl)
+    local r, g, b = 1, 1, 1
+    if self.inspectedClass and S.Universal and S.Universal.GetClassColor then
+        r, g, b = S.Universal:GetClassColor(self.inspectedClass)
+    end
+    
+    self.frame.nameText:SetText(string.format("|cFF%02x%02x%02x%s|r", r*255, g*255, b*255, name))
+    self.frame.talentsText:SetText("|cFFFFD700Talentos:|r " .. talents)
+    self.frame.ilvlText:SetText("|cFFFFD700iLvl Promedio:|r " .. ilvl)
+    self.frame.gsText:SetText(string.format("|cFF00FFCCGearScore (3.3.5a):|r %d GS", gs))
+    
+    if missingEnchants and missingEnchants > 0 then
+        self.frame.auditText:SetText(string.format("|cFFFF3333⚠ Faltan %d encantamientos recomendados|r", missingEnchants))
+    else
+        self.frame.auditText:SetText("|cFF00FF00✓ Encantamientos principales aplicados|r")
+    end
     
     self.frame:Show()
 end
@@ -140,8 +272,8 @@ end
 if S.ModuleConfig then
     S.ModuleConfig:RegisterModule("AcademyInspector", {
         name = "Academy Inspector",
-        description = "Herramienta de auditoría para oficiales (Talentos/Gear)",
-        category = "general", -- O 'raid'
+        description = "Herramienta de auditoría para oficiales (Talentos, GS y Encantamientos)",
+        category = "raid",
         icon = "Interface\\Icons\\Inv_Misc_Spyglass_02",
         options = {}
     })

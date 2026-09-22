@@ -121,214 +121,283 @@ end
 -- ===========================================================================
 -- 3. ROTATION BRAIN (The "Intel" Core)
 -- ============================================================================
-
-function S.MacroGen:GetNecrosisRotation(class, spec)
-    local spellList = {}
-    
-    local function GetIfKnown(id)
-        return self:GetSmartSpell(id, nil)
+function S.MacroGen:GetNecrosisRotation(class, spec)
+    local function GetIfKnown(id, defaultName)
+        return self:GetSmartSpell(id, defaultName)
     end
     
     -- -----------------------------------------------------------------------
-    -- WARLOCK (Brain Logic)
+    -- 1. WARLOCK (3 Specs)
     -- -----------------------------------------------------------------------
     if class == "WARLOCK" then
-        if spec == 3 then -- Destruction
-            -- [Necrosis Parity] : Immolate -> Conflag -> Chaos Bolt -> Incinerate spam
-            if GetIfKnown(348) then table.insert(spellList, GetIfKnown(348)) end -- Immolate
-            if GetIfKnown(17962) then table.insert(spellList, GetIfKnown(17962)) end -- Conflagrate
-            if GetIfKnown(50796) then table.insert(spellList, GetIfKnown(50796)) end -- Chaos Bolt
-            local incin = GetIfKnown(29722) or "Incinerar"
-            table.insert(spellList, incin); 
-            
-            -- Necrosis Smart Logic: Add Curse of Elements if Shift is held?
-            -- Sequito Improvement: Smart Modifiers
-            return "#showtooltip\n/cast [mod:shift] " .. (GetIfKnown(1490) or "Maldición de los Elementos") .. "\n" ..
-                   "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
-            
-        elseif spec == 1 then -- Affliction
-            -- [Necrosis Parity] : Haunt -> UA -> Agony -> Corruption -> Shadow Bolt spam
-            if GetIfKnown(48181) then table.insert(spellList, GetIfKnown(48181)) end -- Haunt
-            if GetIfKnown(30108) then table.insert(spellList, GetIfKnown(30108)) end -- UA
-            if GetIfKnown(980) then table.insert(spellList, GetIfKnown(980)) end -- Agony
-            if GetIfKnown(172) then table.insert(spellList, GetIfKnown(172)) end -- Corruption
-            local sb = GetIfKnown(686) or "Descarga de las Sombras"
-            table.insert(spellList, sb); table.insert(spellList, sb)
-            
-            -- Seed Logic (Ctrl Mod) - Necrosis Style
-            local seed = GetIfKnown(27243)
-            local prefix = "#showtooltip\n"
-            if seed then prefix = prefix .. "/cast [mod:ctrl] " .. seed .. "\n" end
-            
-            -- Execute (Drain Soul) Logic (Shift Mod)
-            local drain = GetIfKnown(1120)
-            if drain then prefix = prefix .. "/cast [mod:shift, nochanneling] " .. drain .. "\n" end
-
-            return prefix .. "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
-            
+        if spec == 1 then -- Affliction
+            local haunt = GetIfKnown(48181, "Poseer")
+            local ua = GetIfKnown(30108, "Aflicción inestable")
+            local corr = GetIfKnown(172, "Corrupción")
+            local sb = GetIfKnown(686, "Descarga de las Sombras")
+            local drain = GetIfKnown(1120, "Drenar alma")
+            return string.format("#showtooltip\n/cast [mod:alt, nochanneling] %s\n/cast [mod:ctrl] %s\n/cast [mod:shift] %s\n/cast %s",
+                drain, corr, (haunt or ua), sb)
         elseif spec == 2 then -- Demonology
+            local meta = GetIfKnown(47241, "Metamorfosis")
+            local aura = GetIfKnown(50589, "Aura de inmolación")
+            local cleave = GetIfKnown(50581, "Hender sombras")
+            local immo = GetIfKnown(348, "Inmolar")
+            local sf = GetIfKnown(6353, "Fuego de alma")
+            local incin = GetIfKnown(29722, "Incinerar") or GetIfKnown(686, "Descarga de las Sombras")
             local prefix = "#showtooltip\n"
-            
-            -- Metamorphosis Burst
-            local meta = GetIfKnown(47241)
-            if meta then 
-                local aura = GetIfKnown(50589) -- Immolation Aura
-                local cleave = GetIfKnown(50581) -- Shadow Cleave
-                if aura then prefix = prefix .. "/cast [form:1] " .. aura .. "\n" end
-                if cleave then prefix = prefix .. "/cast [form:1] " .. cleave .. "\n" end
+            if meta then
+                prefix = prefix .. string.format("/cast [form:1] %s\n/cast [form:1] %s\n", aura, cleave)
             end
-            
-            -- Normal Rotation
-            if GetIfKnown(348) then table.insert(spellList, GetIfKnown(348)) end -- Immolate
-            if GetIfKnown(172) then table.insert(spellList, GetIfKnown(172)) end -- Corruption
-            local sb = GetIfKnown(686) or "Descarga de las Sombras"
-            table.insert(spellList, sb); table.insert(spellList, sb)
-            
-            return prefix .. "/castsequence [noform:1] reset=combat/target " .. table.concat(spellList, ", ")
+            return prefix .. string.format("/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s", immo, sf, incin)
+        else -- Destruction
+            local immo = GetIfKnown(348, "Inmolar")
+            local conflag = GetIfKnown(17962, "Conflagrar")
+            local cb = GetIfKnown(50796, "Descarga de Caos")
+            local incin = GetIfKnown(29722, "Incinerar")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                immo, conflag, cb, incin)
         end
         
     -- -----------------------------------------------------------------------
-    -- DEATH KNIGHT (Brain Logic)
+    -- 2. DEATH KNIGHT (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "DEATHKNIGHT" then
+        local it = GetIfKnown(45477, "Toque helado")
+        local ps = GetIfKnown(45462, "Golpe de peste")
+        local rs = GetIfKnown(56815, "Golpe con runa")
+        local suffix = rs and ("\n/cast !" .. rs) or ""
+        
         if spec == 1 then -- Blood
-            if GetIfKnown(45477) then table.insert(spellList, GetIfKnown(45477)) end -- Icy Touch
-            if GetIfKnown(45462) then table.insert(spellList, GetIfKnown(45462)) end -- Plague Strike
-            local heart = GetIfKnown(55050) or GetIfKnown(49930) 
-            if heart then table.insert(spellList, heart); table.insert(spellList, heart) end
-            if GetIfKnown(49998) then table.insert(spellList, GetIfKnown(49998)) end -- Death Strike
-            local rs = GetIfKnown(56815) 
-            local suffix = ""
-            if rs then suffix = "\n/cast !" .. rs end
-            return "/castsequence reset=combat/target " .. table.concat(spellList, ", ") .. suffix
-            
+            local hs = GetIfKnown(55050, "Golpe en el corazón") or GetIfKnown(45902, "Golpe sangriento")
+            local ds = GetIfKnown(49998, "Golpe mortal")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+                it, ps, ds, hs, suffix)
         elseif spec == 2 then -- Frost
-            if GetIfKnown(45477) then table.insert(spellList, GetIfKnown(45477)) end
-            if GetIfKnown(45462) then table.insert(spellList, GetIfKnown(45462)) end
-            if GetIfKnown(49020) then table.insert(spellList, GetIfKnown(49020)) end
-            local fs = GetIfKnown(49143)
-            if fs then table.insert(spellList, fs); table.insert(spellList, fs) end
-            return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
-            
-        elseif spec == 3 then -- Unholy
-           if GetIfKnown(45462) then table.insert(spellList, GetIfKnown(45462)) end
-           if GetIfKnown(45477) then table.insert(spellList, GetIfKnown(45477)) end
-           if GetIfKnown(55090) then table.insert(spellList, GetIfKnown(55090)) end
-           if GetIfKnown(49930) then table.insert(spellList, GetIfKnown(49930)) end
-           if GetIfKnown(47541) then table.insert(spellList, GetIfKnown(47541)) end
-           return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
+            local ob = GetIfKnown(49020, "Asolar")
+            local fs = GetIfKnown(49143, "Golpe de Escarcha")
+            local hb = GetIfKnown(49184, "Explosión aullante")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+                it, ps, (hb or fs), ob, suffix)
+        else -- Unholy
+            local ss = GetIfKnown(55090, "Golpe de la Plaga")
+            local dc = GetIfKnown(47541, "Espiral de la muerte")
+            local pest = GetIfKnown(50842, "Pestilencia")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+                it, ps, dc, (ss or pest), suffix)
         end
 
     -- -----------------------------------------------------------------------
-    -- PALADIN (Universal Style)
+    -- 3. PALADIN (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "PALADIN" then
-         -- Prot: 53595 (Hammer), 20271 (Judge), 35395 (Crusader/HotR)
-         -- Ret: 20271 (Judge), 35395 (CS), 53385 (DS)
-         -- Holy: 48782 (Shock)
-         if spec == 2 then
-             if GetIfKnown(53595) then table.insert(spellList, GetIfKnown(53595)) end
-             if GetIfKnown(20271) then table.insert(spellList, GetIfKnown(20271)) end
-             if GetIfKnown(35395) then table.insert(spellList, GetIfKnown(35395)) end
-         elseif spec == 3 then
-             if GetIfKnown(20271) then table.insert(spellList, GetIfKnown(20271)) end
-             if GetIfKnown(35395) then table.insert(spellList, GetIfKnown(35395)) end
-             if GetIfKnown(53385) then table.insert(spellList, GetIfKnown(53385)) end
-         else -- Holy
-             if GetIfKnown(48782) then table.insert(spellList, GetIfKnown(48782)) end
-             if GetIfKnown(48782) then table.insert(spellList, GetIfKnown(48782)) end -- Double Shock (CD wait)
-         end
-         
-         if #spellList == 0 then return "/cast " .. (GetIfKnown(35395) or "Golpe de cruzado") end
-         return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
+        if spec == 1 then -- Holy
+            local hs = GetIfKnown(48782, "Choque Sagrado")
+            local hl = GetIfKnown(48782, "Luz Sagrada")
+            local fol = GetIfKnown(48785, "Destello de Luz")
+            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [@mouseover,help][help][@player] %s",
+                hs, hl, fol)
+        elseif spec == 2 then -- Protection
+            local hotr = GetIfKnown(53595, "Martillo de rectitud")
+            local sor = GetIfKnown(53600, "Escudo de rectitud")
+            local cons = GetIfKnown(26573, "Consagración")
+            local hs = GetIfKnown(20925, "Escudo sagrado")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                hotr, cons, hs, sor)
+        else -- Retribution
+            local cs = GetIfKnown(35395, "Golpe de cruzado")
+            local ds = GetIfKnown(53385, "Tormenta divina")
+            local judge = GetIfKnown(53408, "Sentencia de sabiduría") or GetIfKnown(20271, "Sentencia de luz")
+            local exo = GetIfKnown(879, "Exorcismo")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                ds, judge, exo, cs)
+        end
 
     -- -----------------------------------------------------------------------
-    -- MAGE (Universal Style)
+    -- 4. MAGE (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "MAGE" then
-         -- Arcane: 30451 (Blast) x3, 30455 (Ice Lance/Barrage logic too complex for simple seq, simple blast spam)
-         -- Fire: 133 (Fireball)
-         -- Frost: 116 (Frostbolt), 30455 (Ice Lance)
-         if spec == 1 then
-              return "/cast " .. (GetIfKnown(30451) or "Explosión Arcana")
-         elseif spec == 3 then
-              if GetIfKnown(116) then table.insert(spellList, GetIfKnown(116)) end
-              if GetIfKnown(116) then table.insert(spellList, GetIfKnown(116)) end
-              if GetIfKnown(30455) then table.insert(spellList, GetIfKnown(30455)) end
-              return "/castsequence reset=target " .. table.concat(spellList, ", ")
-         else 
-              return "/cast " .. (GetIfKnown(133) or "Bola de Fuego")
-         end
+        if spec == 1 then -- Arcane
+            local ab = GetIfKnown(30451, "Descarga Arcana")
+            local am = GetIfKnown(5143, "Misiles Arcanos")
+            local abarr = GetIfKnown(44425, "Tromba Arcana")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+                am, abarr, ab)
+        elseif spec == 2 then -- Fire
+            local fb = GetIfKnown(133, "Bola de Fuego")
+            local lb = GetIfKnown(44457, "Bomba viva")
+            local pyro = GetIfKnown(11366, "Piroexplosión")
+            local scorch = GetIfKnown(2948, "Agostar")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                lb, pyro, scorch, fb)
+        else -- Frost
+            local fb = GetIfKnown(116, "Descarga de Escarcha")
+            local il = GetIfKnown(30455, "Lanza de hielo")
+            local df = GetIfKnown(44572, "Congelación profunda")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+                il, df, fb)
+        end
 
     -- -----------------------------------------------------------------------
-    -- HUNTER (Universal Style)
-    -- -----------------------------------------------------------------------
-    elseif class == "HUNTER" then
-         -- Mark, Serpent, Shot
-         if GetIfKnown(1130) then table.insert(spellList, GetIfKnown(1130)) end -- Mark
-         if GetIfKnown(1978) then table.insert(spellList, GetIfKnown(1978)) end -- Serpent
-         local shot = GetIfKnown(53209) or GetIfKnown(3044) -- Chimera or Arcane
-         if shot then table.insert(spellList, shot) end
-         
-         return "/castsequence reset=target " .. table.concat(spellList, ", ")
-
-    -- -----------------------------------------------------------------------
-    -- ROGUE (Universal Style)
+    -- 5. ROGUE (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "ROGUE" then
-         return "/cast " .. (GetIfKnown(1752) or "Golpe siniestro")
+        if spec == 1 then -- Assassination
+            local mut = GetIfKnown(1329, "Mutilar")
+            local env = GetIfKnown(32645, "Envenenar")
+            local hfb = GetIfKnown(63848, "Hambre de sangre")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+                env, hfb, mut)
+        elseif spec == 2 then -- Combat
+            local ss = GetIfKnown(1752, "Golpe siniestro")
+            local evis = GetIfKnown(2098, "Eviscerar")
+            local snd = GetIfKnown(5171, "Hacer picadillo")
+            local ks = GetIfKnown(51690, "Asesinato múltiple")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                evis, snd, ks, ss)
+        else -- Subtlety
+            local hemo = GetIfKnown(16511, "Hemorragia")
+            local evis = GetIfKnown(2098, "Eviscerar")
+            local step = GetIfKnown(36554, "Paso de las Sombras")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+                evis, step, hemo)
+        end
 
     -- -----------------------------------------------------------------------
-    -- PRIEST (Universal Style)
+    -- 6. HUNTER (3 Specs)
     -- -----------------------------------------------------------------------
-    elseif class == "PRIEST" then
-         if spec == 3 then -- Shadow
-             if GetIfKnown(34914) then table.insert(spellList, GetIfKnown(34914)) end -- VT
-             if GetIfKnown(589) then table.insert(spellList, GetIfKnown(589)) end -- Pain
-             if GetIfKnown(2944) then table.insert(spellList, GetIfKnown(2944)) end -- Plague
-             local mf = GetIfKnown(15407)
-             if mf then table.insert(spellList, mf) end
-             return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
-         else
-             return "/cast " .. (GetIfKnown(585) or "Punición")
-         end
+    elseif class == "HUNTER" then
+        local steady = GetIfKnown(56641, "Disparo firme")
+        local serpent = GetIfKnown(1978, "Picadura de serpiente")
+        local kill = GetIfKnown(53351, "Disparo mortal")
+        
+        if spec == 1 then -- Beast Mastery
+            local bw = GetIfKnown(19574, "Cólera de las bestias")
+            local kc = GetIfKnown(34026, "Matar")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                bw, kc, serpent, kill, steady)
+        elseif spec == 2 then -- Marksmanship
+            local chim = GetIfKnown(53209, "Disparo de quimera")
+            local aimed = GetIfKnown(19434, "Disparo de puntería")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                chim, aimed, serpent, steady)
+        else -- Survival
+            local exp = GetIfKnown(53301, "Disparo explosivo")
+            local ba = GetIfKnown(3674, "Flecha negra")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                exp, ba, serpent, steady)
+        end
 
     -- -----------------------------------------------------------------------
-    -- WARRIOR (Universal Style)
+    -- 7. WARRIOR (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "WARRIOR" then
-         -- MS/Bloodthirst/ShieldSlam
-         local s = GetIfKnown(12294) or GetIfKnown(23881) or GetIfKnown(23922)
-         return "/cast " .. (s or "Golpe heroico")
+        if spec == 1 then -- Arms
+            local ms = GetIfKnown(12294, "Golpe mortal")
+            local op = GetIfKnown(7384, "Abrumar")
+            local rend = GetIfKnown(772, "Desgarrar")
+            local exe = GetIfKnown(5308, "Ejecutar")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                ms, op, rend, exe)
+        elseif spec == 2 then -- Fury
+            local bt = GetIfKnown(23881, "Sed de sangre")
+            local ww = GetIfKnown(1680, "Torbellino")
+            local slam = GetIfKnown(1464, "Embate")
+            local hs = GetIfKnown(78, "Golpe heroico")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s\n/cast !%s",
+                ww, slam, bt, hs)
+        else -- Protection
+            local ss = GetIfKnown(23922, "Embate con escudo")
+            local rev = GetIfKnown(6572, "Revancha")
+            local shock = GetIfKnown(46968, "Ola de choque")
+            local dev = GetIfKnown(20243, "Devastar") or GetIfKnown(7386, "Hender armadura")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                ss, rev, shock, dev)
+        end
 
     -- -----------------------------------------------------------------------
-    -- SHAMAN (Universal Style)
+    -- 8. SHAMAN (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "SHAMAN" then
-         if GetIfKnown(8050) then table.insert(spellList, GetIfKnown(8050)) end -- Flame Shock
-         local blast = GetIfKnown(51505) or GetIfKnown(403) -- Lava or Lightning
-         if blast then table.insert(spellList, blast) table.insert(spellList, blast) end
-         return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
+        if spec == 1 then -- Elemental
+            local lv = GetIfKnown(51505, "Ráfaga de lava")
+            local fs = GetIfKnown(8050, "Choque de llamas")
+            local cl = GetIfKnown(421, "Cadena de relámpagos")
+            local lb = GetIfKnown(403, "Descarga de relámpagos")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                lv, fs, cl, lb)
+        elseif spec == 2 then -- Enhancement
+            local ss = GetIfKnown(17364, "Golpe de tormenta")
+            local ll = GetIfKnown(60103, "Látigo de lava")
+            local es = GetIfKnown(8042, "Choque de tierra")
+            local lb = GetIfKnown(403, "Descarga de relámpagos")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                ll, es, lb, ss)
+        else -- Restoration
+            local ch = GetIfKnown(1064, "Sanación en cadena")
+            local rip = GetIfKnown(61295, "Mareas vivas")
+            local lhw = GetIfKnown(8004, "Ola de sanación menor")
+            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [@mouseover,help][help][@player] %s",
+                ch, rip, lhw)
+        end
 
     -- -----------------------------------------------------------------------
-    -- DRUID (Universal Style)
+    -- 9. PRIEST (3 Specs)
+    -- -----------------------------------------------------------------------
+    elseif class == "PRIEST" then
+        if spec == 1 then -- Discipline
+            local pws = GetIfKnown(17, "Palabra de poder: escudo")
+            local pen = GetIfKnown(47540, "Penitencia")
+            local fh = GetIfKnown(2061, "Sanación relámpago")
+            local pom = GetIfKnown(33076, "Rezo de alivio")
+            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+                pws, pen, pom, fh)
+        elseif spec == 2 then -- Holy
+            local coh = GetIfKnown(34861, "Círculo de sanación")
+            local pom = GetIfKnown(33076, "Rezo de alivio")
+            local renew = GetIfKnown(139, "Renovar")
+            local fh = GetIfKnown(2061, "Sanación relámpago")
+            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+                coh, pom, renew, fh)
+        else -- Shadow
+            local mf = GetIfKnown(15407, "Tortura mental")
+            local vt = GetIfKnown(34914, "Toque vampírico")
+            local dp = GetIfKnown(2944, "Peste devoradora")
+            local mb = GetIfKnown(8092, "Explosión mental")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast [nochanneling] %s",
+                vt, dp, mb, mf)
+        end
+
+    -- -----------------------------------------------------------------------
+    -- 10. DRUID (3 Specs)
     -- -----------------------------------------------------------------------
     elseif class == "DRUID" then
-         -- Moonfire -> Starfire / Wrath
-         if spec == 1 then
-             if GetIfKnown(8921) then table.insert(spellList, GetIfKnown(8921)) end
-             local filler = GetIfKnown(2912) or GetIfKnown(5176) -- Starfire / Wrath
-             if filler then table.insert(spellList, filler) end
-             return "/castsequence reset=combat/target " .. table.concat(spellList, ", ")
-         elseif spec == 2 then -- Feral
-             local s = GetIfKnown(33876) or GetIfKnown(6807) -- Mangle or Maul
-             return "/cast " .. (s or "Arañazo")
-         else
-             return "/cast " .. (GetIfKnown(5176) or "Cólera")
-         end
+        if spec == 1 then -- Balance
+            local wrath = GetIfKnown(5176, "Cólera")
+            local sf = GetIfKnown(2912, "Fuego estelar")
+            local mf = GetIfKnown(8921, "Fuego lunar")
+            local is = GetIfKnown(5570, "Enjambre de insectos")
+            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+                sf, mf, is, wrath)
+        elseif spec == 2 then -- Feral (Bear & Cat Form Support)
+            local bearMaul = GetIfKnown(6807, "Magullar")
+            local bearMangle = GetIfKnown(33878, "Destrozar (oso)")
+            local catMangle = GetIfKnown(33876, "Destrozar (gato)")
+            local catRip = GetIfKnown(1079, "Destripar")
+            local catBite = GetIfKnown(22568, "Mordedura feroz")
+            local catRoar = GetIfKnown(52610, "Rugido salvaje")
+            return string.format("#showtooltip\n/cast [form:1, mod:shift] %s\n/cast [form:1] %s\n/cast [form:3, mod:shift] %s\n/cast [form:3, mod:ctrl] %s\n/cast [form:3, mod:alt] %s\n/cast [form:3] %s\n/cast [noform] %s",
+                bearMangle, bearMaul, catRip, catBite, catRoar, catMangle, GetIfKnown(5176, "Cólera"))
+        else -- Restoration
+            local rej = GetIfKnown(774, "Rejuvenecimiento")
+            local lb = GetIfKnown(33763, "Flor de vida")
+            local wg = GetIfKnown(48438, "Crecimiento salvaje") or GetIfKnown(18562, "Alivio presto")
+            local reg = GetIfKnown(8936, "Recrecimiento")
+            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+                rej, lb, wg, reg)
+        end
     end
     
-    -- Absolute Fallback
     return "/startattack"
 end
 
