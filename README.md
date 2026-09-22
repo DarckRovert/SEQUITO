@@ -1,6 +1,6 @@
 # 🔮 Sequito - La Plataforma de Raid Definitiva
 
-**Versión:** 10.1.0 (The Final Polish)  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Autor:** DarckRovert (Ingame: Thesaviour)  
 **Clan:** El Sequito del Terror (UltimoWoW)  
 **Compatible con:** World of Warcraft 3.3.5a (WotLK)
@@ -40,7 +40,7 @@ Todo lo que amabas de la "Definitive Edition" sigue aquí, pero mejor organizado
 
 ## 📺 Soporte y Comunidad
 
-¡Únete a la comunida de **El Sequito del Terror**!
+¡Únete a la comunidad de **El Sequito del Terror**!
 
 - 💜 **Twitch:** [twitch.tv/darckrovert](https://www.twitch.tv/darckrovert)
 - 💚 **Kick:** [kick.com/darckrovert](https://kick.com/darckrovert)
@@ -128,7 +128,15 @@ En esta versión **v8.0.0**, hemos implementado **14 módulos nuevos** para PvP,
 - [MACROS.md](MACROS.md) - Guía detallada de las "Smart Macros"
 - [COMMANDS.md](COMMANDS.md) - Lista completa de comandos de consola
 - [MODULES.md](MODULES.md) - Explicación técnica de cada módulo
-- [CHANGELOG.md](CHANGELOG.md) - Notas del parche v8.0.0
+- [CHANGELOG.md](CHANGELOG.md) - Notas del parche
+- [GOVERNANCE.md](GOVERNANCE.md) - Modelo de gobernanza y toma de decisiones
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Código de conducta de la comunidad
+- [SECURITY.md](SECURITY.md) - Política de seguridad y modelo de amenazas WoW 3.3.5a
+- [SUPPORT.md](SUPPORT.md) - Guía de soporte, ayuda y reporte de bugs
+- [API.md](API.md) - Referencia técnica de la API interna
+- [INSTALL.md](INSTALL.md) - Guía de instalación y resolución de problemas
+- [FAQ.md](FAQ.md) - Preguntas frecuentes
+- [USAGE.md](USAGE.md) - Guía de uso rápido
 
 ---
 

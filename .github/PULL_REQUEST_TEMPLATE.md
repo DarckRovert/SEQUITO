@@ -25,7 +25,7 @@ Describe cómo verificaste los cambios:
 
 ## 🛡️ Lista de Verificación (Checklist)
 
-- [ ] Mi código sigue las pautas de estilo descritas en [CONTRIBUTING.md](CONTRIBUTING.md).
+- [ ] Mi código sigue las pautas de estilo descritas en [CONTRIBUTING.md](../CONTRIBUTING.md).
 - [ ] He realizado una auto-revisión meticulosa de mi propio código.
 - [ ] No se utilizan APIs de versiones posteriores a 3.3.5a (e.g. `GROUP_ROSTER_UPDATE`, `C_Timer`, etc.).
 - [ ] Los nombres de módulos siguen la convención `S.<Modulo>`.

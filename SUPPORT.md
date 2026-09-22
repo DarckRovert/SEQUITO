@@ -39,7 +39,7 @@ Para consultas de desarrollo o temas privados:
 ## ❓ Qué Incluir al Solicitar Soporte Técnico
 
 Para que podamos ayudarte rápidamente, asegúrate de proporcionar:
-1. **Versión de Sequito:** (ej. `v9.0.0 Definitive Edition`).
+1. **Versión de Sequito:** (ej. `v10.2.0 Definitive Edition`).
 2. **Idioma del Cliente:** `esMX` o `enUS`.
 3. **Texto exacto del error Lua:** Incluyendo número de línea, archivo y `stack trace`.
 4. **Circunstancia en que ocurrió:** (ej. *Al pulsar el botón del menú radial*, *Durante el combate contra Arthas en ICC 25H*, etc.).

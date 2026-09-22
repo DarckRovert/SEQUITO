@@ -16,8 +16,8 @@ local addonName, S = ...
 _G.Sequito = S -- Global Access
 
 -- Version
-S.Version = "10.1.0"
-S.Build = "The Final Polish"
+S.Version = "10.2.0"
+S.Build = "Definitive Edition"
 
 -- C_Timer polyfill is in Core/Constants.lua (loads first via TOC)
 
@@ -334,7 +334,7 @@ SlashCmdList["SEQUITO"] = function(msg)
             print(string.format("Grupo de Talentos: |cFFFFFFFF%d|r", info.talentGroup))
             print(string.format("Auto-update macros: |cFFFFFFFF%s|r", info.autoUpdate and "Si" or "No"))
         end
-    elseif cmd == "specauto" then
+    elseif cmd == "specauto" or cmd == "autospec" then
         if S.SpecWatcher then
             local current = S.SpecWatcher:GetInfo().autoUpdate
             S.SpecWatcher:SetAutoUpdate(not current)
@@ -342,7 +342,7 @@ SlashCmdList["SEQUITO"] = function(msg)
     elseif cmd == "lock" then
         S.db.profile.Locked = not S.db.profile.Locked
         print("|cFFFF00FFSequito|r: Posicion " .. (S.db.profile.Locked and "bloqueada" or "desbloqueada"))
-    elseif cmd == "reset" then
+    elseif cmd == "reset" or cmd == "resetpos" then
         S.db.profile.Position = S.defaults.profile.Position
         if S.Sphere then
             S.Sphere:ClearAllPoints()
@@ -500,7 +500,7 @@ SlashCmdList["SEQUITO"] = function(msg)
             S.Assignments:StartPullTimer(tonumber(arg) or 10)
         end
     -- ReadyChecker Commands
-    elseif cmd == "readycheck" or cmd == "rc" then
+    elseif cmd == "readycheck" or cmd == "rc" or cmd == "ready" then
         if S.ReadyChecker then
             local subcmd = arg and arg:lower() or ""
             if subcmd == "full" then
@@ -511,6 +511,17 @@ SlashCmdList["SEQUITO"] = function(msg)
             else
                 S.ReadyChecker:Toggle()
             end
+        end
+    -- Sync Generic Command
+    elseif cmd == "sync" then
+        if S.VersionSync then
+            if S.VersionSync.RequestVersions then
+                S.VersionSync:RequestVersions()
+            elseif S.VersionSync.CheckVersions then
+                S.VersionSync:CheckVersions()
+            end
+        elseif S.AutoSync and S.AutoSync.BroadcastState then
+            S.AutoSync:BroadcastState()
         end
     -- FocusFire Commands (PvP)
     elseif cmd == "focusfire" or cmd == "ff" then

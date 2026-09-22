@@ -1,6 +1,6 @@
 # ❓ Preguntas Frecuentes (FAQ) - Sequito
 
-**Versión:** 9.0.0 (Definitive Edition)  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---

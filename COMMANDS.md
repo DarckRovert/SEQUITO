@@ -1,6 +1,6 @@
 # 💬 Lista Completa de Comandos - Sequito
 
-**Versión:** 9.0.0 (Definitive Edition)  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Autor:** DarckRovert (Ingame: Thesaviour)
 
 ---
@@ -569,16 +569,45 @@ Total muertes: 8 | Interrupts: 5
 
 | Comando | Descripción |
 |---------|-------------|
-| `/sequito inspect` | Abre el **Inspector de Academia** (Talentos/Gear). |
-| `/sequito gallery` | Abre la **Galería de Loot** visual. |
+| `/sequito inspect` | Abre el **Inspector de Academia** (Talentos/Gear real de target). |
+| `/sequito gallery` | Abre la **Galería de Loot** legendario. |
 
-## ⚙️ Utilidades Varias
+## ⚔️ Combate, Alertas y PvP
 
 | Comando | Descripción |
 |---------|-------------|
-| `/sequito version` | Muestra las versiones de todos los miembros de la raid. |
-| `/sequito reset` | Restablece la posición de todas las ventanas (si se pierden). |
-| `/rl` | Recargar la interfaz (alias rápido). |
+| `/sequito spy` | Alterna la interfaz de **SequitoSpy** (detección de sigilo y enemigos). |
+| `/sequito focusfire` (o `/seq ff`) | Abre el panel de Focus Fire sincronizado. |
+| `/sequito ff call` | Llama y marca con calavera al objetivo actual. |
+| `/sequito overlord` (o `/seq hud`) | Abre el configurador del HUD **The Overlord**. |
+| `/sequito alert [mensaje]` | Muestra una alerta táctica de prueba en pantalla. |
+| `/sequito alertpos [TOP/CENTER/BOTTOM]` | Modifica la posición en pantalla de las alertas de banda. |
+| `/sequito checkbuffs` (o `/seq checkcons`) | Genera y muestra el reporte de consumibles y buffs de raid. |
+| `/sequito combatclear` | Limpia el historial de daño y sanación del CombatTracker. |
+| `/sequito mode [FARM/PROGRESSION]` | Alterna el modo operativo de la raid (Farmeo vs Progresión). |
+| `/sequito phase [número/nombre]` | Anuncia un cambio de fase del jefe de banda. |
+
+## 🐎 Gestión de Monturas Favoritas
+
+| Comando | Descripción |
+|---------|-------------|
+| `/sequito mounts` (o `/seq monturas`) | Lista las monturas registradas del personaje. |
+| `/sequito setflying [nombre]` | Define la montura voladora preferida para macros. |
+| `/sequito setground [nombre]` | Define la montura terrestre preferida para macros. |
+| `/sequito setaquatic [nombre]` | Define la montura acuática preferida para macros. |
+
+## ⚙️ Utilidades y Mantenimiento
+
+| Comando | Descripción |
+|---------|-------------|
+| `/sequito version` (o `/seq vs`) | Muestra y compara versiones del addon en la banda. |
+| `/sequito sync` | Solicita o transmite el estado de sincronización. |
+| `/sequito whisper [1/2/3]` | Envía plantillas de susurro rápido o abre el panel. |
+| `/sequito notes` | Administrador de notas persistentes sobre jugadores. |
+| `/sequito build` | Gestor de árboles de talentos y configuraciones de glifos. |
+| `/sequito reset` (o `/seq resetpos`) | Restablece la posición centrada de la esfera principal. |
+| `/sequito lock` | Bloquea o desbloquea la posición de la esfera en pantalla. |
+| `/rl` | Recarga la interfaz del juego (`ReloadUI()`). |
 
 ---
 

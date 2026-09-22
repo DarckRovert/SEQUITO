@@ -1,6 +1,6 @@
 # 📜 Licencia - Sequito
 
-**Versión:** 7.1.0  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Autor:** DarckRovert (Ingame: Thesaviour)  
 **Año:** 2026
 

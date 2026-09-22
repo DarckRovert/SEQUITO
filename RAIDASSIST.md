@@ -264,6 +264,6 @@ El sistema funciona automáticamente cuando:
 
 ---
 
-**Versión:** 7.1.0  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Autor:** DarckRovert & Thesaviour  
 **Guild:** UltimoWoW

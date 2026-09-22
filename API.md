@@ -1,6 +1,6 @@
 # 🔌 API Documentation - Sequito
 
-**Version:** 10.1.0 (The Final Polish)  
+**Version:** 10.2.0 (Definitive Edition)  
 **Author:** DarckRovert (Ingame: Thesaviour)
 
 ---

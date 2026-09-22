@@ -1,6 +1,6 @@
 # 📦 Módulos Extra - Sequito
 
-**Versión:** 7.3.0  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Documentación de módulos adicionales y opcionales**
 
 ---
