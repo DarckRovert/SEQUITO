@@ -1,5 +1,10 @@
 # Sequito Changelog
 
+**Versión Actual:** 10.2.0 (Definitive Edition)  
+**Autor:** DarckRovert (Ingame: Thesaviour)
+
+---
+
 ## v10.2.0 "The Next Level"
 **Release Date:** 2026-02-11
 

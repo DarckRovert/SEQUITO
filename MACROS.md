@@ -1,5 +1,11 @@
 # 📜 Guía de Macros - Sequito (Necrosis Edition)
 
+**Versión:** 10.2.0 (Definitive Edition)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
+**Cliente WoW:** 3.3.5a (Build 12340)
+
+---
+
 **Sequito** genera macros inteligentes inspiradas en Necrosis. Estas macros se adaptan dinámicamente a tu clase, especialización y hechizos aprendidos.
 
 ---

@@ -1,6 +1,8 @@
 # 💬 Guía de Soporte y Ayuda - Sequito
 
-¡Gracias por utilizar **Sequito**! Si experimentas dificultades técnicas, dudas sobre la configuración de los módulos o necesitas asistencia, consulta los siguientes canales y recursos:
+**Versión:** 10.2.0 (Definitive Edition)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
+**Servidor:** UltimoWoW (3.3.5a Build 12340)
 
 ---
 
@@ -14,6 +16,9 @@ Antes de abrir una incidencia, te recomendamos consultar la documentación inclu
 - **Comandos de Chat (/sequito):** [COMMANDS.md](COMMANDS.md)
 - **Macros y Utilidades:** [MACROS.md](MACROS.md)
 - **Módulos de Banda (RaidAssist):** [RAIDASSIST.md](RAIDASSIST.md)
+- **Gobernanza del Proyecto:** [GOVERNANCE.md](GOVERNANCE.md)
+- **Política de Seguridad:** [SECURITY.md](SECURITY.md)
+- **Código de Conducta:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
 ---
 

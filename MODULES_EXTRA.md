@@ -1,6 +1,7 @@
 # 📦 Módulos Extra - Sequito
 
 **Versión:** 10.2.0 (Definitive Edition)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
 **Documentación de módulos adicionales y opcionales**
 
 ---

@@ -1,6 +1,6 @@
 # 🛡️ Política de Seguridad - Sequito
 
-**Versión:** 1.0.0  
+**Versión:** 10.2.0 (Definitive Edition)  
 **Fecha:** Septiembre de 2026  
 **Responsable:** DarckRovert (Ingame: Thesaviour)
 
@@ -12,8 +12,8 @@ Actualmente, solo la rama principal del addon (`main`) recibe parches de segurid
 
 | Versión | Cliente WoW | Estado de Soporte |
 | :--- | :--- | :--- |
-| **v9.x (Última Release)** | 3.3.5a (Build 12340) | :white_check_mark: Soportada activamente |
-| **< v9.0** | 3.3.5a | :x: No soportada |
+| **v10.x (Última Release)** | 3.3.5a (Build 12340) | :white_check_mark: Soportada activamente |
+| **< v10.0** | 3.3.5a | :x: No soportada |
 | **Versiones de Retail / Cataclysm / Classic** | 4.x - 11.x | :x: Incompatible |
 
 ---

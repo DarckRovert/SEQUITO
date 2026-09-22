@@ -1,5 +1,11 @@
 # Sequito RaidAssist - Guía Completa
 
+**Versión:** 10.2.0 (Definitive Edition)  
+**Autor:** DarckRovert (Ingame: Thesaviour)  
+**Cliente WoW:** 3.3.5a (Build 12340)
+
+---
+
 ## 📋 Descripción
 
 RaidAssist es un sistema colaborativo que permite a toda la guild coordinar mejor en raids cuando todos usan Sequito. Comparte información automáticamente entre jugadores para mejorar la coordinación.
