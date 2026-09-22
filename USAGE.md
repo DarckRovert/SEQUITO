@@ -128,15 +128,32 @@ Abre una pequeña barra flotante que te muestra la secuencia ideal de hechizos s
 
 ---
 
-## ⚖️ Capítulo 5: Concilio de Botín Inteligente (`Loot Council`)
+## ⚖️ Capítulo 5: Concilio de Botín Inteligente (`Loot Council` - `/sloot`)
 
-La distribución justa y rápida del botín en bandas de hermandad ahora es automática:
+La distribución justa, rápida y transparente del botín en bandas de hermandad ahora cuenta con automatización total:
 
-1. **Apertura de Cofres/Jefes:** Cuando un jefe es derrotado y se abre la ventana de despojo (`LOOT_OPENED`), Sequito escanea automáticamente los objetos. Si cae una pieza épica o legendaria, inicia la sesión de concilio sin necesidad de escribir comandos complejos.
-2. **Votación de Oficiales Blindada:**
-   - Los miembros del concilio tienen botones para votar por cada candidato.
-   - **Regla de 1 voto único:** Cada oficial solo puede emitir un voto por ítem. Si cambia de opinión y vota por otro jugador, su voto anterior se resta automáticamente y se traslada al nuevo candidato. Nadie puede hacer trampa ni spamear votos.
-3. **¿Qué pasa con los jugadores que NO tienen el addon?**
+1. **Cola de Múltiples Ítems (Loot Queue):**
+   - Cuando un jefe es derrotado y se abre la ventana de despojo (`LOOT_OPENED`), Sequito escanea automáticamente **todas** las piezas épicas o legendarias caídas y las encola.
+   - Al finalizar la votación de una pieza, el addon abre inmediatamente la sesión para el siguiente ítem de la cola sin que el líder tenga que hacer nada manual.
+2. **Respuestas de Jugador Estándar de WotLK:**
+   - La ventana ofrece cuatro botones claros para que los miembros de la banda declaren su necesidad:
+     - **Main Spec (MS):** Prioridad principal para tu talento activo.
+     - **Off Spec (OS):** Para tu segunda especialización o equipamiento secundario.
+     - **Mejora:** Para piezas con estadísticas menores o variantes.
+     - **Pasar:** Si no necesitas el objeto.
+3. **Auditoría de Compatibilidad y Marcas de Tier:**
+   - **Tipos de Armadura:** Muestra la clase de cada candidato en su color oficial y audita si puede equipar la armadura (Placas, Malla, Cuero, Tela), alertando con `[Armadura Óptima]`, `[Equipable]` o `[No Equipable]`.
+   - **Marcas de Santificación (Tier Tokens):** Comprueba automáticamente las clases válidas para evitar confusiones de despojo:
+     - *Vencedor:* Pícaro, Caballero de la Muerte, Mago, Druida.
+     - *Protector:* Guerrero, Cazador, Chamán.
+     - *Conquistador:* Paladín, Sacerdote, Brujo.
+4. **Temporizador Regresivo Visual y Desempate:**
+   - Un contador visual en tiempo real muestra los segundos restantes de votación (configurable de 15 a 180s).
+   - Al expirar el tiempo, el sistema avisa en el chat de banda al candidato ganador.
+   - **Resolución de Empates:** Si dos candidatos terminan con la misma cantidad de votos de oficiales, Sequito compara automáticamente sus tiradas de dados para desempatar con justicia.
+5. **Entrega Directa en el Juego (`GiveMasterLoot`):**
+   - El Maestro Despojador dispone de un botón verde **`[Dar]`** en la fila del ganador. Al pulsarlo, Sequito ejecuta la llamada nativa de Blizzard `GiveMasterLoot` para depositar el ítem directamente en la mochila del jugador si el cadáver sigue abierto, o anuncia al ganador en el chat de banda.
+6. **¿Qué pasa con los jugadores que NO tienen el addon?**
    - ¡Están totalmente incluidos! Sequito intercepta automáticamente los resultados de dados en el chat general (`/azar 100` o `/roll`).
    - El jugador sin el addon tira sus dados normalmente en el juego y Sequito lo añade de inmediato a la lista de candidatos con su puntuación numérica exacta, permitiendo al concilio deliberar y votar con transparencia.
 

@@ -55,9 +55,12 @@ Sincronización continua a través del canal de hermandad (`GUILD`), además de 
 - **HUD Reactivo de Rotación (`/srot`):** Pequeña barra flotante con cooldowns y **resaltado instantáneo de PROCS** en verde esmeralda (`Buena racha`, `Arte de la guerra`, `Oleada de sangre`, `Escarcha blanca`, `Diezmar`, `Eclipses`).
 
 ### 5. ⚖️ Concilio de Botín Híbrido (`Loot Council` - `/sloot`)
-- Detección automática de piezas épicas al despojar jefes de banda (`LOOT_OPENED`).
-- Sistema de votación blindado: solo oficiales verificados pueden votar (1 voto único por oficial por ítem, actualizable).
-- **Inclusión de jugadores sin addon:** Intercepta tiradas de dados convencionales (`/azar 100` o `/roll`) por chat general y las incorpora de inmediato a la tabla de candidatos con su puntuación numérica.
+- **Cola de Botín Automática (Loot Queue):** Encola automáticamente todas las piezas épicas del jefe y pasa de una a otra sin intervención manual.
+- **Entrega Directa en el Juego (`GiveMasterLoot`):** Botón `[Dar]` en la interfaz para que el Maestro Despojador asigne el ítem directamente a la mochila del ganador.
+- **Respuestas WotLK:** Declaración de necesidad con botones de `Main Spec (MS)`, `Off Spec (OS)`, `Mejora` y `Pasar`.
+- **Auditoría de Idoneidad y Tier Tokens:** Valida si el candidato puede usar la armadura y si la Marca de Santificación corresponde a su clase (*Vencedor*, *Protector*, *Conquistador*).
+- **Temporizador Visual y Desempate:** Cuenta regresiva en pantalla con auto-aviso de expiración y desempate automático por dados.
+- **Inclusión de jugadores sin addon:** Intercepta tiradas convencionales (`/azar 100` o `/roll`) por chat general y las incorpora a la tabla de candidatos con su puntuación numérica.
 
 ### 6. 💀 Auditoría de Combate y Análisis de Wipes (`/sstats` y `/swipe`)
 - Parser de combate (`CLEU`) que extrae con exactitud matemática el daño realizado y la sanación efectiva neta.

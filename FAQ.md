@@ -145,19 +145,35 @@ Selecciona a cualquier jugador y escribe /sinspect:
 ## 6. Concilio de Botín (Loot Council) e Inclusión de Pugs
 
 ### ¿Cómo se inicia una sesión de Concilio de Botín?
-- **Automática:** Al matar a un jefe y abrir su ventana de despojo (LOOT_OPENED), Sequito escanea el botín. Si detecta piezas de calidad épica o legendaria, abre el panel de concilio de inmediato.
-- **Manual:** Los oficiales pueden abrir el panel en cualquier momento con /sloot o /sequito lc.
+- **Automática:** Al matar a un jefe y abrir su ventana de despojo (`LOOT_OPENED`), Sequito escanea el botín y **encola automáticamente todas las piezas épicas o legendarias**.
+- **Cola de Botín:** Al finalizar de votar un objeto, el concilio pasa de inmediato a la siguiente pieza en cola sin necesidad de reabrir el cadáver ni escribir comandos.
+- **Manual:** Los oficiales pueden abrir el panel en cualquier momento con `/sloot` o `/sequito lc`.
+
+### ¿Cómo responden los miembros de la banda?
+La ventana ofrece 4 botones dedicados:
+- **Main Spec (MS):** Para tu especialización y rol principal.
+- **Off Spec (OS):** Para tu segunda especialización.
+- **Mejora:** Para mejoras secundarias.
+- **Pasar:** Si no necesitas el objeto.
+
+### ¿Cómo ayuda el addon a los oficiales a no equivocarse de clase o armadura?
+- **Auditoría de Armadura:** Detecta si la pieza es Placas, Malla, Cuero o Tela y la contrasta con la clase del jugador, señalando `[Armadura Óptima]`, `[Equipable]` o `[No Equipable]`.
+- **Marcas de Santificación (Tier Tokens):** Valida si la marca corresponde a la clase del aspirante (*Vencedor*, *Protector*, *Conquistador*), previniendo despojos erróneos de piezas de tier en ICC y ToC.
+
+### ¿Cómo entrega el botín el Maestro Despojador?
+El Maestro Despojador dispone de un botón verde **`[Dar]`** en la fila de cada candidato. Al presionarlo, Sequito invoca directamente la API de Blizzard `GiveMasterLoot`, pasando el ítem a la mochila del ganador en un solo clic si el cadáver sigue abierto.
 
 ### ¿Qué pasa si un jugador del grupo o pug NO tiene Sequito instalado?
 **No hay ningún problema.** Sequito está diseñado para la convivencia total en la comunidad:
-- El addon escucha de fondo el canal del juego (CHAT_MSG_SYSTEM).
-- Cuando un jugador escribe /azar 100 o /roll en el chat (soportando clientes en español o inglés), Sequito intercepta su tirada numérica y **lo añade automáticamente a la lista de candidatos con su número exacto obtenido**.
+- El addon escucha de fondo el canal del juego (`CHAT_MSG_SYSTEM`).
+- Cuando un jugador escribe `/azar 100` o `/roll` en el chat (soportando clientes en español o inglés), Sequito intercepta su tirada numérica y **lo añade automáticamente a la lista de candidatos con su número exacto obtenido**.
 - De este modo, los oficiales pueden tomar decisiones justas considerando a toda la banda, tengan o no el addon instalado.
 
-### ¿Cómo se garantiza la transparencia en la votación de oficiales?
-- Solo los oficiales con rango verificado (
-ank >= 1) pueden emitir votos.
-- Cada oficial cuenta con **un único voto por objeto**. Si un oficial pulsa sobre otro candidato, su voto anterior se retira automáticamente y se traslada al nuevo. Es imposible duplicar votos.
+### ¿Cómo se garantiza la transparencia y qué pasa en caso de empate?
+- Solo los oficiales con rango verificado (`rank >= 1`) pueden emitir votos.
+- Cada oficial cuenta con **un único voto por objeto**. Si pulsa sobre otro candidato, su voto anterior se retira automáticamente y se traslada al nuevo.
+- **Desempate Automático:** Si dos candidatos quedan empatados en votos oficiales, Sequito compara sus tiradas de dados para desempatar con imparcialidad.
+- **Temporizador Visual:** Cuenta regresiva en pantalla de 60s (ajustable) con anuncio de tiempo agotado.
 
 ---
 
