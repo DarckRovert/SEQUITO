@@ -6,7 +6,8 @@
 ---
 
 ## 🆕 Comandos v10.2.0 (Definitive Edition)
-- `/sequito inspect` - (Academy) Inspecciona talentos y gear real.
+- `/sequito inspect` (`/sinspect`) - (Academy) Inspecciona talentos, GearScore real y encantamientos.
+- `/shumor` - (Humor) Controla y prueba las frases cómicas de incursión y actividades de banda.
 - `/sequito gallery` - (Gamification) Abre la galería de loot legendario.
 - `/sequito sync config` - (Hive Mind) Panel de configuración remota (Solo Oficiales).
 - `/sequito sync strat` - (Hive Mind) Enviar estrategia de boss (Solo Oficiales).
@@ -607,6 +608,10 @@ Total muertes: 8 | Interrupts: 5
 | `/sequito build` | Gestor de árboles de talentos y configuraciones de glifos. |
 | `/sequito reset` (o `/seq resetpos`) | Restablece la posición centrada de la esfera principal. |
 | `/sequito lock` | Bloquea o desbloquea la posición de la esfera en pantalla. |
+| `/shumor` | Muestra la ayuda y estado del módulo de Frases Cómicas de Incursión. |
+| `/shumor toggle` | Activa o desactiva las frases cómicas en actividades. |
+| `/shumor channel [SAY/PARTY/RAID/YELL]` | Establece el canal de chat para la emisión de frases. |
+| `/shumor test [CATEGORIA]` | Prueba una frase cómica en el chat (ej. `SUMMON`, `BATTLE_REZ`). |
 | `/rl` | Recarga la interfaz del juego (`ReloadUI()`). |
 
 ---

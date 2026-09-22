@@ -153,6 +153,28 @@ La distribución justa y rápida del botín en bandas de hermandad ahora es auto
 
 ---
 
+## 🎭 Capítulo 7: Frases Cómicas de Incursión (`SequitoHumor` - `/shumor`)
+
+Para darle vida, diversión y buen humor a las sesiones de hermandad, Sequito incorpora un sistema inteligente de expresiones automáticas con jerga clásica de WoW y de la comunidad hispana/latina:
+
+1. **Actividades y Escenarios Soportados:**
+   - **Invocaciones de Brujo:** Pide clics con humor (*"¡Uber del Vacío llegando! Denle clic al portal que el brujo no es taxista gratis."*).
+   - **Armario y Piedras de Salud:** Avisa a la banda que agarren sus galletas antes de morir (*"¡Puse el armario de almas! Agarren sus piedras antes de morir y culpar al healer."*).
+   - **Ruleta Rusa / Ritual de la Perdición:** Anuncia la ruleta de sacrificio voluntario (*"¡RULETA RUSA INICIADA! Uno de ustedes será el almuerzo del demonio."*).
+   - **Mesa de Comida de Mago:** Buffet libre de carbohidratos mágicos para no esperar al maná por fotosíntesis.
+   - **Portales a Capitales:** Avisos cómicos ante posibles accidentes interdimensionales al Cráter de Dalaran.
+   - **Resurrección en Combate (BRez):** Le recuerda al compañero que el suelo de ICC no es un hotel de cinco estrellas.
+   - **Resurrecciones Normales:** Avisa al caído que los muertos no tiran dados de botín.
+   - **Heroísmo / Ansia de Sangre:** Gritos épicos para reventar el medidor de DPS.
+   - **Intervención Divina, Redirección, Festines y Reparaciones (Jeeves).**
+2. **Protección Anti-Spam y Seguridad:**
+   - Solo se activa cuando tú lanzas la habilidad con éxito (`unit == "player"`).
+   - Enfriamiento interno de 12 segundos para evitar saturación de chat.
+   - Canal inteligente: por defecto emite en `/say` (Decir), pero puedes configurarlo a `/party`, `/raid` o `/yell` con `/shumor channel [CANAL]`.
+   - Puedes probar cualquier categoría al instante con `/shumor test [CATEGORIA]`.
+
+---
+
 ## ⌨️ Tabla de Comandos Rápidos
 
 | Comando | Alias | Qué hace |
@@ -163,6 +185,7 @@ La distribución justa y rápida del botín en bandas de hermandad ahora es auto
 | `/srot` | `/srotation` | Muestra u oculta el HUD flotante de rotación reactiva |
 | `/sinspect` | `/seqinspect` | Inspecciona al objetivo (Talentos, GS real y encantamientos) |
 | `/sloot` | `/sequito lc` | Abre el panel del Concilio de Botín |
+| `/shumor` | `/shumor toggle` | Controla y prueba las frases cómicas de incursión |
 | `/sstats` | `/sequito stats` | Abre las estadísticas de rendimiento en combate |
 | `/swipe` | `/sequito wipe` | Abre el análisis detallado del último wipe |
 | `/sbuffs` | `/sequito buffs` | Escanea y reporta buffs faltantes en la banda |

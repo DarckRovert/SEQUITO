@@ -57,6 +57,7 @@ Modules\Utility\Runes.lua
 Modules\Utility\EventCalendar.lua
 Modules\Utility\Visuals.lua
 Modules\Utility\SequitoTrade.lua
+Modules\Utility\SequitoHumor.lua
 Modules\Class\SequitoCoven.lua
 Modules\Class\SequitoSoulstones.lua
 Modules\Class\SequitoDoTTracker.lua

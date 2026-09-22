@@ -564,4 +564,9 @@ S.L = S.L or {}
     S.L["ILVL_APPROX"] = "Nivel de Objeto Aprox."
     S.L["COOLDOWN_ASSIGNMENTS"] = "Asignaciones de Cooldowns"
     S.L["NOT_RAID_LEADER"] = "Solo el Líder de Banda puede ejecutar esta acción."
+
+    -- Humor & Fun Speech
+    S.L["HUMOR_TITLE"] = "Frases y Humor de Incursión"
+    S.L["HUMOR_DESC"] = "Expresiones cómicas e inmersivas automáticas para actividades de hermandad."
+    S.L["HUMOR_ENABLED"] = "Habilitar Modo Humor"
 -- end

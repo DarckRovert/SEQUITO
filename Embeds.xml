@@ -53,6 +53,7 @@
     <Script file="Modules/Utility/EventCalendar.lua"/>
     <Script file="Modules/Utility/Visuals.lua"/>
     <Script file="Modules/Utility/SequitoTrade.lua"/>
+    <Script file="Modules/Utility/SequitoHumor.lua"/>
     <Script file="Modules/Class/SequitoCoven.lua"/>
     <Script file="Modules/Class/SequitoSoulstones.lua"/>
     <Script file="Modules/Class/SequitoDoTTracker.lua"/>

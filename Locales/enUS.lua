@@ -174,3 +174,9 @@ S.L["TALENTS"] = "Talents"
 S.L["ILVL_APPROX"] = "Approx. Item Level"
 S.L["COOLDOWN_ASSIGNMENTS"] = "Cooldown Assignments"
 S.L["NOT_RAID_LEADER"] = "Only the Raid Leader can perform this action."
+
+-- Humor & Fun Speech
+S.L["HUMOR_TITLE"] = "Raid Humor & Fun Speech"
+S.L["HUMOR_DESC"] = "Automatic humorous and immersive quotes for guild activities."
+S.L["HUMOR_ENABLED"] = "Enable Humor Mode"
+

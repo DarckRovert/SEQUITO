@@ -493,4 +493,37 @@ HUD de combate con alertas de proc, barra de recursos y salud de mascota para to
 
 ---
 
+## 🎭 SequitoHumor.lua (NUEVO v10.2.0)
+
+### Descripción
+Sistema interactivo de expresiones, frases cómicas e inmersión de hermandad ante actividades clave en mazmorras y bandas.
+
+### Funcionalidades Clave
+#### 1. Detección Inteligente por Eventos
+- Escucha `UNIT_SPELLCAST_SENT` y `UNIT_SPELLCAST_SUCCEEDED` exclusivamente cuando el lanzador es el jugador (`unit == "player"`).
+- Reemplazo dinámico de `%t` por el nombre del objetivo destinatario.
+
+#### 2. Categorías Soportadas
+- **Invocaciones:** Portal de reunión y rituales de brujo.
+- **Pozos de Almas / Armario:** Piedras de salud para la banda.
+- **Ruleta Rusa:** Ritual de la perdición / sacrificio voluntario.
+- **Mesa de Mago / Refrigerio:** Buffet libre de carbohidratos mágicos.
+- **Portales:** Teletransporte a capitales y advertencias sobre Dalaran Cráter.
+- **Resurrección en Combate (BRez):** Druida (Renacer) y Brujo (Piedra de alma).
+- **Resurrecciones Normales:** Paladín, Sacerdote y Chamán.
+- **Heroísmo / Ansia de Sangre:** Gritos épicos de batalla.
+- **Intervención Divina, Redirección, Festines y Reparaciones (Jeeves).**
+
+#### 3. Seguridad Anti-Spam
+- Cooldown interno de 12 segundos por categoría para evitar saturación de chat.
+- Fallback seguro de canal (`RAID` -> `PARTY` -> `SAY`).
+
+### Comandos
+- `/shumor toggle` - Activar o desactivar el módulo.
+- `/shumor channel [SAY|PARTY|RAID|YELL]` - Configurar canal de emisión.
+- `/shumor test [CATEGORIA]` - Probar una frase cómica en chat.
+
+---
+
 **Nota:** Para detalles de implementación técnica, revisar el código fuente en `Modules/`.
+
