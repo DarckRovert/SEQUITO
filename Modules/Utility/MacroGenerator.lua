@@ -27,6 +27,9 @@ S.MacroGen.Races = {
 
 function S.MacroGen:CreateMacro(name, icon, body, perChar)
     if not name or not body then return nil end
+    if #body > 255 then
+        body = body:sub(1, 255)
+    end
     local isPerChar = perChar or 1
     local macroID = GetMacroIndexByName(name)
     if macroID > 0 then
@@ -188,7 +191,7 @@ function S.MacroGen:GetNecrosisRotation(class, spec)
     -- -----------------------------------------------------------------------
     elseif class == "PALADIN" then
         if spec == 1 then -- Holy
-            local hs = GetIfKnown(48782, "Choque Sagrado")
+            local hs = GetIfKnown(20473, "Choque Sagrado")
             local hl = GetIfKnown(48782, "Luz Sagrada")
             local fol = GetIfKnown(48785, "Destello de Luz")
             return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [@mouseover,help][help][@player] %s",
@@ -458,7 +461,7 @@ function S.MacroGen:GetClassMacros(class, spec)
         local bub = self:GetSmartSpell(642, "Escudo divino") 
         table.insert(macros, { Name = "SeqBubble", Body = "#showtooltip " .. bub .. "\n/stopcasting\n/cast " .. bub .. "\n/cancelaura [mod:alt] " .. bub .. "\n/s ¡Escudo divino activo!" })
         if spec == 1 then
-             local shock = self:GetSmartSpell(48782, "Choque Sagrado")
+             local shock = self:GetSmartSpell(20473, "Choque Sagrado")
              table.insert(macros, { Name = "SeqHeal", Body = "#showtooltip " .. shock .. "\n/cast [@mouseover,help][help][@player] " .. shock .. "\n/s ¡Luz salvadora sobre %t!" })
         end
         if spec == 2 then

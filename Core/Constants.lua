@@ -83,17 +83,30 @@ end
 
 -- Polyfill for IsSpellKnown (doesn't exist in 3.3.5)
 if not IsSpellKnown then
-    function IsSpellKnown(spellID)
-        local name = GetSpellInfo(spellID)
-        if not name then return false end
-        -- Check if player has the spell in spellbook
+    function IsSpellKnown(spellID, isPet)
+        local targetName = type(spellID) == "string" and spellID or GetSpellInfo(spellID)
+        if not targetName then return false end
+        
+        local bookType = isPet and (BOOKTYPE_PET or "pet") or (BOOKTYPE_SPELL or "spell")
         local i = 1
         while true do
-            local spellName = GetSpellInfo(i, BOOKTYPE_SPELL)
+            local spellName = GetSpellName(i, bookType)
             if not spellName then break end
-            if spellName == name then return true end
+            if spellName == targetName then return true end
             i = i + 1
         end
+        
+        -- Fallback to pet spellbook if checking general spell and player has pets (Warlock/Hunter/DK)
+        if not isPet and HasPetSpells and HasPetSpells() then
+            i = 1
+            while true do
+                local spellName = GetSpellName(i, BOOKTYPE_PET or "pet")
+                if not spellName then break end
+                if spellName == targetName then return true end
+                i = i + 1
+            end
+        end
+        
         return false
     end
     _G.IsSpellKnown = IsSpellKnown
