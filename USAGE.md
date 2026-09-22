@@ -5,7 +5,7 @@
 
 ---
 
-## 🏆 Novedades Definitive Edition (v9.0)
+## 🏆 Novedades Definitive Edition (v10.2.0)
 
 ### 🧠 Hive Mind (Para Oficiales)
 - `/sequito sync start` - Envía la estrategia del Boss actual a toda la raid (debe estar en tus notas).

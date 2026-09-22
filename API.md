@@ -333,7 +333,7 @@ Sequito_MacroGenerator_DeleteMacro("[SEQ] Old Macro")
 
 ---
 
-## 🔄 Macro Sync API *(NEW v7.1.0)*
+## 🔄 Macro Sync API **
 
 ### `S.MacroSync:ShareMacro(macroName)`
 
@@ -653,7 +653,7 @@ end
 
 ---
 
-## 🛡️ Raid Assist API *(NEW v7.1.0)*
+## 🛡️ Raid Assist API **
 
 ### `S.RaidAssist:StartPullTimer(seconds)`
 
@@ -1212,7 +1212,7 @@ end
 
 ---
 
-## ⚔️ TrinketTracker API *(NEW v7.2.0)*
+## ⚔️ TrinketTracker API **
 
 Tracker de trinkets PvP enemigos.
 
@@ -1236,7 +1236,7 @@ Limpia todos los datos del tracker.
 
 ---
 
-## 💀 WipeAnalyzer API *(NEW v7.2.0)*
+## 💀 WipeAnalyzer API **
 
 Analizador de wipes para raids.
 
@@ -1259,7 +1259,7 @@ Muestra el historial de wipes.
 
 ---
 
-## 📊 CooldownMonitor API *(NEW v7.2.0)*
+## 📊 CooldownMonitor API **
 
 Monitor de cooldowns del raid en tiempo real.
 
@@ -1282,7 +1282,7 @@ Anuncia cooldowns disponibles de un tipo.
 
 ---
 
-## 🎯 Assignments API *(NEW v7.2.0)*
+## 🎯 Assignments API **
 
 Sistema de asignaciones para raids.
 
@@ -1305,7 +1305,7 @@ Limpia todas las asignaciones.
 
 ---
 
-## ✅ ReadyChecker API *(NEW v7.2.0)*
+## ✅ ReadyChecker API **
 
 Chequeo pre-pull mejorado.
 

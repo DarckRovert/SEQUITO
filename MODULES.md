@@ -101,7 +101,7 @@ Detecta cuando cambias de talentos (Dual Spec) y desencadena automáticamente `S
 ---
 
 ## 👥 RaidSync.lua / RaidIntel.lua / RaidPanel.lua
-*(Funcionalidad intacta v2.2.0 - Sincronización y Panel de Raid)*
+*(Sincronización y Panel de Raid)*
 
 ---
 
@@ -220,7 +220,7 @@ Chequeo Pre-Pull Mejorado. Verifica que todos estén listos antes del pull.
 ---
 
 ## ⚔️ CombatTracker.lua
-*(Funcionalidad intacta v2.2.0 - Métricas de combate)*
+*(Métricas de combate)*
 
 ---
 
@@ -234,7 +234,7 @@ Módulos de soporte que mejoran la calidad de vida.
 
 ---
 
-## 🔄 MacroSync.lua (NUEVO v7.1.0)
+## 🔄 MacroSync.lua 
 
 ### Descripción
 Sistema de sincronización y biblioteca de macros entre usuarios de Sequito.
@@ -270,12 +270,12 @@ Sistema de sincronización y biblioteca de macros entre usuarios de Sequito.
 
 ---
 
-## 🎯 RaidAssist.lua (MEJORADO v7.1.0)
+## 🎯 RaidAssist.lua 
 
 ### Descripción
 Asistente completo para raids con alertas personalizables e historial de wipes.
 
-### Nuevas Funcionalidades v7.1.0
+### Funcionalidades de Asistencia de Banda
 
 #### 1. Sistema de Alertas Personalizables
 - Alertas visuales con colores por tipo (INFO/WARNING/CRITICAL).
@@ -308,7 +308,7 @@ Asistente completo para raids con alertas personalizables e historial de wipes.
 
 ---
 
-## ⚔️ TrinketTracker.lua (NUEVO v7.2.0)
+## ⚔️ TrinketTracker.lua 
 
 ### Descripción
 Tracker de Trinkets PvP enemigos para Arena y Battlegrounds.
@@ -346,7 +346,7 @@ Tracker de Trinkets PvP enemigos para Arena y Battlegrounds.
 
 ---
 
-## 💀 WipeAnalyzer.lua (NUEVO v7.2.0)
+## 💀 WipeAnalyzer.lua 
 
 ### Descripción
 Analizador de Wipes para raids que ayuda a identificar las causas de los wipes.

@@ -211,7 +211,7 @@ El sistema funciona automáticamente cuando:
 
 **El pull timer no aparece:**
 - Verifica que el raid leader haya usado el comando
-- Asegúrate de tener Sequito actualizado a v7.1.0+
+- Asegúrate de tener Sequito actualizado a v10.2.0+
 
 ---
 
@@ -224,7 +224,7 @@ El sistema funciona automáticamente cuando:
 
 ---
 
-## ✅ Mejoras Implementadas (v7.1.0)
+## ✅ Mejoras Implementadas
 
 - [x] **Integración visual con la esfera principal** - Botón satélite + indicador de estado
 - [x] **Más opciones de configuración** - Pestaña RaidAssist en Options
@@ -234,7 +234,7 @@ El sistema funciona automáticamente cuando:
 
 ---
 
-## 🎯 Próximas Mejoras (Roadmap v2.4.0)
+## 🎯 Próximas Mejoras (Roadmap)
 
 - [ ] Integración con DBM/BigWigs
 - [ ] Alertas de mecánicas de boss
@@ -243,7 +243,7 @@ El sistema funciona automáticamente cuando:
 
 ---
 
-## 🆕 Nuevos Comandos v7.1.0
+## 🆕 Comandos de Asistencia
 
 ### Alertas
 ```

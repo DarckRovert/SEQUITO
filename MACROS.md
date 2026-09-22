@@ -6,170 +6,199 @@
 
 ---
 
-**Sequito** genera macros inteligentes inspiradas en Necrosis. Estas macros se adaptan dinámicamente a tu clase, especialización y hechizos aprendidos.
+**Sequito** genera macros inteligentes inspiradas en Necrosis. Estas macros se adaptan dinámicamente a tu clase, especialización activa (las 30 ramas de talentos de WotLK 3.3.5a) y hechizos aprendidos, garantizando fluidez sin bloqueos de secuencia.
 
 ---
 
-## 🔮 Universal (Todas las Clases)
+## 🔮 Universal & Utilidades Inteligentes
 
-Estas macros están disponibles para todos los personajes:
+Estas macros están disponibles o se adaptan a todas las clases del juego:
+
+### [SeqRot] (Macro de Rotación Inteligente Adaptativa)
+Es la joya del sistema de combate de Sequito. Genera una macro multifunción que se adapta a las **30 especializaciones de las 10 clases**:
+- **Pulsación directa:** Lanza el hechizo principal o filler de la rotación (con `/startattack` y `/petattack` integrados).
+- **Shift:** Lanza el DoT principal, finisher o habilidad de daño burst.
+- **Ctrl:** Lanza el hechizo secundario de prioridad o control de daño.
+- **Alt:** Habilidad de remate (Execute/Drain Soul), CD ofensivo o AoE.
+- **Sanadores:** Modificadores automáticos con soporte de cursor (`[@mouseover,help]`) y jugador (`[@player]`).
+- **Druidas:** Detección de forma nativa (`[form:1]` oso vs `[form:3]` gato) para no mezclar habilidades de tanqueo y dps.
 
 ### [SeqRacial] (Macro Racial)
-Utiliza tu habilidad racial activa con un grito de batalla personalizado.
-- **Orc**: Furia Sangrienta ("¡Por el Sequito del Terror!")
+Utiliza la habilidad racial activa de tu personaje con un grito de batalla inmersivo:
+- **Orc**: Furia Sangrienta (*"¡Por el Sequito del Terror!"*)
 - **Troll**: Rabiar
 - **Human**: Sálvese quien pueda
 - **Undead**: Voluntad de los Renegados
-- ... y todas las demás razas.
+- **Blood Elf**: Torrente Arcano
+- **Tauren**: Pisotón de guerra
+- **Night Elf**: Fusión con las sombras
+- **Dwarf**: Forma de piedra
+- **Gnome**: Filo de la fuga
+- **Draenei**: Ofrenda de los naaru
 
 ### [SeqMount] (Montura Inteligente)
-Un solo botón para todas tus necesidades de transporte.
-- Detecta si puedes volar (Invoca montura voladora).
-- Si no puedes volar, invoca montura terrestre.
-- Desmonta si estás montado.
+Un solo botón para todas tus necesidades de transporte:
+- Si estás en zona donde se permite volar, invoca tu montura voladora.
+- Si estás en tierra o mazmorras, invoca tu montura terrestre.
+- Desmonta automáticamente si ya estás montado.
+
+### [SeqInt] (Interrupción Inteligente de Hechizo)
+Configurada para las 9 clases que poseen cortes de casteo:
+- **Prioridad:** Con tecla Shift corta el foco (`[mod:shift, target=focus]`), de lo contrario corta tu objetivo actual.
+- **Habilidades según clase:**
+  - *Pícaro:* Patada
+  - *Guerrero:* Zurrar
+  - *Caballero de la Muerte:* Helada mental
+  - *Mago:* Contrahechizo
+  - *Chamán:* Corte de viento
+  - *Sacerdote:* Silencio
+  - *Cazador:* Disparo silenciador
+  - *Brujo:* Bloqueo de hechizo (Manáfago)
+
+### [SeqCC] (Control de Masas Inteligente)
+Aplica el CC principal de tu clase manteniendo el control del combate:
+- **Modificadores:** `[mod:ctrl, target=mouseover]` para cc al vuelo sin perder target, `[mod:shift, target=focus]` para cc al foco, o directo al objetivo.
+- **Habilidades:** Polimorfia (Mago), Miedo (Brujo), Ceguera (Pícaro), Ciclón (Druida), Encadenar no-muerto (Sacerdote), Disparo disperso (Cazador), Martillo de justicia (Paladín).
 
 ---
 
-## ☠️ Death Knight (Necrosis Style)
+## ☠️ Caballero de la Muerte (Death Knight)
 
-### [SeqStart] (Inicio Inteligente)
-- Selecciona enemigo más cercano.
-- Manda a la pet a atacar.
-- Lanza tu opener (Toque Helado).
-
-### [SeqGrip] (Atracción)
-- Prioridad: Focus > Mouseover > Target.
-- Atrae al enemigo a tu posición.
-
-### [SeqInt] (Interrumpir)
-- Prioridad: Focus > Mouseover > Target.
-- Usa Helada Mental.
-- **Shift**: Usa Estrangular.
-
-### [SeqHeal] (Autosanación)
-- Transfusión de Runa.
-- **Shift**: Pacto de la Muerte (Sacrifica pet).
-- Usa Poción de Sanación Rúnica si está en la bolsa.
+- **[SeqStart]:** Opener de combate con Toque helado y ataque de pet.
+- **[SeqGrip]:** Atracción letal con prioridad Focus > Mouseover > Objetivo.
+- **[SeqInt]:** Helada mental con corte a foco en Shift.
+- **[SeqHeal]:** Autosanación con Transfusión de runa; en Shift activa Pacto de la muerte para sacrificar al esbirro, o consume poción rúnica.
+- **[SeqAoE]:** Propagación de enfermedades con Pestilencia y Muerte y descomposición.
+- **[SeqArmy]:** Invocación de Ejército de muertos con aviso sonoro.
+- **[SeqRot]:** Rotación adaptada a Sangre (Golpe en el corazón/Mortal), Escarcha (Asolar/Golpe de Escarcha) o Profano (Golpe de la Plaga/Espiral), con Golpe con runa en cola de autoataque (`/cast !Golpe con runa`).
 
 ---
 
-## 🔮 Warlock (Necrosis Style)
+## 🔮 Brujo (Warlock - Necrosis Core)
 
-### [SeqStart]
-- Opener inteligente según Spec (Corrupción / Inmolar / Metamorfosis).
-
-### [SeqPet] (Control Total)
-- **Clic**: Pet Atacar.
-- **Clic Derecho**: Pet Seguir.
-- **Shift + Clic**: Habilidad Especial (Prioridad Mouseover > Focus > Target).
-  - Imp: Huida / Escudo de Fuego.
-  - Voidwalker: Sacrificio / Consumir Sombras.
-  - Succubus: Seducción.
-  - Felhunter: Bloqueo de Hechizo / Devorar Magia.
-
-### [SeqHeal] (Supervivencia)
-- **Clic**: Usar Piedra de Salud.
-- **Clic Derecho**: Crear Piedra de Salud (si no tienes).
-- **Shift**: Canalizar Salud (Curar pet).
-
-### [SeqBanish] / [SeqFear]
-- Prioridad: Focus > Mouseover > Target.
-- Mantiene a tu objetivo principal seleccionado mientras controlas al add.
+- **[SeqStart]:** Opener según rama de talentos (Inmolar, Corrupción o Metamorfosis).
+- **[SeqPet]:** Control total de esbirro con un solo botón: Clic ataca, Clic derecho sigue, Shift usa habilidad especial (Imp: Huida, Voidwalker: Sacrificio, Súcubo: Seducción, Felhunter: Bloqueo/Devorar magia).
+- **[SeqHeal]:** Piedra de salud en clic primario; en Shift canaliza salud hacia el demonio.
+- **[SeqBanish]:** Desterrar con prioridad Focus > Mouseover > Objetivo.
+- **[SeqFear]:** Miedo rápido a foco o mouseover sin deseleccionar el objetivo primario.
+- **[SeqDispel]:** Devorar magia sobre aliados o enemigos.
+- **[SeqBurst]:** Metamorfosis + Aura de inmolación + Hender sombras (Demonología) o CDs ofensivos.
+- **[SeqRot]:**
+  - *Aflicción:* Descarga de las Sombras; Shift para Poseer/Aflicción inestable; Ctrl para Corrupción; Alt para Drenar alma en fase de ejecución (<25%).
+  - *Demonología:* Incinerar/Descarga; Shift para Inmolar; Ctrl para Fuego de alma (proc Diezmar); transformado en demonio activa Aura + Hender sombras.
+  - *Destrucción:* Incinerar; Shift para Inmolar; Ctrl para Conflagrar; Alt para Descarga de Caos.
 
 ---
 
-## 🛡️ Paladin
+## 🛡️ Paladín (Paladin)
 
-### [SeqBubble] (La "Vieja Confiable")
-- Lanza Escudo Divino.
-- Usa Piedra de Hogar.
-- Grita frase de inmunidad.
-
-### [SeqPull]
-- Lanza Escudo de Vengador.
-- Grita aviso de Pull.
-
-### [SeqHeal]
-- Prioridad: Mouseover > Target > Self.
-- Lanza Choque Sagrado (Holy) o Destello de Luz.
-- Anuncia curación crítica.
+- **[SeqBubble]:** Escudo divino + uso de Piedra de hogar ("Bubble Hearth") con frase inmersiva.
+- **[SeqPull]:** Escudo de vengador para tanques con aviso por chat.
+- **[SeqHeal]:** Choque Sagrado en Shift, Luz Sagrada en Ctrl, Destello de Luz con mouseover y jugador.
+- **[SeqRot]:**
+  - *Sagrado:* Choque Sagrado / Luz Sagrada / Destello de Luz por mouseover.
+  - *Protección:* Escudo de rectitud; Shift para Martillo de rectitud; Ctrl para Consagración; Alt para Escudo sagrado.
+  - *Reprensión:* Golpe de cruzado; Shift para Tormenta divina; Ctrl para Sentencia de sabiduría; Alt para Exorcismo instantáneo.
 
 ---
 
-## 🐺 Shaman
+## 🐺 Chamán (Shaman)
 
-### [SeqLust] (Ansia/Heroísmo)
-- Detecta automáticamente si eres Horda (Ansia de Sangre) o Alianza (Heroísmo).
-- Grita a la raid para avisar del buff.
-
-### [SeqWolves]
-- Invoca Espíritu Feral + Ira del Chamán.
-- Grita frase de manada.
-
----
-
-## 🏹 Hunter / 🗡️ Rogue
-
-### [SeqMD] (Hunter) / [SeqTricks] (Rogue)
-- Redirección / Secretos del Oficio.
-- Prioridad: Focus > Pet > Target.
-- Avisa al objetivo por susurro/chat.
+- **[SeqLust]:** Detecta si eres Horda (Ansia de sangre) o Alianza (Heroísmo) y grita el aviso a la banda.
+- **[SeqWolves]:** Invoca Espíritu feral + Ira del chamán (Mejora).
+- **[SeqTide]:** Tótem Marea de maná con aviso de recuperación a los sanadores.
+- **[SeqRot]:**
+  - *Elemental:* Descarga de relámpagos; Shift para Ráfaga de lava; Ctrl para Choque de llamas; Alt para Cadena de relámpagos.
+  - *Mejora:* Golpe de tormenta; Shift para Látigo de lava; Ctrl para Choque de tierra; Alt para Descarga de relámpagos con Arma vorágine x5.
+  - *Restauración:* Ola de sanación menor; Shift para Sanación en cadena; Ctrl para Mareas vivas con mouseover.
 
 ---
 
-## ⚕️ Priest / 🌿 Druid / 🗡️ Warrior
+## 🏹 Cazador (Hunter)
 
-### [SeqHymn] (Priest)
-- Himno Divino con cuenta atrás en chat.
-
-### [SeqRez] (Druid)
-- Renacer (Brez) con frase de rol de Necrosis.
-
-### [SeqWall] (Warrior)
-- Muro de Escudo + Grito de batalla.
+- **[SeqMD]:** Redirección inteligente a `@focus`, a la mascota si existe, o al objetivo amigo.
+- **[SeqRot]:** Disparo firme; Shift para Disparo de quimera / Disparo explosivo / Cólera de las bestias; Ctrl para Picadura de serpiente o Flecha negra; Alt para Disparo mortal.
 
 ---
 
-## ❓ Preguntas Frecuentes
+## 🗡️ Pícaro (Rogue)
 
-**¿Por qué mis macros tienen texto de rol?**
-Es una característica "Flavor" importada de Necrosis para mayor inmersión.
-
-**¿Se actualizan solas?**
-Sí, cada vez que aprendes un hechizo nuevo o cambias de talentos, Sequito regenera las macros para asegurar que siempre use el rango máximo y los hechizos correctos.
-
-**¿Qué pasa si no tengo el hechizo?**
-El sistema "Real Data" verifica si `IsSpellKnown` es verdadero. Si no sabes el hechizo, la macro no se creará o usará una alternativa válida.
+- **[SeqTricks]:** Secretos del oficio a foco o aliado con aviso automático por susurro.
+- **[SeqRot]:**
+  - *Asesinato:* Mutilar como ataque principal; Shift para Envenenar; Ctrl para Hambre de sangre.
+  - *Combate:* Golpe siniestro; Shift para Eviscerar; Ctrl para Hacer picadillo; Alt para Asesinato múltiple / Aluvión de acero.
+  - *Sutileza:* Hemorragia; Shift para Eviscerar; Ctrl para Paso de las Sombras.
 
 ---
 
-## 🔄 MacroSync - Sistema de Macros Compartidos (v7.1.0)
+## 🧙‍♂️ Mago (Mage)
 
-Nuevo en v7.1.0: Comparte y sincroniza macros con otros usuarios de Sequito.
+- **[SeqTable]:** Ritual de refrigerio (Mesita) con anuncio por chat y aviso de finalización.
+- **[SeqDecurse]:** Eliminar maldición con soporte de cursor (`@mouseover`) y autolanzamiento.
+- **[SeqRot]:**
+  - *Arcano:* Descarga Arcana; Shift para Misiles Arcanos; Ctrl para Tromba Arcana.
+  - *Fuego:* Bola de Fuego; Shift para Bomba viva; Ctrl para Piroexplosión instantánea con proc; Alt para Agostar.
+  - *Escarcha:* Descarga de Escarcha; Shift para Lanza de hielo; Ctrl para Congelación profunda.
+
+---
+
+## ⚕️ Sacerdote (Priest)
+
+- **[SeqHymn]:** Himno divino con temporizador de cuenta regresiva en el canal.
+- **[SeqRot]:**
+  - *Disciplina:* Sanación relámpago; Shift para Palabra de poder: escudo; Ctrl para Penitencia; Alt para Rezo de alivio con mouseover.
+  - *Sagrado:* Sanación relámpago; Shift para Círculo de sanación; Ctrl para Rezo de alivio; Alt para Renovar.
+  - *Sombras:* Tortura mental; Shift para Toque vampírico; Ctrl para Peste devoradora; Alt para Explosión mental.
+
+---
+
+## 🌿 Druida (Druid)
+
+- **[SeqRez]:** Renacer en combate (Brez) con aviso y frase de rol personalizable.
+- **[SeqInnervate]:** Estimular hacia cursor (`@mouseover`), objetivo aliado o jugador.
+- **[SeqRot]:**
+  - *Equilibrio:* Cólera; Shift para Fuego estelar; Ctrl para Fuego lunar; Alt para Enjambre de insectos.
+  - *Feral Oso (`[form:1]`):* Magullar / Destrozar oso / Lacerar.
+  - *Feral Gato (`[form:3]`):* Destrozar gato / Triturar; Shift para Destripar; Ctrl para Mordedura feroz; Alt para Rugido salvaje.
+  - *Restauración:* Recrecimiento; Shift para Rejuvenecimiento; Ctrl para Flor de vida; Alt para Crecimiento salvaje con mouseover.
+
+---
+
+## 🛡️ Guerrero (Warrior)
+
+- **[SeqWall]:** Muro de escudo con grito de batalla para alertar a los sanadores.
+- **[SeqRot]:**
+  - *Armas:* Golpe heroico / Embate; Shift para Golpe mortal; Ctrl para Abrumar / Desgarrar; Alt para Ejecutar.
+  - *Furia:* Sed de sangre + Golpe heroico encadenado; Shift para Torbellino; Ctrl para Embate con proc.
+  - *Protección:* Devastar / Hender armadura; Shift para Embate con escudo; Ctrl para Revancha; Alt para Ola de choque.
+
+---
+
+## 🔄 MacroSync - Sistema de Macros Compartidos
+
+**Sequito** permite compartir y sincronizar macros de forma bidireccional entre usuarios de la hermandad, banda o grupo:
 
 ### Comandos de MacroSync
 
 | Comando | Descripción |
 |---------|-------------|
-| `/sequito macro share <nombre>` | Comparte un macro con tu grupo/raid |
-| `/sequito macro list` | Lista macros recibidos de otros jugadores |
-| `/sequito macro import <nombre>` | Importa un macro compartido |
-| `/sequito macro library` | Muestra biblioteca de macros de tu clase |
-| `/sequito macro getlib <nombre>` | Importa macro de la biblioteca |
-| `/sequito macro getall` | Importa todos los macros de tu clase |
-| `/sequito macro request` | Solicita lista de macros del grupo |
+| `/sequito macro share <nombre>` | Comparte una macro con tu grupo, banda o por susurro |
+| `/sequito macro list` | Lista las macros recibidas de otros jugadores |
+| `/sequito macro import <nombre>` | Importa una macro recibida al libro de macros |
+| `/sequito macro library` | Muestra la biblioteca de macros integrada para tu clase |
+| `/sequito macro getlib <nombre>` | Importa una macro específica de la biblioteca |
+| `/sequito macro getall` | Importa todas las macros recomendadas para tu clase |
+| `/sequito macro request` | Solicita la lista de macros disponibles a los compañeros |
 
-### Biblioteca de Macros por Clase
+---
 
-MacroSync incluye una biblioteca integrada con macros probados para cada clase:
+## ❓ Preguntas Frecuentes
 
-- **Warlock**: Drain Tank, Fear Juggling, Soulstone Macro, Pet Control, DoT Weaving
-- **Death Knight**: Frost Opener, Blood Tank, Unholy Burst, AMS Timing, Chains Pull
-- **Paladin**: Holy Shock Weave, Bubble Hearth, Righteous Defense, Sacred Shield, Divine Plea
-- **Mage**: Spell Steal, Counterspell Focus, Ice Block Cancel, Arcane Blast Stack, Living Bomb Spread
-- **Hunter**: Misdirection, Tranq Shot, Disengage Jump, Rapid Fire Macro, Pet Dismiss
-- **Rogue**: Tricks of Trade, Cloak Cancel, Vanish Sap, Kidney Shot Focus, Fan of Knives
-- **Priest**: Pain Suppression, Guardian Spirit, Mass Dispel, Prayer of Mending, Fade Macro
-- **Warrior**: Heroic Throw Pull, Shield Wall, Spell Reflect, Charge Intercept, Sunder Stack
-- **Shaman**: Bloodlust Announce, Wind Shear Focus, Grounding Totem, Chain Heal Bounce, Earth Shield
-- **Druid**: Innervate, Rebirth Announce, Bear Form Panic, Cyclone Focus, Lifebloom Stack
+**¿Se actualizan solas las macros al cambiar de talentos?**  
+Sí. Al cambiar de especialización dual o aprender nuevas habilidades (`PLAYER_TALENT_UPDATE` y `LEARNED_SPELL_IN_TAB`), Sequito recalcula y regenera tus macros `Seq*` automáticamente para adaptarlas a tu nueva especialización y rangos máximos.
+
+**¿Puede Sequito borrar mis macros personales?**  
+No. El motor de gestión de macros solo inspecciona y administra las macros creadas por el propio addon (prefijo `Seq`). Tus macros personales nunca son eliminadas ni modificadas.
+
+**¿Qué pasa si mi espacio de macros está lleno (18/18 por personaje)?**  
+El addon avisa por chat si has alcanzado el límite nativo del cliente de WoW y no puede crear una nueva macro hasta que liberes una ranura.

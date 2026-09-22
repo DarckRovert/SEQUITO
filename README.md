@@ -29,7 +29,7 @@ Tu entrenador personal de raid.
 
 ---
 
-## 📦 Características Core (v9.0 Included)
+## 📦 Características Core (v10.2.0 Included)
 Todo lo que amabas de la "Definitive Edition" sigue aquí, pero mejor organizado.
 - **Hive Mind:** Sincronización automática de addons y macros entre oficiales.
 - **Academy Mode:** Inspector de talentos y rotaciones.

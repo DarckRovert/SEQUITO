@@ -5,7 +5,7 @@
 
 ---
 
-## 🆕 Comandos v9.0 (Definitive Edition)
+## 🆕 Comandos v10.2.0 (Definitive Edition)
 - `/sequito inspect` - (Academy) Inspecciona talentos y gear real.
 - `/sequito gallery` - (Gamification) Abre la galería de loot legendario.
 - `/sequito sync config` - (Hive Mind) Panel de configuración remota (Solo Oficiales).
@@ -243,7 +243,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## 📊 CooldownMonitor - Monitor de CDs (v7.2.0)
+## 📊 CooldownMonitor - Monitor de CDs
 
 ### `/sequito cooldowns`
 **Alias:** `/seq cd`
@@ -264,7 +264,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## 🎯 Assignments - Asignaciones (v7.2.0)
+## 🎯 Assignments - Asignaciones
 
 ### `/sequito assign`
 **Alias:** `/seq as`
@@ -291,7 +291,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## ✅ ReadyChecker - Chequeo Pre-Pull (v7.2.0)
+## ✅ ReadyChecker - Chequeo Pre-Pull
 
 ### `/sequito readycheck`
 **Alias:** `/seq rc`
@@ -312,7 +312,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## 🎯 RaidAssist (v7.1.0)
+## 🎯 RaidAssist
 
 ### `/sequito ra` o `/sequito raidassist`
 **Descripción:** Abre el panel principal de RaidAssist.
@@ -354,7 +354,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## 🔄 MacroSync - Macros Compartidos (v7.1.0)
+## 🔄 MacroSync - Macros Compartidos
 
 ### `/sequito macro share <nombre>`
 **Descripción:** Comparte un macro con tu grupo/raid.
@@ -389,7 +389,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## ⚔️ TrinketTracker - PvP (NUEVO v7.2.0)
+## ⚔️ TrinketTracker - PvP
 
 ### `/sequito trinkets`
 **Alias:** `/seq tt`
@@ -408,7 +408,7 @@ Configura tus monturas favoritas para la macro `SeqMount`.
 
 ---
 
-## 💀 WipeAnalyzer - Análisis de Wipes (NUEVO v7.2.0)
+## 💀 WipeAnalyzer - Análisis de Wipes
 
 ### `/sequito analyze`
 **Alias:** `/seq wa`
@@ -432,7 +432,7 @@ Total muertes: 8 | Interrupts: 5
 
 ---
 
-## 📊 Tabla de Nuevos Comandos v7.2.0
+## 📊 Tabla de Comandos de Raid
 
 | Comando | Atajo | Descripción |
 |---------|-------|-------------|
@@ -446,7 +446,7 @@ Total muertes: 8 | Interrupts: 5
 
 ---
 
-## ⚔️ Comandos PvP v8.0.0
+## ⚔️ Comandos PvP
 
 ### `/sequito focus`
 **Alias:** `/seq ff`
@@ -478,7 +478,7 @@ Total muertes: 8 | Interrupts: 5
 
 ---
 
-## 🏰 Comandos Dungeons v8.0.0
+## 🏰 Comandos Mazmorras
 
 ### `/sequito pullguide`
 **Alias:** `/seq pg`
@@ -500,7 +500,7 @@ Total muertes: 8 | Interrupts: 5
 
 ---
 
-## 👥 Comandos Generales v8.0.0
+## 👥 Comandos Generales
 
 ### `/sequito notes add <jugador> <texto>`
 **Alias:** `/seq pn add`
