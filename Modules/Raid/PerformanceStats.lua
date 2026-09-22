@@ -1,7 +1,7 @@
 --[[
     Sequito - PerformanceStats Module
     Estadísticas de Rendimiento
-    Version: 7.3.0
+    Version: 10.2.0
 ]]
 
 local addonName, S = ...
@@ -63,7 +63,22 @@ function PS:RegisterEvents()
     local events = CreateFrame("Frame")
     events:RegisterEvent("PLAYER_REGEN_DISABLED")
     events:RegisterEvent("PLAYER_REGEN_ENABLED")
-    events:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    
+    if S.CLEU and S.CLEU.Register then
+        local function onCLEU(...)
+            PS:ProcessCombatLog(...)
+        end
+        S.CLEU:Register("SWING_DAMAGE", onCLEU)
+        S.CLEU:Register("RANGE_DAMAGE", onCLEU)
+        S.CLEU:Register("SPELL_DAMAGE", onCLEU)
+        S.CLEU:Register("SPELL_PERIODIC_DAMAGE", onCLEU)
+        S.CLEU:Register("DAMAGE_SHIELD", onCLEU)
+        S.CLEU:Register("SPELL_HEAL", onCLEU)
+        S.CLEU:Register("SPELL_PERIODIC_HEAL", onCLEU)
+    else
+        events:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    end
+    
     events:SetScript("OnEvent", function(_, event, ...)
         if event == "PLAYER_REGEN_DISABLED" then
             PS:StartCombat()
@@ -92,7 +107,7 @@ end
 function PS:EndCombat()
     if currentCombat then
         local duration = GetTime() - currentCombat.startTime
-        if duration > 5 then
+        if duration > 3 and (currentCombat.damage > 0 or currentCombat.healing > 0) then
             local dps = currentCombat.damage / duration
             local hps = currentCombat.healing / duration
             
@@ -105,29 +120,42 @@ function PS:EndCombat()
             }
             
             table.insert(SequitoStatsDB, record)
-            if #SequitoStatsDB > 100 then table.remove(SequitoStatsDB, 1) end
+            local maxRecords = tonumber(self:GetOption("maxRecords")) or 50
+            while #SequitoStatsDB > maxRecords do
+                table.remove(SequitoStatsDB, 1)
+            end
         end
         currentCombat = nil
     end
 end
 
 function PS:ProcessCombatLog(...)
-    if not currentCombat then return end
-    local _, event, _, sourceGUID, _, _, _, destGUID, destName = ...
+    if not currentCombat then
+        if self:GetOption("autoTrack") then
+            self:StartCombat()
+        else
+            return
+        end
+    end
+    
+    -- WoW 3.3.5a CLEU signature: timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, ...
+    local timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = ...
     local playerGUID = UnitGUID("player")
     local petGUID = UnitGUID("pet")
     
     if sourceGUID == playerGUID or (petGUID and sourceGUID == petGUID) then
-        if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") and destName ~= UnitName("pet") then
-            currentCombat.target = destName
-        end
-        
         if event == "SWING_DAMAGE" then
             local amount = select(9, ...) or 0
             currentCombat.damage = currentCombat.damage + (tonumber(amount) or 0)
-        elseif event == "SPELL_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "RANGE_DAMAGE" then
+            if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") and destName ~= UnitName("pet") then
+                currentCombat.target = destName
+            end
+        elseif event == "SPELL_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "RANGE_DAMAGE" or event == "DAMAGE_SHIELD" then
             local amount = select(12, ...) or 0
             currentCombat.damage = currentCombat.damage + (tonumber(amount) or 0)
+            if currentCombat.target == "Unknown" and destName and destName ~= UnitName("player") and destName ~= UnitName("pet") then
+                currentCombat.target = destName
+            end
         elseif event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL" then
             local amount = select(12, ...) or 0
             local overheal = select(13, ...) or 0
@@ -161,6 +189,19 @@ function PS:ShowStats()
     self.statLines = self.statLines or {}
     for _, fs in ipairs(self.statLines) do
         fs:Hide()
+    end
+    
+    if #SequitoStatsDB == 0 then
+        if not self.emptyText then
+            self.emptyText = self.frame.content:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+            self.emptyText:SetPoint("TOP", 0, -40)
+            self.emptyText:SetText("No hay registros de combate aún.\nEntra en combate para medir tu DPS y HPS.")
+        end
+        self.emptyText:Show()
+        self.frame:Show()
+        return
+    elseif self.emptyText then
+        self.emptyText:Hide()
     end
     
     local yOffset = 0

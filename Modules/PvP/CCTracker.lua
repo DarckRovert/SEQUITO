@@ -70,21 +70,30 @@ function CC:CreateAnchor()
 end
 
 function CC:RegisterEvents()
-    local f = CreateFrame("Frame")
-    f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    f:SetScript("OnEvent", function(self, event, ...)
-        CC:OnCombatLog(...)
-    end)
+    if S.CLEU and S.CLEU.Register then
+        local function onCLEU(...)
+            CC:OnCombatLog(...)
+        end
+        S.CLEU:Register("SPELL_AURA_APPLIED", onCLEU)
+        S.CLEU:Register("SPELL_AURA_REFRESH", onCLEU)
+        S.CLEU:Register("SPELL_AURA_REMOVED", onCLEU)
+    else
+        local f = CreateFrame("Frame")
+        f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        f:SetScript("OnEvent", function(self, event, ...)
+            CC:OnCombatLog(...)
+        end)
+    end
     
-    f:SetScript("OnUpdate", function(self, elapsed)
+    local timerFrame = CreateFrame("Frame")
+    timerFrame:SetScript("OnUpdate", function(self, elapsed)
         CC:OnUpdate(elapsed)
     end)
 end
 
 function CC:OnCombatLog(...)
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, 
-          sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, 
-          spellID, spellName = ...
+    -- WoW 3.3.5a CLEU signature: timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, ...
+    local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName = ...
           
     if sourceGUID ~= UnitGUID("player") and sourceGUID ~= UnitGUID("pet") then return end
     

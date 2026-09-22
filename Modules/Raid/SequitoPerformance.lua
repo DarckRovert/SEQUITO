@@ -67,7 +67,8 @@ end
 -- COMBAT LOG LOGIC
 -- ===========================================================================
 function SP:OnCombatLog(...)
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool, auraType = ...
+    -- WoW 3.3.5a CLEU signature: timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool, auraType
+    local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool, auraType = ...
 
     if eventType == "SPELL_INTERRUPT" then
         if sourceName then
@@ -78,12 +79,8 @@ function SP:OnCombatLog(...)
             self.Data.Dispels[sourceName] = (self.Data.Dispels[sourceName] or 0) + 1
         end
     elseif eventType == "UNIT_DIED" then
-        if destName and UnitIsPlayer(destName) then -- Only track player deaths? careful with API
-            -- In 3.3.5 UnitIsPlayer doesn't work with names in combat log sometimes without looking at flags
-            -- Simplified check: If it's in our raid roster
-            if UnitInRaid(destName) or UnitInParty(destName) then
-                 table.insert(self.Data.Deaths, { name = destName, time = date("%H:%M:%S") })
-            end
+        if destName and (UnitInRaid(destName) or UnitInParty(destName) or destName == UnitName("player")) then
+            table.insert(self.Data.Deaths, { name = destName, time = date("%H:%M:%S") })
         end
     end
 end

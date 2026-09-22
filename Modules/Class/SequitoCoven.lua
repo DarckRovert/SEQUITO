@@ -210,7 +210,8 @@ end
 function Coven:CheckDoomSacrifice(...)
     if not self.DoomActive then return end
     
-    local timestamp, subEvent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = ...
+    -- WoW 3.3.5a CLEU signature: timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags
+    local timestamp, subEvent, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = ...
     
     if subEvent == "UNIT_DIED" then
         if UnitInRaid(destName) or UnitInParty(destName) or destName == UnitName("player") then

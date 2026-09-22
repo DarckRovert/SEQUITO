@@ -145,18 +145,22 @@ S.RaidIntel.ImportantCDs = {
 S.RaidIntel.CombatAlerts = {}
 
 function S.RaidIntel:RegisterCombatEvents()
-    local frame = CreateFrame("Frame")
-    frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    
-    frame:SetScript("OnEvent", function(self, event, ...)
-        S.RaidIntel:OnCombatLog(...)
-    end)
+    if S.CLEU and S.CLEU.Register then
+        S.CLEU:Register("SPELL_CAST_SUCCESS", function(...)
+            S.RaidIntel:OnCombatLog(...)
+        end)
+    else
+        local frame = CreateFrame("Frame")
+        frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        frame:SetScript("OnEvent", function(self, event, ...)
+            S.RaidIntel:OnCombatLog(...)
+        end)
+    end
 end
 
 function S.RaidIntel:OnCombatLog(...)
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, 
-          sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, 
-          spellID, spellName = ...
+    -- WoW 3.3.5a CLEU signature: timestamp, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, ...
+    local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName = ...
     
     -- Detectar uso de CDs importantes
     if eventType == "SPELL_CAST_SUCCESS" then
