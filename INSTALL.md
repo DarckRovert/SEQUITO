@@ -17,38 +17,42 @@
 
 ### Paso 1: Descargar el Addon
 
-1. Descarga la última versión de Sequito (v10.1+)
-2. Asegúrate de tener el archivo `Sequito.zip`
+1. Descarga la versión oficial de Sequito v10.2.0 (Definitive Edition)
+2. Asegúrate de tener el archivo comprimido del addon
 
 ### Paso 2: Extraer Archivos
 
-1. Extrae el `.zip`
-2. Deberías tener una carpeta llamada `Sequito`
+1. Extrae el archivo comprimido
+2. Deberías tener una carpeta llamada `SEQUITO`
 
 ### Paso 3: Copiar a la Carpeta de AddOns
 
 **Ruta típica en Windows:**
 ```
-World of Warcraft\Interface\AddOns\Sequito\
+World of Warcraft\Interface\AddOns\SEQUITO\
+```
+
+**Para UltimoWoW:**
+```
+[Directorio de UltimoWoW]\Interface\AddOns\SEQUITO\
 ```
 
 ### Paso 4: Verificar Estructura
 
-Dentro de `Sequito/`, deberías ver:
-- `Sequito.toc`
-- `Sequito.lua`
-- `Modules/` (que contiene `Core`, `Raid`, `PvP`, `Utility`)
-- `Locales/`
-- `Data/`
-
-*Nota: En v10.0, los archivos Lua ya no están sueltos en Modules, sino organizados en carpetas.*
+Dentro de `SEQUITO/`, deberías ver:
+- `SEQUITO.toc`
+- `SEQUITO.lua`
+- `Core/` (Arquitectura base, eventos y componentes del cónclave)
+- `Modules/` (Contiene `Core`, `Raid`, `PvP`, `Utility`)
+- `Locales/` (Soporte multilingüe en español e inglés)
+- `Data/` (Bases de datos de procs, rotaciones y tiers)
 
 Asegúrate de que la estructura sea:
 ```
 AddOns/
-└── Sequito/
-    ├── Sequito.toc
-    ├── Sequito.lua
+└── SEQUITO/
+    ├── SEQUITO.toc
+    ├── SEQUITO.lua
     ├── Embeds.xml
     ├── Core/
     ├── Data/
@@ -227,18 +231,19 @@ Para resetear completamente la configuración:
 ---
 
 ## ✅ Verificación Post-Instalación
-
-Después de instalar, verifica que todo funcione:
-
-```
-/sequito info      - Debe mostrar tu clase y spec
-/sequito macros    - Debe generar macros
-/sequito raid      - Debe mostrar composición (si estás en grupo)
-/sequito panel     - Debe abrir el panel
-/sequito options   - Debe abrir configuración
-```
-
-Si todos estos comandos funcionan, ¡la instalación fue exitosa! 🎉
+ 
+ Después de instalar, verifica que todo funcione:
+ 
+ ```
+ /sdash            - Abre el Dashboard Central de 4 pestañas
+ /sequito macros   - Genera las macros inteligentes (SeqRot, SeqMount, etc.)
+ /srot             - Despliega el HUD de rotación reactivo con procs
+ /sinspect         - Abre el inspector de academia (GS real y encantamientos)
+ /sloot            - Abre el panel del Concilio de Botín
+ /sequito options  - Abre la configuración de módulos
+ ```
+ 
+ Si estos comandos responden correctamente y ves la Esfera Central flotante, ¡la instalación fue un éxito total! 🎉
 
 ---
 

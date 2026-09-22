@@ -1,361 +1,188 @@
-# 📚 Guía de Uso - Sequito
+# 📚 Manual de Usuario del Ecosistema Sequito
 
 **Versión:** 10.2.0 (Definitive Edition)  
-**Autor:** DarckRovert (Ingame: Thesaviour)
+**Autor:** DarckRovert (Ingame: Thesaviour)  
+**Clan:** El Sequito del Terror (UltimoWoW)  
+**Cliente Compatible:** World of Warcraft 3.3.5a (Build 12340)
 
 ---
 
-## 🏆 Novedades Definitive Edition (v10.2.0)
+## 🌟 Bienvenido a Sequito
 
-### 🧠 Hive Mind (Para Oficiales)
-- `/sequito sync start` - Envía la estrategia del Boss actual a toda la raid (debe estar en tus notas).
-- `/sequito sync config` - Abre el panel para configurar addons de la raid remotamente.
+**Sequito** es una suite completa y revolucionaria diseñada para World of Warcraft 3.3.5a. Su objetivo es transformar tu experiencia de juego mediante una arquitectura moderna, fluida y colaborativa que une a jugadores individuales, grupos de mazmorra y hermandades enteras (clanes).
 
-### 🎓 Academy Mode (Para Todos)
-- `/sequito inspect` (o click en el botón) - Muestra talentos y gear real del objetivo.
-- **Rotation Helper:** Simplemente entra en combate y sigue el icono que aparece en pantalla.
-- `/sequito gallery` - Abre la galería de loot legendario de la hermandad.
+Olvídate de addons viejos que se traban o que solo sirven para una sola clase. Sequito ofrece **funcionalidad real, cero maquetas y soporte integral para las 10 clases del juego**.
 
 ---
 
-## 🚀 Inicio Rápido
+## 🧭 Los Componentes del Ecosistema
 
-### Primer Uso
+Cuando entras al juego con Sequito activado, dispones de varios elementos interactivos diseñados para no estorbar y responder de inmediato:
 
-1. **Entra al juego** con tu personaje
-2. **Espera 5 segundos** para que Sequito genere tus macros automáticamente.
-3. **Escribe** `/sequito` para ver el mensaje de bienvenida
-4. **Si lo deseas, regenera manualmente** con `/sequito macros`
-5. **Abre el panel** con `/sequito panel` (si estás en grupo/raid)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    EL ECOSISTEMA SEQUITO                    │
+├─────────────────┬─────────────────────────┬─────────────────┤
+│ 🔮 ESFERA       │ 🖥️ DASHBOARD            │ ⚡ HUD ROTACIÓN  │
+│ Menú radial     │ Ventana central         │ Prioridades y   │
+│ y acceso rápido │ Resumen, Logros,        │ alertas de PROC │
+│ al hacer clic   │ Rotación y Botín        │ en tiempo real  │
+├─────────────────┼─────────────────────────┼─────────────────┤
+│ 📜 MACROS INTEL │ ⚖️ LOOT COUNCIL         │ 💀 WIPE COACH   │
+│ 30 Specs con    │ Detección automática    │ Diagnóstico de  │
+│ modificadores   │ y captura de /azar 100  │ muertes y DPS   │
+└─────────────────┴─────────────────────────┴─────────────────┘
+```
+
+1. **La Esfera Central (Orb):**
+   - **Clic Izquierdo:** Abre o cierra el Dashboard Principal (`/sdash`).
+   - **Clic Derecho:** Despliega el Menú Radial con accesos rápidos a utilidades, profesiones y monturas.
+   - **Shift + Clic y Arrastrar:** Permite mover la esfera libremente por cualquier parte de tu pantalla.
+2. **Botón del Minimapa:** Acceso directo con un solo clic a la configuración y paneles.
+3. **Comando Universal:** Escribe `/sequito` o `/s` para ver el menú de ayuda interactivo.
 
 ---
 
-## 💬 Comandos Básicos
+## 🖥️ Capítulo 1: El Dashboard Central (`/sdash` o `/sequito`)
 
-### Ayuda y Información
+El Dashboard reúne toda la información vital en una interfaz elegante y moderna dividida en 4 pestañas:
 
-```
-/sequito help      - Muestra lista de comandos
-/sequito info      - Muestra tu clase, raza y especialización
-/sequito spec      - Muestra información de tu especialización actual
-```
-
-### Generación de Macros
-
-```
-/sequito macros    - Genera macros personalizadas para tu clase/spec
-```
-
-**¿Qué hace?**
-- Detecta tu clase y especialización
-- Crea macros optimizadas para tu build
-- Las macros aparecen en tu lista de macros del juego
-
-**Ejemplo para Warlock Affliction:**
-- Macro de rotación de DoTs
-- Macro de AoE
-- Macro de pet management
-- Macro de cooldowns
+1. **Pestaña «Resumen»:**
+   - Visualiza los datos de tu personaje: clase, especialización activa, rol (Tanque, Sanador o DPS) y versión del cliente.
+   - Monitorea el estado del grupo o banda: número de miembros, clases presentes y porcentaje de vida promedio.
+   - Botones de acción rápida: Regenerar macros, comprobar listos (`Ready Check`) y escanear buffs faltantes.
+2. **Pestaña «Logros»:**
+   - Sistema interno de gamificación de hermandad. Registra proezas y metas completadas en raids clásicas (Naxxramas, Ulduar, Sagrario Obsidiana, Ciudadela de la Corona de Hielo).
+   - Incluye botón para abrir el *Navegador Flotante de Logros*.
+3. **Pestaña «Rotación»:**
+   - Muestra la cadena de prioridades recomendada para tu talento actual y permite encender el **HUD Flotante de Rotación**.
+4. **Pestaña «Tesoros» (Galería de Botín):**
+   - Registro histórico de todas las piezas épicas y legendarias obtenidas por la hermandad durante las incursiones de banda.
 
 ---
 
-## 👥 Comandos de Raid
+## 📜 Capítulo 2: El Motor de Macros Dinámico (`SeqRot`)
 
-### Información de Raid
+A diferencia de las macros convencionales que usan secuencias rígidas (`/castsequence`) y se congelan si un hechizo falla o está fuera de rango, Sequito implementa un **motor inteligente de prioridades con modificadores**:
 
-```
-/sequito raid      - Muestra composición de raid (clases y specs)
-/sequito class     - Muestra conteo de clases en raid
-/sequito buffs     - Escanea buffs faltantes en raid
-```
+### ¿Cómo usar la macro `SeqRot`?
+1. Escribe `/sequito macros` o abre tu libro de macros (`/m`).
+2. En la pestaña de **Macros específicas del personaje**, busca la macro llamada **`SeqRot`**.
+3. Arrástrala a tu tecla de ataque principal (por ejemplo, el número `1`).
+4. **En combate:**
+   - **Pulsación directa (sin teclas adicionales):** Lanza tu ataque principal o filler. Además, inicia el ataque automático (`/startattack`) y manda a tu mascota a atacar (`/petattack`).
+   - **Manteniendo presionada la tecla Shift:** Lanza tu DoT principal, finisher o habilidad de daño burst.
+   - **Manteniendo presionada la tecla Ctrl:** Lanza tu habilidad secundaria de prioridad o de recarga rápida.
+   - **Manteniendo presionada la tecla Alt:** Habilidad de remate en fase de ejecución (como *Ejecutar* o *Drenar alma*), CD de daño o habilidad de área.
 
-### Panel Visual de Raid
+### Sanadores (Healers):
+Si juegas Paladín Sagrado, Sacerdote Disciplina/Sagrado, Chamán Restauración o Druida Árbol, las macros incluyen soporte automático de cursor:
+- Pasa el ratón sobre el marco de vida de un compañero y pulsa la macro: lo curará sin necesidad de cambiar tu objetivo actual (`[@mouseover,help]`).
+- Si no hay nadie bajo el cursor, curará a tu objetivo amistoso o a ti mismo (`[@player]`).
 
-```
-/sequito panel     - Abre/cierra el panel de raid
-/sequito lock      - Bloquea/desbloquea la posición del panel
-/sequito reset     - Reinicia la posición del panel al centro
-```
+### Druidas Ferales (Oso y Gato):
+La macro detecta automáticamente tu forma animal:
+- Si entras en **Forma de Oso (`[form:1]`)**: Se convierte en tu macro de tanqueo (*Magullar*, *Destrozar oso*, *Lacerar*).
+- Si entras en **Forma de Felino (`[form:3]`)**: Se convierte en tu rotación de DPS (*Destrozar gato*, *Destripar*, *Mordedura feroz*, *Rugido salvaje*).
 
-**Panel de Raid muestra:**
-- Lista de miembros con clase y spec
-- Estado de buffs importantes
-- Cooldowns disponibles
-- Composición de grupo
+### Macros de Utilidad Generadas:
+- **`SeqInt` (Interrupción Inteligente):** Presiónala normalmente para cortar el casteo de tu objetivo actual; si mantienes **Shift**, cortará el casteo de tu objetivo en **Foco** sin cambiar de target.
+- **`SeqCC` (Control de Masas):** Aplica Polimorfia, Miedo, Ceguera, Ciclón o Martillo de Justicia con modificador de mouseover o foco.
+- **`SeqMount` (Montura Inteligente):** Invoca automáticamente tu montura voladora si estás en zona donde se permite volar (Rasganorte, Terrallende), montura terrestre si estás en interiores/mazmorras, y te desmonta si estás montado.
+- **`SeqRacial`:** Tu habilidad racial con grito inmersivo por el Sequito.
 
-### Comandos Tácticos
-
-```
-/sequito focus [nombre]   - Envía orden de focus a la raid
-/sequito alpha            - Envía orden de Alpha Strike
-```
-
-**Ejemplo:**
-```
-/sequito focus Ragnaros
-```
-Todos los miembros de raid con Sequito recibirán la orden de atacar a Ragnaros.
+> [!TIP]
+> **Cambio de Talentos:** Cada vez que cambias de talentos o compras la especialización dual, Sequito detecta el cambio automáticamente y adapta tus macros sin tocar tus macros personales.
 
 ---
 
-## ⚔️ Seguimiento de Combate
+## 🌐 Capítulo 3: Malla de Clan en Vivo (`ClanMesh`)
 
-### Comandos de Combate
+Uno de los mayores poderes de Sequito es que **los miembros de una hermandad no necesitan estar en la misma raid para colaborar**:
 
-```
-/sequito combat    - Muestra resumen del último combate
-```
-
-**Información mostrada:**
-- DPS total
-- HPS (Healing Per Second)
-- Daño recibido
-- Muertes
-- Duración del combate
+- **Canal de Hermandad Activo:** El sistema de red sincroniza información a través del canal `GUILD` de manera continua y eficiente.
+- **Tráfico Protegido (Cero Caídas):** Sequito utiliza un sistema de transmisión por goteo que fragmenta los paquetes grandes con pausas seguras de 80 ms. Esto garantiza que nunca seas desconectado del servidor por saturación de chat (*anti-flood protection*).
+- **Órdenes de Banda y Estrategias:**
+  - Los oficiales pueden enviar notas tácticas de jefes que aparecen en pantalla grande para todos los miembros con el comando `/sequito sync start`.
+  - Comandos de ataque coordinado:
+    - `/sequito focus [Nombre]` - Marca un objetivo prioritario para que todos cambien de foco.
+    - `/sequito alpha` - Orden de ataque masivo simultáneo.
+    - `/sequito ready` - Chequeo de listos enriquecido con verificación de comida y frascos.
 
 ---
 
-## ⚙️ Configuración
+## 🎓 Capítulo 4: Modo Academia (`Academy Mode`)
 
-### Panel de Opciones
+Diseñado tanto para que los oficiales auditen a los miembros de la banda, como para que los jugadores aprendan a maximizar su rendimiento:
 
-```
-/sequito options   - Abre el panel de configuración
-```
+### 1. Inspector de Academia (`/sinspect` o `/seqinspect`)
+Selecciona a cualquier jugador y escribe `/sinspect`:
+- **Talentos Asíncronos:** Consulta los árboles de talentos exactos sin riesgo de error por lag.
+- **GearScore Real de 3.3.5a:** Calcula el GearScore exacto según la fórmula oficial de Wrath of the Lich King, ponderando armas principales (2.0x), piezas grandes (1.0x) y accesorios.
+- **Auditoría de Encantamientos:** Te avisa al instante si al jugador le faltan encantamientos recomendados en piezas mayores (cabeza, hombros, pecho, piernas, pies, muñecas, manos, capa o arma).
 
-**Opciones disponibles:**
-
-#### Módulos
-- Activar/desactivar generación de macros
-- Activar/desactivar sincronización de raid
-- Activar/desactivar seguimiento de combate
-- Activar/desactivar panel de raid
-
-#### Notificaciones
-- Mensajes de chat
-- Alertas visuales
-- Sonidos
-
-#### Sincronización
-- Auto-sync en raid
-- Compartir información de spec
-- Recibir comandos tácticos
-
-#### Interfaz
-- Escala del panel
-- Transparencia
-- Posición
-
-### Auto-Actualización de Macros
-
-```
-/sequito specauto  - Activa/desactiva auto-actualización al cambiar spec
-```
-
-**¿Qué hace?**
-- Detecta cuando cambias de especialización
-- Regenera automáticamente las macros para la nueva spec
-- Te notifica del cambio
+### 2. HUD Asesor de Rotación Reactivo (`/srot` o `/srotation`)
+Abre una pequeña barra flotante que te muestra la secuencia ideal de hechizos según tu especialización:
+- Muestra el tiempo restante de recarga de cada habilidad.
+- **Alertas de PROCS en Tiempo Real:** Cuando se activa una habilidad instantánea por talentos (como *Buena racha* en Magos de Fuego, *El arte de la guerra* en Paladines Retri, *Oleada de sangre* en Guerreros, *Escarcha blanca* en Caballeros de la Muerte o *Diezmar* en Brujos), el icono correspondiente en el HUD se ilumina con un **borde verde esmeralda brillante** y muestra el texto **`PROC!`** para que no lo desaproveches.
 
 ---
 
-## 🎮 Uso por Clase
+## ⚖️ Capítulo 5: Concilio de Botín Inteligente (`Loot Council`)
 
-### 🔮 Warlock (Brujo)
+La distribución justa y rápida del botín en bandas de hermandad ahora es automática:
 
-**Macros generadas:**
-- **Affliction**: Rotación de DoTs (Corruption, Curse of Agony, Unstable Affliction)
-- **Demonology**: Pet management y Metamorphosis
-- **Destruction**: Rotación de nukes (Incinerate, Chaos Bolt)
-
-**Comandos útiles:**
-```
-/sequito macros    - Genera macros de Warlock
-/sequito info      - Verifica tu spec actual
-```
-
-### ⚕️ Priest (Sacerdote)
-
-**Macros generadas:**
-- **Holy**: Healing rotation (Flash Heal, Prayer of Healing)
-- **Discipline**: Shield spam y Penance
-- **Shadow**: DoT rotation (SW:Pain, VT, DP, Mind Flay)
-
-### ☠️ Death Knight
-
-**Macros generadas:**
-- **Blood**: Tanking rotation
-- **Frost**: DPS dual-wield
-- **Unholy**: Pet DPS y diseases
-
-### 🔥 Mage
-
-**Macros generadas:**
-- **Arcane**: Arcane Blast spam
-- **Fire**: Fireball + Hot Streak
-- **Frost**: Frostbolt + Fingers of Frost
-
-### 🐺 Shaman
-
-**Macros generadas:**
-- **Elemental**: Lightning Bolt rotation
-- **Enhancement**: Melee rotation con Stormstrike
-- **Restoration**: Chain Heal y Riptide
-
-### 🌿 Druid
-
-**Macros generadas:**
-- **Balance**: Moonfire/Sunfire rotation
-- **Feral**: Cat/Bear form rotations
-- **Restoration**: HoT stacking
-
-### 🗡️ Warrior
-
-**Macros generadas:**
-- **Arms**: Mortal Strike rotation
-- **Fury**: Bloodthirst spam
-- **Protection**: Tanking rotation
-
-### 🛡️ Paladin
-
-**Macros generadas:**
-- **Holy**: Holy Light y Holy Shock
-- **Protection**: Tanking con 969 rotation
-- **Retribution**: Crusader Strike rotation
-
-### 🏹 Hunter
-
-**Macros generadas:**
-- **Beast Mastery**: Pet DPS
-- **Marksmanship**: Aimed Shot rotation
-- **Survival**: Explosive Shot rotation
-
-### 🗡️ Rogue
-
-**Macros generadas:**
-- **Assassination**: Mutilate rotation
-- **Combat**: Sinister Strike spam
-- **Subtlety**: Hemorrhage rotation
+1. **Apertura de Cofres/Jefes:** Cuando un jefe es derrotado y se abre la ventana de despojo (`LOOT_OPENED`), Sequito escanea automáticamente los objetos. Si cae una pieza épica o legendaria, inicia la sesión de concilio sin necesidad de escribir comandos complejos.
+2. **Votación de Oficiales Blindada:**
+   - Los miembros del concilio tienen botones para votar por cada candidato.
+   - **Regla de 1 voto único:** Cada oficial solo puede emitir un voto por ítem. Si cambia de opinión y vota por otro jugador, su voto anterior se resta automáticamente y se traslada al nuevo candidato. Nadie puede hacer trampa ni spamear votos.
+3. **¿Qué pasa con los jugadores que NO tienen el addon?**
+   - ¡Están totalmente incluidos! Sequito intercepta automáticamente los resultados de dados en el chat general (`/azar 100` o `/roll`).
+   - El jugador sin el addon tira sus dados normalmente en el juego y Sequito lo añade de inmediato a la lista de candidatos con su puntuación numérica exacta, permitiendo al concilio deliberar y votar con transparencia.
 
 ---
 
-## 👥 Uso en Raid
+## 📊 Capítulo 6: Auditoría de Combate y Wipes
 
-### Configuración Inicial
-
-1. **Todos los miembros** deben tener Sequito instalado
-2. **Entra a la raid**
-3. **Espera unos segundos** para que se sincronice
-4. **Abre el panel** con `/sequito panel`
-
-### Sincronización Automática
-
-Sequito sincroniza automáticamente:
-- Clase y especialización de cada miembro
-- Buffs activos
-- Cooldowns disponibles
-- Estado de combate
-
-### Líder de Raid
-
-Como líder, puedes:
-
-```
-/sequito focus [objetivo]  - Marca objetivo prioritario
-/sequito alpha             - Orden de burst damage
-/sequito buffs             - Verifica buffs faltantes
-```
-
-### Miembros de Raid
-
-Como miembro, puedes:
-
-```
-/sequito raid      - Ver composición
-/sequito panel     - Ver panel de raid
-/sequito combat    - Ver tu rendimiento
-```
+- **Estadísticas Reales (`/sequito stats` o `/sstats`):** Registro de combate que extrae con precisión el daño infligido por ataques blancos, hechizos y daño periódico, así como la sanación efectiva (descontando la sobresanación o overhealing).
+- **Analizador de Wipes (`/sequito wipe` o `/swipe`):** Cuando la banda cae en un combate, Sequito realiza una autopsia inmediata:
+  - ¿Quién murió primero y qué hechizo o golpe le quitó la vida?
+  - ¿Murió sin usar su Poción de Vida o Piedra de Salud?
+  - ¿Hubo cortes de casteo fallidos contra el jefe?
+  - Detección de patrones: si mueres 2 veces seguidas por la misma habilidad, el sistema te alertará para que corrijas tu posicionamiento.
 
 ---
 
-## 💡 Consejos y Trucos
+## ⌨️ Tabla de Comandos Rápidos
 
-### Optimización de Macros
-
-1. **Revisa las macros generadas** antes de usarlas
-2. **Personaliza** según tu estilo de juego
-3. **Regenera** después de cambiar talentos importantes
-
-### Uso del Panel de Raid
-
-1. **Posiciónalo** donde no obstruya tu visión
-2. **Bloquea** la posición con `/sequito lock`
-3. **Ajusta la escala** en opciones si es muy grande/pequeño
-
-### Sincronización
-
-1. **Asegúrate** de que todos tengan la misma versión
-2. **Espera** unos segundos después de entrar a raid
-3. **Verifica** con `/sequito raid` que todos estén sincronizados
-
-### Cambio de Especialización
-
-1. **Activa auto-update** con `/sequito specauto`
-2. **Cambia de spec** normalmente
-3. **Sequito detectará** el cambio y actualizará macros automáticamente
+| Comando | Alias | Qué hace |
+|---------|-------|----------|
+| `/sequito` | `/s` | Abre el menú interactivo o el Dashboard central |
+| `/sdash` | `/sequito dashboard` | Abre/cierra el Dashboard principal de 4 pestañas |
+| `/sequito macros` | `/smacros` | Genera y optimiza todas las macros de tu clase |
+| `/srot` | `/srotation` | Muestra u oculta el HUD flotante de rotación reactiva |
+| `/sinspect` | `/seqinspect` | Inspecciona al objetivo (Talentos, GS real y encantamientos) |
+| `/sloot` | `/sequito lc` | Abre el panel del Concilio de Botín |
+| `/sstats` | `/sequito stats` | Abre las estadísticas de rendimiento en combate |
+| `/swipe` | `/sequito wipe` | Abre el análisis detallado del último wipe |
+| `/sbuffs` | `/sequito buffs` | Escanea y reporta buffs faltantes en la banda |
+| `/sfocus [Nombre]` | `/sequito focus` | Envía orden de target prioritario a toda la raid |
+| `/sready` | `/sequito ready` | Inicia comprobación de listos táctica |
 
 ---
 
-## ⚠️ Limitaciones
+## ❓ Preguntas Frecuentes para Nuevos Usuarios
 
-### Lo que Sequito NO hace:
+**¿Sequito gasta muchos recursos o me bajará los FPS en raid de 25 jugadores?**  
+No. Todo el código de Sequito cuenta con acumuladores de tiempo rígidos (*throttling*) que limitan las comprobaciones visuales a 20 Hz en lugar de saturar tu procesador a 144 Hz. Es extremadamente liviano y seguro para clientes de 32 bits.
 
-- ❌ **No automatiza ataques** - Solo crea macros, tú las ejecutas
-- ❌ **No juega por ti** - Solo proporciona información
-- ❌ **No hace bots** - Cumple con los ToS de WoW
-- ❌ **No lee memoria del juego** - Solo usa API oficial de WoW
+**¿Puedo usar Sequito si juego solo o solo hago mazmorras de 5 personas?**  
+Por supuesto. Las macros adaptativas, el HUD de rotación con procs, el comando de montura y las estadísticas de combate funcionan perfectamente en solitario, en grupos de 5 y en campos de batalla (PvP).
 
-### Restricciones de Macros
-
-- **Máximo 255 caracteres** por macro (limitación de WoW)
-- **Máximo 36 macros generales** + 18 por personaje
-- Las macros complejas pueden requerir múltiples macros
+**¿Qué pasa si mi lista de macros está llena (18/18 del personaje)?**  
+El addon te avisará en el chat para que borres alguna macro vieja que ya no uses. Sequito nunca borrará tus macros personales creadas a mano.
 
 ---
 
-## 🔧 Solución de Problemas
-
-### Las macros no se actualizan al cambiar spec
-
-**Solución:**
-```
-/sequito specauto  - Verifica que esté activado
-/sequito macros    - Regenera manualmente
-```
-
-### El panel de raid no muestra a todos
-
-**Solución:**
-1. Verifica que todos tengan Sequito instalado
-2. Espera 10-15 segundos para sincronización
-3. Intenta `/reload`
-
-### Los comandos tácticos no llegan
-
-**Solución:**
-1. Verifica que estés en raid (no funciona en party de 5)
-2. Asegúrate de que otros tengan Sequito
-3. Revisa que la sincronización esté activada en opciones
-
----
-
-## 📚 Más Información
-
-- [COMMANDS.md](COMMANDS.md) - Lista completa de comandos
-- [MODULES.md](MODULES.md) - Documentación de módulos
-- [FAQ.md](FAQ.md) - Preguntas frecuentes
-- [API.md](API.md) - Para desarrolladores
-
----
-
-**Creado por DarckRovert (Ingame: Thesaviour)**
+*Desarrollado con dedicación para la comunidad de World of Warcraft 3.3.5a.*  
+*¡Por el Sequito del Terror!*
