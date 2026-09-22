@@ -217,27 +217,38 @@ end
 
 function WA:RegisterEvents()
     local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
     eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
     eventFrame:RegisterEvent("RAID_ROSTER_UPDATE")
     eventFrame:RegisterEvent("PARTY_MEMBERS_CHANGED")
     
     eventFrame:SetScript("OnEvent", function(self, event, ...)
-        if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-            WA:OnCombatLog(...)
-        elseif event == "PLAYER_REGEN_DISABLED" then
+        if event == "PLAYER_REGEN_DISABLED" then
             WA:OnCombatStart()
         elseif event == "PLAYER_REGEN_ENABLED" then
             WA:OnCombatEnd()
-        elseif event == "ENCOUNTER_START" then
-            WA:OnEncounterStart(...)
-        elseif event == "ENCOUNTER_END" then
-            WA:OnEncounterEnd(...)
         elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" then
             WA:UpdateRoster()
         end
     end)
+
+    if S.CLEU and S.CLEU.Register then
+        local function onCLEU(...)
+            WA:OnCombatLog(...)
+        end
+        S.CLEU:Register("UNIT_DIED", onCLEU)
+        S.CLEU:Register("SPELL_CAST_SUCCESS", onCLEU)
+        S.CLEU:Register("SPELL_INTERRUPT", onCLEU)
+        S.CLEU:Register("SPELL_DAMAGE", onCLEU)
+        S.CLEU:Register("SWING_DAMAGE", onCLEU)
+    else
+        eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        eventFrame:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                WA:OnCombatLog(...)
+            end
+        end)
+    end
     
     -- Initial update
     WA:UpdateRoster()

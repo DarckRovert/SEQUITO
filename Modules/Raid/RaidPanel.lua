@@ -582,7 +582,8 @@ function RaidPanel:Initialize()
 end
 
 function RaidPanel:CreateSlashCommands()
-    SLASH_SEQUITORP1 = "/sequito panel"
+    SLASH_SEQUITORP1 = "/srp"
+    SLASH_SEQUITORP2 = "/seqpanel"
     SlashCmdList["SEQUITORP"] = function()
         if Sequito.Dashboard then
              Sequito.Dashboard:Toggle()

@@ -593,10 +593,12 @@ function S.MacroSync:ImportMacro(macroName)
     end
     
     -- Crear el macro
-    if S.MacroGen then
+    if S.MacroGen and S.MacroGen.CreateMacro then
         S.MacroGen:CreateMacro(macroName, 1, data.body)
-        print("|cFF00FF00Sequito|r: Macro '" .. macroName .. "' importado exitosamente.")
+    else
+        CreateMacro(macroName, 1, data.body, 1)
     end
+    print("|cFF00FF00Sequito|r: Macro '" .. macroName .. "' importado exitosamente.")
 end
 
 function S.MacroSync:ListSharedMacros()
@@ -647,11 +649,13 @@ function S.MacroSync:ImportFromLibrary(macroName)
     
     for _, macro in ipairs(macros) do
         if macro.name == macroName then
-            if S.MacroGen then
+            if S.MacroGen and S.MacroGen.CreateMacro then
                 S.MacroGen:CreateMacro(macro.name, 1, macro.body)
-                print("|cFF00FF00Sequito|r: Macro '" .. macro.name .. "' importado de la biblioteca.")
-                return
+            else
+                CreateMacro(macro.name, 1, macro.body, 1)
             end
+            print("|cFF00FF00Sequito|r: Macro '" .. macro.name .. "' importado de la biblioteca.")
+            return
         end
     end
     
@@ -665,8 +669,11 @@ function S.MacroSync:ImportAllFromLibrary(spec)
     
     for _, macro in ipairs(macros) do
         if not spec or spec == 0 or macro.spec == 0 or macro.spec == spec then
-            if S.MacroGen then
+            if S.MacroGen and S.MacroGen.CreateMacro then
                 S.MacroGen:CreateMacro(macro.name, 1, macro.body)
+                count = count + 1
+            else
+                CreateMacro(macro.name, 1, macro.body, 1)
                 count = count + 1
             end
         end

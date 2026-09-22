@@ -1,0 +1,41 @@
+# World of Warcraft Addon Git Ignore
+# Project: SEQUITO (WoW 3.3.5a Client)
+
+# OS generated files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor and IDE configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Temporary, scratch & backup files
+*.bak
+*.orig
+*~
+*.tmp
+*_backup.lua
+scratch/
+
+# WoW Client runtime directories (if cloned inside AddOns directly)
+WTF/
+Logs/
+Errors/
+Screenshots/
+WDB/
+Cache/
+*.blp.bak

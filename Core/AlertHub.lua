@@ -53,6 +53,7 @@ function AH:CreateFrame()
     hold:SetChange(0)
     hold:SetDuration(3) -- Dynamic
     hold:SetOrder(2)
+    self.HoldAnim = hold
     
     local fadeOut = f.ag:CreateAnimation("Alpha")
     fadeOut:SetChange(-1)
@@ -126,7 +127,9 @@ function AH:Show(msg, type, icon, colorOverride)
     -- Reiniciar animacion
     self.Frame.ag:Stop()
     -- Ajustar duracion hold
-    self.Frame.ag:GetAnimations()[2]:SetDuration(config.duration)
+    if self.HoldAnim then
+        self.HoldAnim:SetDuration(config.duration)
+    end
     self.Frame.ag:Play()
 end
 

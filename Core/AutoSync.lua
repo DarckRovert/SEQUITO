@@ -41,8 +41,6 @@ function AS:Initialize()
 end
 
 function AS:RegisterEvents()
-    local frame = CreateFrame("Frame")
-    frame:RegisterEvent("GROUP_ROSTER_UPDATE")
     frame:RegisterEvent("PARTY_MEMBERS_CHANGED") -- WotLK
     frame:RegisterEvent("RAID_ROSTER_UPDATE") -- WotLK
     frame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -54,7 +52,7 @@ function AS:RegisterEvents()
     frame:RegisterEvent("CHAT_MSG_LOOT")
     
     frame:SetScript("OnEvent", function(_, event, ...)
-        if event == "GROUP_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" or event == "RAID_ROSTER_UPDATE" then
+        if event == "PARTY_MEMBERS_CHANGED" or event == "RAID_ROSTER_UPDATE" then
             AS:OnGroupChanged()
         elseif event == "PLAYER_ENTERING_WORLD" then
             C_Timer.After(2, function() AS:OnLogin() end)

@@ -34,7 +34,6 @@ function S.RaidSync:Initialize()
     -- Frame de eventos
     local frame = CreateFrame("Frame")
     frame:RegisterEvent("CHAT_MSG_ADDON")
-    frame:RegisterEvent("GROUP_ROSTER_UPDATE")
     frame:RegisterEvent("RAID_ROSTER_UPDATE")
     frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
     frame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -54,7 +53,7 @@ function S.RaidSync:OnEvent(event, ...)
             if sender == UnitName("player") then return end
             self:ParseMessage(msg, sender)
         end
-    elseif event == "GROUP_ROSTER_UPDATE" or event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" then
+    elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" then
         self:ScanRaid()
         self:BroadcastMyInfo()
     elseif event == "PLAYER_ENTERING_WORLD" then
@@ -527,6 +526,10 @@ function S.RaidSync:OnAlphaStrike(sender)
     -- Efecto visual si existe
     if S.FX and S.FX.PlayAlphaStrike then
         S.FX:PlayAlphaStrike()
+    end
+    
+    if S.SendMessage then
+        S:SendMessage("ALPHA_STRIKE_CALLED")
     end
 end
 

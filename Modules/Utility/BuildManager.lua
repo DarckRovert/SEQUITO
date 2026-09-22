@@ -192,6 +192,14 @@ function BM:UpdateBuildList()
     self.frame.scrollChild:SetHeight(math.max(150, yOffset))
 end
 
+function BM:LoadBuild(name)
+    if not SequitoBuildDB or not SequitoBuildDB[name] then
+        S:Print("Build no encontrado: " .. tostring(name))
+        return
+    end
+    self:ShowBuildDetails(name)
+end
+
 function BM:ShowBuildDetails(name)
     local build = SequitoBuildDB[name]
     if not build then return end

@@ -46,7 +46,7 @@ AM.Types = {
 
 -- Frame para mensajes flotantes (estilo Blizzard UIErrorsFrame pero propio)
 function AM:Initialize()
-    self.AlertFrame = CreateFrame("MessageFrame", "SequitoAlertFrame", UIParent)
+    self.AlertFrame = CreateFrame("MessageFrame", "SequitoAlertMessageFrame", UIParent)
     self.AlertFrame:SetPoint("TOP", 0, -180)
     self.AlertFrame:SetSize(512, 100)
     self.AlertFrame:SetFont("Fonts\\FRIZQT__.TTF", 18, "OUTLINE")

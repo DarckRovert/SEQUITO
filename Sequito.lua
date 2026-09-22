@@ -97,6 +97,8 @@ S.defaults = {
         DeathSound = true, -- Added
         RadialEnabled = true, -- Radial Menu
         SummonAssistant = true, -- Coven Summon Queue
+        SoulstoneTracker = true,
+        AudioFX = true,
     }
 }
 
@@ -207,8 +209,9 @@ function S:OnEnable()
         "MacroSync", "RaidSync", "RaidAssist", "SoulEngine", "Logistics", "RaidIntel", "Connect", "RaidCmd",
         -- PvP & Class Extras
         "Spy", "Runes", "SpecWatcher",
-        -- Smart Coach UI
-        "RaidPanel", "RaidAssistUI", "SequitoPlates"
+        -- Smart Coach UI & Automation
+        "RaidPanel", "RaidAssistUI", "SequitoPlates", "CombatTracker",
+        "AutoSync", "ContextEngine", "SmartDefaults"
     }
 
     for _, moduleName in ipairs(modules) do
@@ -514,9 +517,16 @@ SlashCmdList["SEQUITO"] = function(msg)
         if S.CCCoordinator then
             local subcmd = arg and arg:lower() or ""
             if subcmd == "assign" then
-                S.CCCoordinator:AssignCC()
+                if S.CCCoordinator.Assign then
+                    local p, t, s = UnitName("player"), UnitName("target") or "Target", "CC"
+                    S.CCCoordinator:Assign(p, t, s)
+                elseif S.CCCoordinator.AssignCC then
+                    S.CCCoordinator:AssignCC()
+                end
             elseif subcmd == "clear" then
-                S.CCCoordinator:ClearAssignments()
+                if S.CCCoordinator.ClearAssignments then
+                    S.CCCoordinator:ClearAssignments()
+                end
             else
                 S.CCCoordinator:Toggle()
             end
@@ -631,7 +641,11 @@ SlashCmdList["SEQUITO"] = function(msg)
                 local question = arg:gsub("create%s*", "")
                 S.VotingSystem:CreatePoll(question)
             elseif subcmd == "end" then
-                S.VotingSystem:EndPoll()
+                if S.VotingSystem.ClosePoll then
+                    S.VotingSystem:ClosePoll()
+                elseif S.VotingSystem.EndPoll then
+                    S.VotingSystem:EndPoll()
+                end
             else
                 S.VotingSystem:Toggle()
             end
@@ -641,7 +655,11 @@ SlashCmdList["SEQUITO"] = function(msg)
         if S.VersionSync then
             local subcmd = arg and arg:lower() or ""
             if subcmd == "check" then
-                S.VersionSync:CheckVersions()
+                if S.VersionSync.RequestVersions then
+                    S.VersionSync:RequestVersions()
+                elseif S.VersionSync.CheckVersions then
+                    S.VersionSync:CheckVersions()
+                end
             else
                 S.VersionSync:Toggle()
             end
@@ -703,6 +721,38 @@ SlashCmdList["SEQUITO"] = function(msg)
                 S:Print("  request - Solicita lista de macros del grupo")
                 S:Print("  get <nombre> <jugador> - Solicita macro específico")
             end
+        end
+    -- AcademyInspector Commands
+    elseif cmd == "inspect" then
+        if S.AcademyInspector and S.AcademyInspector.InspectUnit then
+            S.AcademyInspector:InspectUnit("target")
+        end
+    -- RaidAssistUI Commands
+    elseif cmd == "assist" then
+        if S.RaidAssistUI then
+            if not S.RaidAssistUI.mainFrame and S.RaidAssistUI.CreateMainWindow then
+                S.RaidAssistUI:CreateMainWindow()
+            end
+            if S.RaidAssistUI.mainFrame then
+                if S.RaidAssistUI.mainFrame:IsShown() then
+                    S.RaidAssistUI.mainFrame:Hide()
+                else
+                    S.RaidAssistUI.mainFrame:Show()
+                end
+            end
+        end
+    -- RaidPanel Commands
+    elseif cmd == "panel" then
+        if S.Dashboard and S.Dashboard.Toggle then
+            S.Dashboard:Toggle()
+        elseif S.RaidPanel and S.RaidPanel.Toggle then
+            S.RaidPanel:Toggle()
+        end
+    -- LootGallery Commands
+    elseif cmd == "gallery" then
+        if S.LootGallery then
+            if S.LootGallery.frame then S.LootGallery.frame:Show() end
+            if S.LootGallery.UpdateGallery then S.LootGallery:UpdateGallery() end
         end
     else
         print("|cFFFF00FFSequito|r: Comando desconocido. Usa /sequito help")
@@ -911,6 +961,37 @@ function S:TargetOrAttack()
 end
 
 -- ===========================================================================
+-- COMMUNICATION & MESSAGE BUS
+-- ===========================================================================
+S.CommHandlers = S.CommHandlers or {}
+
+function S:RegisterComm(prefix, callback)
+    if not prefix or type(callback) ~= "function" then return end
+    self.CommHandlers[prefix] = callback
+end
+
+function S:SendComm(prefix, message, channel, target)
+    if not prefix or not message then return end
+    local chan = channel or (IsInRaid() and "RAID" or IsInGroup() and "PARTY" or "GUILD")
+    SendAddonMessage(prefix, message, chan, target)
+end
+
+S.MessageListeners = S.MessageListeners or {}
+
+function S:RegisterMessage(message, callback)
+    if not message or type(callback) ~= "function" then return end
+    self.MessageListeners[message] = self.MessageListeners[message] or {}
+    table.insert(self.MessageListeners[message], callback)
+end
+
+function S:SendMessage(message, ...)
+    if not message or not self.MessageListeners or not self.MessageListeners[message] then return end
+    for _, cb in ipairs(self.MessageListeners[message]) do
+        pcall(cb, message, ...)
+    end
+end
+
+-- ===========================================================================
 -- MAIN EVENT HANDLER
 -- ===========================================================================
 function S:RegisterMainEvents()
@@ -919,6 +1000,7 @@ function S:RegisterMainEvents()
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
     f:RegisterEvent("PLAYER_REGEN_ENABLED")
     f:RegisterEvent("PLAYER_DEAD")
+    f:RegisterEvent("CHAT_MSG_ADDON")
     
     f:SetScript("OnEvent", function(self, event, ...)
         if event == "PLAYER_ENTERING_WORLD" then
@@ -929,11 +1011,16 @@ function S:RegisterMainEvents()
             if S.GUI then S.GUI:UpdateCombatStatus(false) end
         elseif event == "PLAYER_DEAD" then
             -- Necrosis Style Death Sound ("I'll be back...")
-            if S.db.profile.DeathSound then
+            if S.db and S.db.profile and S.db.profile.DeathSound then
                 PlaySoundFile("Sound\\Creature\\LordMarrowgar\\IC_Marrowgar_Slay01.wav")
                 print("|cFFFF0000Sequito:|r La muerte es solo el principio...")
             end
             if S.GUI then S.GUI:UpdateCombatStatus(false) end
+        elseif event == "CHAT_MSG_ADDON" then
+            local prefix, message, channel, sender = ...
+            if S.CommHandlers[prefix] then
+                S.CommHandlers[prefix](prefix, message, channel, sender)
+            end
         end
     end)
 end

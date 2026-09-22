@@ -25,6 +25,24 @@ S.MacroGen.Races = {
     ["BloodElf"]  = { ID = 28730 }, 
 }
 
+function S.MacroGen:CreateMacro(name, icon, body, perChar)
+    if not name or not body then return nil end
+    local isPerChar = perChar or 1
+    local macroID = GetMacroIndexByName(name)
+    if macroID > 0 then
+        EditMacro(macroID, name, icon or 1, body)
+        return macroID
+    else
+        local numAccount, numChar = GetNumMacros()
+        if (isPerChar == 1 and numChar < 18) or (isPerChar ~= 1 and numAccount < 36) then
+            return CreateMacro(name, icon or 1, body, isPerChar)
+        else
+            print("|cFFFF0000Sequito Error:|r Espacio de macros lleno. No se pudo crear: " .. tostring(name))
+            return nil
+        end
+    end
+end
+
 function S.MacroGen:GetSmartSpell(id, defaultName)
     local name = GetSpellInfo(id)
     if name and IsSpellKnown(id) then

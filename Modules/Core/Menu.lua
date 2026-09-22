@@ -16,6 +16,17 @@ function M:GetOption(key)
     return true
 end
 
+local function SafeCastSpell(spellName)
+    if InCombatLockdown() then
+        if S.Print then S:Print("No se pueden lanzar hechizos desde el menú durante el combate.") end
+        return
+    end
+    local ok, err = pcall(CastSpellByName, spellName)
+    if not ok then
+        if S.Print then S:Print("Usa la barra de acción o un macro para lanzar: " .. tostring(spellName)) end
+    end
+end
+
 function M:Initialize()
     if not self:GetOption("enabled") then
         return
@@ -81,27 +92,27 @@ function M:Toggle()
             notCheckable = true,
             menuList = {
                 { text = "Invocar Demonio", isTitle = true, notCheckable = true },
-                { text = "Diablillo", func = function() CastSpellByName("Invocar diablillo") end },
-                { text = "Abisario", func = function() CastSpellByName("Invocar abisario") end },
-                { text = "Súcubo", func = function() CastSpellByName("Invocar súcubo") end },
-                { text = "Manáfago", func = function() CastSpellByName("Invocar manáfago") end },
-                { text = "Guardia Apocalíptico", func = function() CastSpellByName("Invocar guardia apocalíptico") end },
-                { text = "Infernal", func = function() CastSpellByName("Invocar infernal") end },
+                { text = "Diablillo", func = function() SafeCastSpell("Invocar diablillo") end },
+                { text = "Abisario", func = function() SafeCastSpell("Invocar abisario") end },
+                { text = "Súcubo", func = function() SafeCastSpell("Invocar súcubo") end },
+                { text = "Manáfago", func = function() SafeCastSpell("Invocar manáfago") end },
+                { text = "Guardia Apocalíptico", func = function() SafeCastSpell("Invocar guardia apocalíptico") end },
+                { text = "Infernal", func = function() SafeCastSpell("Invocar infernal") end },
                 
                 { text = "", notCheckable = true, disabled = true },
                 
                 { text = "Piedras", isTitle = true, notCheckable = true },
-                { text = "Crear Piedra de Salud", func = function() CastSpellByName("Crear piedra de salud") end },
-                { text = "Crear Piedra de Alma", func = function() CastSpellByName("Crear piedra de alma") end },
-                { text = "Crear Piedra de Fuego", func = function() CastSpellByName("Crear piedra de fuego") end },
-                { text = "Crear Piedra de Hechizo", func = function() CastSpellByName("Crear piedra de hechizo") end },
+                { text = "Crear Piedra de Salud", func = function() SafeCastSpell("Crear piedra de salud") end },
+                { text = "Crear Piedra de Alma", func = function() SafeCastSpell("Crear piedra de alma") end },
+                { text = "Crear Piedra de Fuego", func = function() SafeCastSpell("Crear piedra de fuego") end },
+                { text = "Crear Piedra de Hechizo", func = function() SafeCastSpell("Crear piedra de hechizo") end },
                 
                 { text = "", notCheckable = true, disabled = true },
                 
                 { text = "Rituales", isTitle = true, notCheckable = true },
-                { text = "Ritual de Invocación", func = function() CastSpellByName("Ritual de invocación") end },
-                { text = "Ritual de las Almas", func = function() CastSpellByName("Ritual de las Almas") end },
-                { text = "Ritual de la Perdición", func = function() CastSpellByName("Ritual de la perdición") end },
+                { text = "Ritual de Invocación", func = function() SafeCastSpell("Ritual de invocación") end },
+                { text = "Ritual de las Almas", func = function() SafeCastSpell("Ritual de las Almas") end },
+                { text = "Ritual de la Perdición", func = function() SafeCastSpell("Ritual de la perdición") end },
                 { text = "|cFFFF0000RULETA RUSA|r", func = function() if S.Coven then S.Coven:StartDoomRoulette() end end },
             }
         },
@@ -114,7 +125,7 @@ function M:Toggle()
             end 
         },
         { 
-            text = S.L["COOLDOWN_monitor"] or "Monitor de Cooldowns",
+            text = S.L["COOLDOWN_MONITOR"] or "Monitor de Cooldowns",
             notCheckable = true,
             func = function() 
                 if S.CooldownMonitor then S.CooldownMonitor:Toggle() end 
@@ -246,7 +257,7 @@ function M:Toggle()
                     menuList = {
                         { text = "Demonio (Default)", func = function() if S.Theme then S.Theme:SetTheme("Demonio") end end },
                         { text = "Oscuro (Modern)", func = function() if S.Theme then S.Theme:SetTheme("Oscuro") end end },
-                        { text = "Clásico (WoW)", func = function() if S.Theme then S.Theme:SetTheme("Clásico") end end },
+                        { text = "Clásico (WoW)", func = function() if S.Theme then S.Theme:SetTheme("Clasico") end end },
                     }
                 }
             }

@@ -6,6 +6,7 @@
 
 local addonName, S = ...
 S.Plates = {}
+S.SequitoPlates = S.Plates
 local P = S.Plates
 
 P.Frame = CreateFrame("Frame")

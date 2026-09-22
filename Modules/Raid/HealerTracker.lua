@@ -197,28 +197,43 @@ end
 
 function HT:RegisterEvents()
     local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     eventFrame:RegisterEvent("UNIT_MANA")
-    eventFrame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-    eventFrame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
+    eventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    eventFrame:RegisterEvent("PLAYER_FOCUS_CHANGED")
+    eventFrame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
     eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
     
     eventFrame:SetScript("OnEvent", function(self, event, ...)
-        if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-            HT:OnCombatLog(...)
-        elseif event == "UNIT_MANA" then
+        if event == "UNIT_MANA" then
             local unit = ...
             HT:OnUnitPower(unit)
-        elseif event == "NAME_PLATE_UNIT_ADDED" then
-            local unit = ...
-            HT:OnNameplateAdded(unit)
-        elseif event == "NAME_PLATE_UNIT_REMOVED" then
-            local unit = ...
-            HT:OnNameplateRemoved(unit)
+        elseif event == "PLAYER_TARGET_CHANGED" then
+            HT:OnNameplateAdded("target")
+        elseif event == "PLAYER_FOCUS_CHANGED" then
+            HT:OnNameplateAdded("focus")
+        elseif event == "UPDATE_MOUSEOVER_UNIT" then
+            HT:OnNameplateAdded("mouseover")
         elseif event == "PLAYER_REGEN_ENABLED" then
-            -- Opcional: limpiar al salir de combate
+            -- Limpieza o mantenimiento opcional fuera de combate
         end
     end)
+
+    if S.CLEU and S.CLEU.Register then
+        local function onHeal(...)
+            HT:OnCombatLog(...)
+        end
+        S.CLEU:Register("SPELL_HEAL", onHeal)
+        S.CLEU:Register("SPELL_PERIODIC_HEAL", onHeal)
+        S.CLEU:Register("SPELL_CAST_START", onHeal)
+        S.CLEU:Register("SPELL_CAST_SUCCESS", onHeal)
+    else
+        eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        eventFrame:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                HT:OnCombatLog(...)
+            end
+        end)
+    end
 end
 
 function HT:OnCombatLog(...)

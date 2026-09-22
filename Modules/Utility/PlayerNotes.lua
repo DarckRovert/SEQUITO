@@ -78,6 +78,20 @@ function PN:SetNote(playerName, note)
     S:Print("Nota guardada para " .. playerName)
 end
 
+function PN:AddNote(playerName, note)
+    self:SetNote(playerName, note)
+end
+
+function PN:DeleteNote(playerName)
+    if SequitoPlayerNotesDB and playerName then
+        SequitoPlayerNotesDB[playerName] = nil
+        S:Print("Nota eliminada para " .. playerName)
+        if self.currentPlayer == playerName and self.frame and self.frame:IsShown() then
+            self.frame.editBox:SetText("")
+        end
+    end
+end
+
 function PN:GetNote(playerName)
     return SequitoPlayerNotesDB[playerName]
 end

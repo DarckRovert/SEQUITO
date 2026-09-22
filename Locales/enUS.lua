@@ -6,6 +6,11 @@
 
 local addonName, S = ...
 S.L = S.L or {}
+setmetatable(S.L, {
+    __index = function(t, k)
+        return k
+    end
+})
 
 -- Default English strings (fallback)
 S.L["INITIALIZED"] = "Sequito: System initialized."
@@ -143,3 +148,29 @@ S.L["AVAILABLE"] = "Available"
 S.L["ON_COOLDOWN"] = "On Cooldown"
 S.L["UPDATED"] = "Updated"
 S.L["OUTDATED"] = "Outdated"
+
+-- Gamification & Achievements
+S.L["ACH_INITIATE"] = "Initiate"
+S.L["ACH_INITIATE_DESC"] = "Log in with the Sequito addon active in your guild."
+S.L["ACH_MACRO_MASTER"] = "Macro Master"
+S.L["ACH_MACRO_MASTER_DESC"] = "Generate a set of optimized automatic class macros."
+S.L["ACH_WIPE_SAVIOR"] = "Raid Savior"
+S.L["ACH_WIPE_SAVIOR_DESC"] = "Cast a crucial raid-saving cooldown (Divine Hymn, Tranquility, or Rebirth) in combat."
+S.L["ACH_CANNON_FODDER"] = "Cannon Fodder"
+S.L["ACH_CANNON_FODDER_DESC"] = "Fall in battle during a challenging dungeon or raid encounter."
+
+-- Menu & Quick Settings
+S.L["OPEN_OPTIONS"] = "Open Options"
+S.L["ANALYZE_WIPE"] = "Analyze Last Wipe"
+S.L["COOLDOWN_MONITOR"] = "Cooldown Monitor"
+S.L["RAID_TOOLS"] = "Raid Tools"
+S.L["READY_CHECK"] = "Ready Check"
+S.L["QUICK_SETTINGS"] = "Quick Settings"
+S.L["LOCK_SPHERE"] = "Lock Sphere"
+
+-- Academy & Inspection
+S.L["ACADEMY_INSPECTOR"] = "Academy Inspector"
+S.L["TALENTS"] = "Talents"
+S.L["ILVL_APPROX"] = "Approx. Item Level"
+S.L["COOLDOWN_ASSIGNMENTS"] = "Cooldown Assignments"
+S.L["NOT_RAID_LEADER"] = "Only the Raid Leader can perform this action."

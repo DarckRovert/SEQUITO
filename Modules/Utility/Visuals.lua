@@ -245,12 +245,25 @@ function FX:TriggerSoulSiphon()
         f.tex = f:CreateTexture(nil, "BACKGROUND")
         f.tex:SetAllPoints()
         f.tex:SetTexture("Interface\\FullScreenTextures\\LowHealth") -- Generic texture, tint purple
-        f.tex:SetVertexColor(0.5, 0, 0.5, 0.5) -- Purple tint
+        f.tex:SetVertexColor(0.6, 0.1, 0.85, 0.7) -- Purple tint
         f.tex:SetBlendMode("ADD")
         f:Hide()
         FX.FlashFrame = f
     end
     
+    f:Show()
+    f:SetAlpha(0.7)
+    f.timer = 0
+    f:SetScript("OnUpdate", function(self, elapsed)
+        self.timer = self.timer + elapsed
+        if self.timer >= 0.7 then
+            self:Hide()
+            self:SetScript("OnUpdate", nil)
+        else
+            local alpha = (1 - (self.timer / 0.7)) * 0.7
+            self:SetAlpha(math.max(0, alpha))
+        end
+    end)
 end
 
 -- ===========================================================================

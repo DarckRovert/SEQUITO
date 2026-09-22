@@ -126,15 +126,48 @@ function PS:ProcessCombatLog(...)
     end
 end
 
+function PS:ClearStats()
+    wipe(SequitoStatsDB)
+    if self.statLines then
+        for _, fs in ipairs(self.statLines) do
+            fs:Hide()
+        end
+    end
+    if S.Print then
+        S:Print("Estadísticas de rendimiento reiniciadas.")
+    end
+end
+
+function PS:CompareRaids()
+    if S.Print then
+        S:Print("Comparación de combate: registros totales guardados = " .. #SequitoStatsDB)
+    end
+    self:ShowStats()
+end
+
 function PS:ShowStats()
+    if not self.frame then return end
+    self.statLines = self.statLines or {}
+    for _, fs in ipairs(self.statLines) do
+        fs:Hide()
+    end
+    
     local yOffset = 0
+    local lineIdx = 1
     for i = #SequitoStatsDB, math.max(1, #SequitoStatsDB - 20), -1 do
         local record = SequitoStatsDB[i]
-        local text = self.frame.content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        local text = self.statLines[lineIdx]
+        if not text then
+            text = self.frame.content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            self.statLines[lineIdx] = text
+        end
+        text:ClearAllPoints()
         text:SetPoint("TOPLEFT", 5, -yOffset)
         text:SetText(string.format("%s - %s: %.1f DPS, %.1f HPS (%.0fs)", 
-            record.date, record.target, record.dps, record.hps, record.duration))
+            record.date or "-", record.target or "Unknown", record.dps or 0, record.hps or 0, record.duration or 0))
+        text:Show()
         yOffset = yOffset + 15
+        lineIdx = lineIdx + 1
     end
     self.frame:Show()
 end

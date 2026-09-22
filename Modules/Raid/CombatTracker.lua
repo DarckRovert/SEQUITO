@@ -438,16 +438,6 @@ function CombatTracker:Reset()
     Sequito:Print("Estadisticas de combate reseteadas.")
 end
 
--- Inicializacion
-
--- Helper para obtener configuración
-function CombatTracker:GetOption(key)
-    if Sequito.ModuleConfig then
-        return Sequito.ModuleConfig:GetValue("CombatTracker", key)
-    end
-    return true
-end
-
 function CombatTracker:Initialize()
     if not self:GetOption("enabled") then
         return
@@ -459,7 +449,6 @@ function CombatTracker:Initialize()
     -- Registrar eventos
     eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED") -- Entrar en combate
     eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")  -- Salir de combate
-    eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     
     eventFrame:SetScript("OnEvent", function(self, event, ...)
         if event == "PLAYER_REGEN_DISABLED" then
@@ -469,20 +458,35 @@ function CombatTracker:Initialize()
                 lastUpdate = lastUpdate + elapsed
                 if lastUpdate >= CONFIG.updateInterval then
                     lastUpdate = 0
-                    -- Update realtime UI here if needed
                 end
             end)
         elseif event == "PLAYER_REGEN_ENABLED" then
-            -- Pequeno delay para capturar ultimos eventos
             C_Timer.After(0.5, function()
                 EndCombat()
-                -- STOP OPTIMIZATION: Stop OnUpdate when combat ends
                 eventFrame:SetScript("OnUpdate", nil)
             end)
-        elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-            ParseCombatEvent(...)
         end
     end)
+
+    if Sequito.CLEU and Sequito.CLEU.Register then
+        local subEvents = {
+            "SWING_DAMAGE", "RANGE_DAMAGE", "SPELL_DAMAGE", "SPELL_PERIODIC_DAMAGE",
+            "DAMAGE_SHIELD", "ENVIRONMENTAL_DAMAGE", "SPELL_HEAL", "SPELL_PERIODIC_HEAL",
+            "SPELL_INTERRUPT", "SPELL_DISPEL", "UNIT_DIED"
+        }
+        for _, subEvent in ipairs(subEvents) do
+            Sequito.CLEU:Register(subEvent, function(...)
+                ParseCombatEvent(...)
+            end)
+        end
+    else
+        eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        eventFrame:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                ParseCombatEvent(...)
+            end
+        end)
+    end
     
     Sequito:Print("CombatTracker cargado (Optimizado).")
 end

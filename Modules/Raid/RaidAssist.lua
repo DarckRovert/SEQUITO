@@ -795,7 +795,7 @@ function RA:ShowAlert(message, alertType, duration)
 end
 
 function RA:CreateAlertFrame()
-    local frame = CreateFrame("Frame", "SequitoAlertFrame", UIParent)
+    local frame = CreateFrame("Frame", "SequitoRaidAlertFrame", UIParent)
     frame:SetSize(400, 60)
     
     -- Posición según configuración

@@ -9,8 +9,8 @@ S.AcademyInspector = {}
 local AI = S.AcademyInspector
 
 -- Slash Command Handler
-SLASH_SEQUITOINSPECT1 = "/sequito inspect"
-SLASH_SEQUITOINSPECT2 = "/inspect" -- Optional shorthand if no conflict
+SLASH_SEQUITOINSPECT1 = "/sinspect"
+SLASH_SEQUITOINSPECT2 = "/seqinspect"
 SlashCmdList["SEQUITOINSPECT"] = function(msg)
     AI:InspectUnit("target")
 end

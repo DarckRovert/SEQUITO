@@ -116,7 +116,7 @@ function S.GUI:CreateSphere()
     f:SetAttribute("macrotext1", finalMacro)
     
     f:RegisterForClicks("AnyUp")
-    f:SetScript("OnClick", function(self, button)
+    f:SetScript("PostClick", function(self, button)
         if button == "RightButton" then
             if S.Menu then
                 S.Menu:Toggle()
@@ -365,19 +365,21 @@ function S.GUI:CreateSatellites()
             
             if spellID then
                 local btnName = "SequitoBtn"..i
-                if _G[btnName] then return end
+                local btn = _G[btnName]
+                if not btn then
+                    btn = CreateFrame("Button", btnName, S.Sphere, "SecureActionButtonTemplate")
+                    btn:SetSize(32, 32)
+                    
+                    local rad = math.rad(angles[i])
+                    local x = math.cos(rad) * r
+                    local y = math.sin(rad) * r
+                    btn:SetPoint("CENTER", S.Sphere, "CENTER", x, y)
+                    
+                    local cd = CreateFrame("Cooldown", btnName.."Cooldown", btn, "CooldownFrameTemplate")
+                    cd:SetAllPoints()
+                    btn.cooldown = cd
+                end
                 
-                local btn = CreateFrame("Button", btnName, S.Sphere, "SecureActionButtonTemplate")
-                btn:SetSize(32, 32)
-                
-                local rad = math.rad(angles[i])
-                local x = math.cos(rad) * r
-                local y = math.sin(rad) * r
-                btn:SetPoint("CENTER", S.Sphere, "CENTER", x, y)
-                
-                local cd = CreateFrame("Cooldown", btnName.."Cooldown", btn, "CooldownFrameTemplate")
-                cd:SetAllPoints()
-                btn.cooldown = cd
                 btn.spellID = spellID
                 btn.spellOptions = spellData -- Guardar el array completo para actualizaciones
                 

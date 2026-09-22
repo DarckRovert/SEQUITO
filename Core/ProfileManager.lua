@@ -73,8 +73,10 @@ function PM:LoadCurrentProfile()
     S.db.profile = SequitoDB.profiles[profileName]
     S.db.global = SequitoDB.global or {}
     
-    -- Notificar cambio
-    S:SendMessage("SEQUITO_PROFILE_CHANGED")
+    -- Notificar cambio si existe un despachador de eventos
+    if S.SendMessage then
+        S:SendMessage("SEQUITO_PROFILE_CHANGED")
+    end
 end
 
 function PM:GetProfiles()

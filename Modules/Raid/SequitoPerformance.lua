@@ -25,7 +25,6 @@ end
 
 function SP:RegisterEvents()
     local f = CreateFrame("Frame")
-    f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     f:RegisterEvent("PLAYER_REGEN_DISABLED") -- Combat Start
     f:RegisterEvent("PLAYER_REGEN_ENABLED")  -- Combat End
     
@@ -37,11 +36,26 @@ function SP:RegisterEvents()
                 SP:Report()
                 SP.InCombat = false
             end
-        elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
+        end
+    end)
+
+    if S.CLEU and S.CLEU.Register then
+        local function onCLEU(...)
             SP.InCombat = true
             SP:OnCombatLog(...)
         end
-    end)
+        S.CLEU:Register("SPELL_INTERRUPT", onCLEU)
+        S.CLEU:Register("SPELL_DISPEL", onCLEU)
+        S.CLEU:Register("UNIT_DIED", onCLEU)
+    else
+        f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        f:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                SP.InCombat = true
+                SP:OnCombatLog(...)
+            end
+        end)
+    end
 end
 
 function SP:ResetData()

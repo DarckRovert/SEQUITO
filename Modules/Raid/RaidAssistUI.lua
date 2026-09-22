@@ -24,7 +24,8 @@ function RAUI:Initialize()
     self:CreateLeaderPanel()
     
     -- Register Slash Command
-    SLASH_SEQUITORAU1 = "/sequito assist"
+    SLASH_SEQUITORAU1 = "/sra"
+    SLASH_SEQUITORAU2 = "/seqassist"
     SlashCmdList["SEQUITORAU"] = function()
         if not self.mainFrame then self:CreateMainWindow() end
         if self.mainFrame:IsShown() then self.mainFrame:Hide() else self.mainFrame:Show() end

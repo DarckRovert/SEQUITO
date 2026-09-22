@@ -186,8 +186,6 @@ function DT:RegisterEvents()
     local eventFrame = CreateFrame("Frame")
     eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
     eventFrame:RegisterEvent("LFG_COMPLETION_REWARD")
-    eventFrame:RegisterEvent("BOSS_KILL")
-    eventFrame:RegisterEvent("ENCOUNTER_END")
     eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
     
     eventFrame:SetScript("OnEvent", function(self, event, ...)
@@ -196,15 +194,26 @@ function DT:RegisterEvents()
             DT:UpdateDisplay()
         elseif event == "LFG_COMPLETION_REWARD" then
             DT:OnDungeonComplete()
-        elseif event == "BOSS_KILL" or event == "ENCOUNTER_END" then
-            local encounterID, encounterName, difficultyID, groupSize, success = ...
-            if success == 1 or event == "BOSS_KILL" then
-                DT:OnBossKill(encounterName)
-            end
         elseif event == "ZONE_CHANGED_NEW_AREA" then
             DT:CheckCurrentDungeon()
         end
     end)
+    
+    -- Detección real de bosses en 3.3.5a vía CLEU Dispatcher
+    if S.CLEU and S.CLEU.Register then
+        S.CLEU:Register("UNIT_DIED", function(...)
+            local _, _, _, _, _, destGUID, destName = ...
+            if destGUID and destName then
+                local unitType = tonumber(destGUID:sub(5, 5), 16)
+                if unitType == 3 or unitType == 5 then -- Creature/Vehicle
+                    local _, instanceType, difficultyID = GetInstanceInfo()
+                    if instanceType == "party" or instanceType == "raid" then
+                        DT:OnBossKill(destName)
+                    end
+                end
+            end
+        end)
+    end
 end
 
 function DT:LoadSavedData()

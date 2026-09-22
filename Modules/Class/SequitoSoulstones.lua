@@ -12,7 +12,9 @@ local SS_SPELL_NAME = "Resurrección de piedra de alma" -- Check locale
 local SS_ICON = "Interface\\Icons\\Spell_Shadow_SoulGem"
 
 function SS:Initialize()
-    if not S.db.profile.SoulstoneTracker then return end
+    local _, class = UnitClass("player")
+    if class ~= "WARLOCK" then return end
+    if S.db and S.db.profile and S.db.profile.SoulstoneTracker == false then return end
     
     self.Frame = CreateFrame("Frame", "SequitoSSTracker", UIParent)
     self.Frame:SetSize(160, 60)

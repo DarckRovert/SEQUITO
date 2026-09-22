@@ -124,11 +124,22 @@ end
 
 function VS:Vote(optionIndex)
     if currentPoll then
+        local opt = tonumber(optionIndex)
+        if not opt and type(optionIndex) == "string" then
+            local str = optionIndex:lower()
+            if str == "yes" or str == "si" or str == "sí" then
+                opt = 1
+            elseif str == "no" then
+                opt = 2
+            end
+        end
+        opt = opt or 1
+        
         local channel = IsInRaid() and "RAID" or IsInGroup() and "PARTY" or nil
         if channel then
-            SendAddonMessage("SeqVote", "VOTE:" .. optionIndex, channel)
+            SendAddonMessage("SeqVote", "VOTE:" .. opt, channel)
         end
-        votes[UnitName("player")] = optionIndex
+        votes[UnitName("player")] = opt
         self:UpdateResults()
     end
 end
@@ -162,13 +173,18 @@ function VS:OnAddonMessage(msg, sender)
         votes = {}
         self:ShowPoll(question, options)
     elseif cmd == "VOTE" then
-        votes[sender] = tonumber(data)
-        self:UpdateResults()
-    elseif cmd == "END" then
-        -- Anunciar resultados si está habilitado
-        if self:GetOption("announceResults") then
-            self:AnnounceResults()
+        local opt = tonumber(data)
+        if not opt and type(data) == "string" then
+            local str = data:lower()
+            if str == "yes" or str == "si" or str == "sí" then opt = 1
+            elseif str == "no" then opt = 2
+            end
         end
+        if opt then
+            votes[sender] = opt
+            self:UpdateResults()
+        end
+    elseif cmd == "END" then
         currentPoll = nil
         self.frame:Hide()
     end

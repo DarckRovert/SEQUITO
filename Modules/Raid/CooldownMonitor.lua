@@ -286,7 +286,6 @@ end
 function CM:RegisterEvents()
     local eventFrame = CreateFrame("Frame")
     eventFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     eventFrame:RegisterEvent("RAID_ROSTER_UPDATE")
     eventFrame:RegisterEvent("PARTY_MEMBERS_CHANGED")
     eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -294,12 +293,23 @@ function CM:RegisterEvents()
     eventFrame:SetScript("OnEvent", function(self, event, ...)
         if event == "UNIT_SPELLCAST_SUCCEEDED" then
             CM:OnSpellCast(...)
-        elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-            CM:OnCombatLog(...)
         elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
             CM:ScanRaid()
         end
     end)
+
+    if S.CLEU and S.CLEU.Register then
+        S.CLEU:Register("SPELL_CAST_SUCCESS", function(...)
+            CM:OnCombatLog(...)
+        end)
+    else
+        eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        eventFrame:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                CM:OnCombatLog(...)
+            end
+        end)
+    end
     
     -- Timer de actualización
     local updateFrame = CreateFrame("Frame")

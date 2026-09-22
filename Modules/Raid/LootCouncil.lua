@@ -8,7 +8,6 @@ local addonName, S = ...
 local L = S.L or {}
 S.LootCouncil = {}
 local LC = S.LootCouncil
-local L = S.L or {}
 
 -- Variables locales
 local currentSession = nil
@@ -39,19 +38,6 @@ function LC:Initialize()
     
     self.frame = self:CreateFrame()
     self:RegisterEvents()
-    self:RegisterEvents()
-    if S.ModuleConfig then
-        S.ModuleConfig:RegisterModule("LootCouncil", {
-            name = L["LC_TITLE"],
-            description = "Loot Council System",
-            icon = "Interface\\Icons\\INV_Box_02",
-            category = "raid",
-            options = {
-                {key = "enabled", type = "checkbox", label = L["CFG_ENABLED"], default = true},
-                {key = "announceResults", type = "checkbox", label = L["CFG_ANNOUNCE"], default = true},
-            }
-        })
-    end
 end
 
 function LC:CreateFrame()
@@ -142,8 +128,8 @@ function LC:StartSession(itemLink)
         return
     end
     
-    -- Verificar si auto-open está habilitado
-    if not self:GetOption("autoOpen") then
+    -- Verificar si auto-open está deshabilitado explícitamente
+    if self:GetOption("autoOpen") == false then
         return
     end
     
@@ -167,7 +153,11 @@ function LC:EndSession(winner)
         
         -- Anunciar resultados si está habilitado
         if self:GetOption("announceResults") and winner and winner ~= "" then
-            SendChatMessage("[Sequito] " .. string.format(L["LC_WINNER"], winner, currentSession.item), "RAID")
+            SendChatMessage("[Sequito] " .. string.format(L["LC_WINNER"] or "Ganador de %s: %s", winner, currentSession.item), "RAID")
+        end
+        
+        if S.SendMessage and winner and winner ~= "" then
+            S:SendMessage("LOOT_AWARDED", currentSession.item, winner)
         end
         
         currentSession = nil
@@ -251,6 +241,9 @@ function LC:OnAddonMessage(prefix, msg, channel, sender)
             self:UpdateDisplay()
         end
     elseif cmd == "END" then
+        if data and data ~= "" and currentSession and S.SendMessage then
+            S:SendMessage("LOOT_AWARDED", currentSession.item, data)
+        end
         currentSession = nil
         self.frame:Hide()
     end

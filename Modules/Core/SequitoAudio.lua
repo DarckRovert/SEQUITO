@@ -31,7 +31,7 @@ local WATCHED_PROCS = {
 }
 
 function Audio:Initialize()
-    if not S.db.profile.AudioFX then return end
+    if S.db and S.db.profile and S.db.profile.AudioFX == false then return end
     
     self.Frame = CreateFrame("Frame")
     self.Frame:RegisterEvent("UNIT_HEALTH")

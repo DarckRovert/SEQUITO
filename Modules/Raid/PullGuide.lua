@@ -197,33 +197,46 @@ end
 function PG:RegisterEvents()
     local eventFrame = CreateFrame("Frame")
     eventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-    eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    eventFrame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
+    eventFrame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
     
     eventFrame:SetScript("OnEvent", function(self, event, ...)
         if event == "PLAYER_TARGET_CHANGED" then
-            PG:OnTargetChanged()
-        elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-            PG:OnCombatLog(...)
-        elseif event == "NAME_PLATE_UNIT_ADDED" then
-            local unit = ...
-            PG:OnNameplateAdded(unit)
+            PG:OnTargetChanged("target")
+        elseif event == "UPDATE_MOUSEOVER_UNIT" then
+            PG:OnTargetChanged("mouseover")
         end
     end)
+    
+    if S.CLEU and S.CLEU.Register then
+        local function onCast(...)
+            PG:OnCombatLog(...)
+        end
+        S.CLEU:Register("SPELL_CAST_START", onCast)
+        S.CLEU:Register("SPELL_CAST_SUCCESS", onCast)
+    else
+        eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        eventFrame:HookScript("OnEvent", function(self, event, ...)
+            if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                PG:OnCombatLog(...)
+            end
+        end)
+    end
 end
 
-function PG:OnTargetChanged()
-    if not UnitExists("target") then return end
-    if not UnitIsEnemy("player", "target") then return end
+function PG:OnTargetChanged(unit)
+    unit = unit or "target"
+    if not UnitExists(unit) then return end
+    if not UnitIsEnemy("player", unit) then return end
+    if UnitIsDead(unit) then return end
     
     -- Agregar al pack actual si está cerca
-    local guid = UnitGUID("target")
-    local name = UnitName("target")
+    local guid = UnitGUID(unit)
+    local name = UnitName(unit)
     
     if not self.CurrentPack[guid] then
         self.CurrentPack[guid] = {
             name = name,
-            type = self:DetectMobType("target"),
+            type = self:DetectMobType(unit),
             priority = 0,
             marked = false,
         }

@@ -78,28 +78,8 @@ if not C_Timer then
     _G.C_Timer = C_Timer
 end
 
--- Polyfill for CombatLogGetCurrentEventInfo (doesn't exist in 3.3.5)
--- In WotLK 3.3.5, COMBAT_LOG_EVENT_UNFILTERED passes args directly
--- We create a wrapper that stores the last event args
-if not CombatLogGetCurrentEventInfo then
-    local combatLogArgs = {}
-    
-    local combatLogCapture = CreateFrame("Frame")
-    combatLogCapture:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    combatLogCapture:SetScript("OnEvent", function(self, event, ...)
-        -- Store all arguments from the combat log event
-        wipe(combatLogArgs)
-        for i = 1, select("#", ...) do
-            combatLogArgs[i] = select(i, ...)
-        end
-    end)
-    
-    function CombatLogGetCurrentEventInfo()
-        return unpack(combatLogArgs)
-    end
-    
-    _G.CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-end
+-- In WotLK 3.3.5a, COMBAT_LOG_EVENT_UNFILTERED passes args directly to OnEvent(self, event, ...).
+-- CombatLogGetCurrentEventInfo does not exist natively and is not needed; individual modules consume arguments directly.
 
 -- Polyfill for IsSpellKnown (doesn't exist in 3.3.5)
 if not IsSpellKnown then

@@ -31,7 +31,8 @@ function LG:RegisterEvents()
 end
 
 function LG:RegisterCommands()
-    SLASH_SEQUITOGALLERY1 = "/sequito gallery"
+    SLASH_SEQUITOGALLERY1 = "/sgallery"
+    SLASH_SEQUITOGALLERY2 = "/seqlg"
     SlashCmdList["SEQUITOGALLERY"] = function() 
         LG.frame:Show()
         LG:UpdateGallery() 

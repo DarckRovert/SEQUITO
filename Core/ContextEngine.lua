@@ -104,6 +104,10 @@ end
 function CE:OnContextChanged(oldContext, newContext)
     S:Print("|cff00ff00Contexto|r: " .. (oldContext or "nil") .. " → " .. newContext)
     
+    if S.SendMessage then
+        S:SendMessage("CONTEXT_CHANGED", newContext, oldContext)
+    end
+    
     -- Ocultar ventanas del contexto anterior (si aplica)
     if oldContext == CONTEXT.RAID and newContext ~= CONTEXT.RAID then
         self:AutoHideRaidWindows()
@@ -112,8 +116,14 @@ function CE:OnContextChanged(oldContext, newContext)
     -- Mostrar ventanas del nuevo contexto
     if newContext == CONTEXT.RAID then
         self:AutoShowRaidWindows()
+        if S.PetManager and S.PetManager.CheckPetTauntInGroup then
+            C_Timer.After(2, function() S.PetManager:CheckPetTauntInGroup() end)
+        end
     elseif newContext == CONTEXT.PARTY or newContext == CONTEXT.DUNGEON then
         self:AutoShowPartyWindows()
+        if S.PetManager and S.PetManager.CheckPetTauntInGroup then
+            C_Timer.After(2, function() S.PetManager:CheckPetTauntInGroup() end)
+        end
     elseif newContext == CONTEXT.BATTLEGROUND or newContext == CONTEXT.ARENA then
         self:AutoShowPvPWindows()
     end
@@ -149,22 +159,20 @@ function CE:AutoShowRaidWindows()
 end
 
 function CE:AutoShowPartyWindows()
-    -- En party/dungeon, menos ventanas
-    if S.CooldownMonitor and self:IsModuleEnabled("CooldownMonitor") then
-        self:ShowWindow("CooldownMonitor", function()
-            if S.CooldownMonitor.Show then
-                S.CooldownMonitor:Show()
-            elseif S.CooldownMonitor.Frame then
-                S.CooldownMonitor.Frame:Show()
-            elseif S.CooldownMonitor.frame then
-                S.CooldownMonitor.frame:Show()
+    -- En party/dungeon, mostrar PullGuide táctico
+    if S.PullGuide and self:IsModuleEnabled("PullGuide") then
+        self:ShowWindow("PullGuide", function()
+            if S.PullGuide.Show then
+                S.PullGuide:Show()
+            elseif S.PullGuide.Frame then
+                S.PullGuide.Frame:Show()
             end
         end)
     end
 end
 
 function CE:AutoShowPvPWindows()
-    -- PvP específico
+    -- PvP específico: FocusFire y TrinketTracker
     if S.FocusFire and self:IsModuleEnabled("FocusFire") then
         self:ShowWindow("FocusFire", function()
             if S.FocusFire.Show then
@@ -173,6 +181,15 @@ function CE:AutoShowPvPWindows()
                 S.FocusFire.Frame:Show()
             elseif S.FocusFire.frame then
                 S.FocusFire.frame:Show()
+            end
+        end)
+    end
+    if S.TrinketTracker and self:IsModuleEnabled("TrinketTracker") then
+        self:ShowWindow("TrinketTracker", function()
+            if S.TrinketTracker.Show then
+                S.TrinketTracker:Show()
+            elseif S.TrinketTracker.Frame then
+                S.TrinketTracker.Frame:Show()
             end
         end)
     end
@@ -193,6 +210,12 @@ function CE:AutoHideRaidWindows()
         elseif S.RaidPanel.frame then
             S.RaidPanel.frame:Hide()
         end
+    end
+    if S.PullGuide and S.PullGuide.Frame then
+        S.PullGuide.Frame:Hide()
+    end
+    if S.LootCouncil and S.LootCouncil.frame then
+        S.LootCouncil.frame:Hide()
     end
 end
 

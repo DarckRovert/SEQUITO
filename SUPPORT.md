@@ -1,0 +1,46 @@
+# 💬 Guía de Soporte y Ayuda - Sequito
+
+¡Gracias por utilizar **Sequito**! Si experimentas dificultades técnicas, dudas sobre la configuración de los módulos o necesitas asistencia, consulta los siguientes canales y recursos:
+
+---
+
+## 📚 Recursos Iniciales Recomendados
+
+Antes de abrir una incidencia, te recomendamos consultar la documentación incluida en el repositorio:
+
+- **Instalación y Requisitos:** [INSTALL.md](INSTALL.md)
+- **Guía de Uso Rápido:** [USAGE.md](USAGE.md)
+- **Preguntas Frecuentes (FAQ):** [FAQ.md](FAQ.md)
+- **Comandos de Chat (/sequito):** [COMMANDS.md](COMMANDS.md)
+- **Macros y Utilidades:** [MACROS.md](MACROS.md)
+- **Módulos de Banda (RaidAssist):** [RAIDASSIST.md](RAIDASSIST.md)
+
+---
+
+## 🛠️ Canales de Soporte
+
+### 1. GitHub Issues (Recomendado para Errores y Bugs)
+Para reportar errores del addon, problemas con perfiles o comportamientos inesperados:
+- **Enlace:** [https://github.com/DarckRovert/SEQUITO/issues](https://github.com/DarckRovert/SEQUITO/issues)
+- Utiliza las plantillas disponibles (`Reporte de Bug` o `Solicitud de Funcionalidad`).
+- **Importante:** Adjunta siempre la traza de error completa de Lua (proporcionada por herramientas como *BugSack* o *Swatter*).
+
+### 2. Soporte Ingame (UltimoWoW)
+Si juegas en el servidor UltimoWoW y necesitas orientación directa:
+- **Personaje:** `Eljesuita` (Alianza / Horda)
+- **Líder del Proyecto:** DarckRovert
+
+### 3. Correo Electrónico
+Para consultas de desarrollo o temas privados:
+- **Email:** [darckrovert@gmail.com](mailto:darckrovert@gmail.com)
+
+---
+
+## ❓ Qué Incluir al Solicitar Soporte Técnico
+
+Para que podamos ayudarte rápidamente, asegúrate de proporcionar:
+1. **Versión de Sequito:** (ej. `v9.0.0 Definitive Edition`).
+2. **Idioma del Cliente:** `esMX` o `enUS`.
+3. **Texto exacto del error Lua:** Incluyendo número de línea, archivo y `stack trace`.
+4. **Circunstancia en que ocurrió:** (ej. *Al pulsar el botón del menú radial*, *Durante el combate contra Arthas en ICC 25H*, etc.).
+5. **Otros addons de interfaz activos:** (e.g., ElvUI, Tukui, Bartender4, DBM).

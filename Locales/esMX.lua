@@ -538,4 +538,30 @@ S.L = S.L or {}
     _G["BINDING_NAME_SEQUITO_WIPE"] = "Analizar Último Wipe"
     _G["BINDING_NAME_SEQUITO_COOLDOWNS"] = "Monitor de Cooldowns"
     _G["BINDING_NAME_SEQUITO_PULL_TIMER"] = "Iniciar Pull (10s)"
+
+    -- Gamification & Achievements
+    S.L["ACH_INITIATE"] = "Iniciado"
+    S.L["ACH_INITIATE_DESC"] = "Inicia sesión con el addon Sequito activo en tu hermandad."
+    S.L["ACH_MACRO_MASTER"] = "Maestro de Macros"
+    S.L["ACH_MACRO_MASTER_DESC"] = "Genera un conjunto de macros automáticas optimizadas para tu clase."
+    S.L["ACH_WIPE_SAVIOR"] = "Salvador de Banda"
+    S.L["ACH_WIPE_SAVIOR_DESC"] = "Lanza un hechizo crucial de salvamento (Himno Divino, Tranquilidad o Renacer) en combate."
+    S.L["ACH_CANNON_FODDER"] = "Carne de Cañón"
+    S.L["ACH_CANNON_FODDER_DESC"] = "Caer en combate durante una estancia o encuentro desafiante."
+
+    -- Menu & Quick Settings
+    S.L["OPEN_OPTIONS"] = "Abrir Opciones"
+    S.L["ANALYZE_WIPE"] = "Analizar Último Wipe"
+    S.L["COOLDOWN_MONITOR"] = "Monitor de Cooldowns"
+    S.L["RAID_TOOLS"] = "Herramientas de Raid"
+    S.L["READY_CHECK"] = "Comprobación de Listos"
+    S.L["QUICK_SETTINGS"] = "Ajustes Rápidos"
+    S.L["LOCK_SPHERE"] = "Bloquear Esfera"
+
+    -- Academy & Inspection
+    S.L["ACADEMY_INSPECTOR"] = "Inspector de Academia"
+    S.L["TALENTS"] = "Talentos"
+    S.L["ILVL_APPROX"] = "Nivel de Objeto Aprox."
+    S.L["COOLDOWN_ASSIGNMENTS"] = "Asignaciones de Cooldowns"
+    S.L["NOT_RAID_LEADER"] = "Solo el Líder de Banda puede ejecutar esta acción."
 -- end

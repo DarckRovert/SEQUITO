@@ -63,6 +63,9 @@ T.Presets = {
     },
 }
 
+-- Alias con tilde para compatibilidad
+T.Presets["Clásico"] = T.Presets["Clasico"]
+
 -- Tema activo (se carga desde SavedVariables o default)
 T.ActiveTheme = "Demonio"
 
@@ -108,10 +111,13 @@ function T:SetTheme(themeName)
             S.db.profile.theme = themeName
             S.db.profile.Theme_theme = themeName -- Sync for ModuleConfig
         end
-        -- Disparar callback para que módulos se actualicen (si existe sistema de callbacks)
         if S.Callbacks and S.Callbacks.Fire then
             S.Callbacks:Fire("THEME_CHANGED", themeName)
         end
+        if S.SendMessage then
+            S:SendMessage("THEME_CHANGED", themeName)
+        end
+        self:RefreshAllFrames()
     end
 end
 
@@ -197,23 +203,119 @@ function T:Initialize()
     end
 end
 
--- ============================================
--- UTILIDADES DE ESTILIZADO
--- ============================================
+-- Registro de frames para actualización reactiva en vivo
+T.RegisteredFrames = {}
+
+function T:RegisterFrame(frame, refreshCallback)
+    if not frame then return end
+    table.insert(self.RegisteredFrames, { frame = frame, callback = refreshCallback })
+end
+
+function T:RefreshAllFrames()
+    for _, entry in ipairs(self.RegisteredFrames) do
+        if entry.callback then
+            pcall(entry.callback, self.ActiveTheme)
+        elseif entry.frame and entry.frame.SetBackdropBorderColor then
+            entry.frame:SetBackdropBorderColor(self:GetColor("border"))
+        end
+    end
+end
 
 -- Aplicar tema a un frame con fondo + borde
 function T:StyleFrame(frame)
     if not frame then return end
     
-    -- Fondo
     if frame.bg then
         frame.bg:SetTexture(self:GetColor("background"))
     end
     
-    -- Borde
     if frame.SetBackdropBorderColor then
         frame:SetBackdropBorderColor(self:GetColor("border"))
     end
+end
+
+-- Crear un panel estilizado moderno tipo Glassmorphism
+function T:ApplyPanelBackdrop(frame, isChild)
+    if not frame then return end
+    
+    frame:SetBackdrop({
+        bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = true, tileSize = 16, edgeSize = isChild and 12 or 16,
+        insets = { left = 3, right = 3, top = 3, bottom = 3 }
+    })
+    
+    local r, g, b, a = self:GetColor("background")
+    if isChild then
+        frame:SetBackdropColor(r * 0.7, g * 0.7, b * 0.7, math.min(1, a + 0.05))
+    else
+        frame:SetBackdropColor(r, g, b, a)
+    end
+    
+    frame:SetBackdropBorderColor(self:GetColor("border"))
+end
+
+-- Estilizar botón con diseño moderno y hover reactivo
+function T:ApplyButtonTheme(btn, isPrimary)
+    if not btn then return end
+    
+    btn:SetBackdrop({
+        bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = true, tileSize = 12, edgeSize = 10,
+        insets = { left = 2, right = 2, top = 2, bottom = 2 }
+    })
+    
+    local pr, pg, pb = self:GetColor(isPrimary and "primary" or "secondary")
+    local br, bg, bb = self:GetColor("border")
+    btn:SetBackdropColor(pr * 0.3, pg * 0.3, pb * 0.3, 0.85)
+    btn:SetBackdropBorderColor(br, bg, bb, 0.9)
+    
+    local font = btn:GetFontString()
+    if font then
+        font:SetTextColor(self:GetColor("text"))
+    end
+    
+    btn:HookScript("OnEnter", function(self)
+        self:SetBackdropColor(pr * 0.6, pg * 0.6, pb * 0.6, 1.0)
+        self:SetBackdropBorderColor(T:GetColor("accent"))
+    end)
+    btn:HookScript("OnLeave", function(self)
+        self:SetBackdropColor(pr * 0.3, pg * 0.3, pb * 0.3, 0.85)
+        self:SetBackdropBorderColor(T:GetColor("border"))
+    end)
+end
+
+-- Aplicar estilo zebra interactivo a filas de tablas/listas
+function T:ApplyZebraRow(row, index)
+    if not row then return end
+    
+    if not row.zebraBg then
+        row.zebraBg = row:CreateTexture(nil, "BACKGROUND")
+        row.zebraBg:SetAllPoints()
+    end
+    
+    local isEven = (index % 2 == 0)
+    if isEven then
+        row.zebraBg:SetTexture(1, 1, 1, 0.04)
+    else
+        row.zebraBg:SetTexture(0, 0, 0, 0.15)
+    end
+    row.zebraBg:Show()
+    
+    row:EnableMouse(true)
+    row:HookScript("OnEnter", function(self)
+        self.zebraBg:SetTexture(T:GetColor("accent"))
+        self.zebraBg:SetAlpha(0.18)
+    end)
+    row:HookScript("OnLeave", function(self)
+        if isEven then
+            self.zebraBg:SetTexture(1, 1, 1, 0.04)
+        else
+            self.zebraBg:SetTexture(0, 0, 0, 0.15)
+        end
+        self.zebraBg:SetAlpha(1.0)
+    end)
 end
 
 -- Crear un fondo temático para un frame

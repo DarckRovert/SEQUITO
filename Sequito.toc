@@ -17,6 +17,7 @@ Data\SpellData.lua
 # 3. Addon Core (Framework)
 Core\Constants.lua
 Core\Theme.lua
+Core\CLEUDispatcher.lua
 Core\AlertManager.lua
 Core\AlertHub.lua
 Core\AutoSync.lua
