@@ -71,7 +71,7 @@ end
 -- 2. UTILITY GENERATORS (Smart Macros)
 -- ===========================================================================
 
--- 1. Smart Interrupt
+--- 1. Smart Interrupt
 function S.MacroGen:GetSmartInterrupt(class)
     local spellId = 0
     if class == "WARRIOR" then spellId = 6552 -- Pummel
@@ -87,9 +87,9 @@ function S.MacroGen:GetSmartInterrupt(class)
     
     if spellId > 0 and IsSpellKnown(spellId) then
         local name = GetSpellInfo(spellId)
-        return "#showtooltip " .. name .. "\n/stopcasting\n/cast [mod:shift, target=focus] " .. name .. "; " .. name
+        return "#showtooltip " .. name .. "\n/stopcasting\n/cast [mod:shift,@focus,harm,nodead][@mouseover,harm,nodead][] " .. name
     elseif class == "WARLOCK" then
-         return "#showtooltip Bloqueo de hechizo\n/cast [mod:shift, target=focus] Bloqueo de hechizo; Bloqueo de hechizo"
+        return "#showtooltip Bloqueo de hechizo\n/cast [mod:shift,@focus,harm,nodead][@mouseover,harm,nodead][] Bloqueo de hechizo"
     end
     return nil
 end
@@ -108,7 +108,7 @@ function S.MacroGen:GetSmartCC(class)
     
     if spellId > 0 and IsSpellKnown(spellId) then
         local name = GetSpellInfo(spellId)
-        return "#showtooltip " .. name .. "\n/cast [mod:ctrl, target=mouseover] " .. name .. "; [mod:shift, target=focus] " .. name .. "; " .. name
+        return "#showtooltip " .. name .. "\n/cast [mod:ctrl,@mouseover,harm,nodead][mod:shift,@focus,harm,nodead][] " .. name
     end
     return nil
 end
@@ -121,7 +121,7 @@ end
 -- ===========================================================================
 -- 3. ROTATION BRAIN (The "Intel" Core)
 -- ============================================================================
-function S.MacroGen:GetNecrosisRotation(class, spec)
+function S.MacroGen:GetNecrosisRotation(class, spec)
     local function GetIfKnown(id, defaultName)
         return self:GetSmartSpell(id, defaultName)
     end
@@ -136,26 +136,22 @@ end
             local corr = GetIfKnown(172, "Corrupción")
             local sb = GetIfKnown(686, "Descarga de las Sombras")
             local drain = GetIfKnown(1120, "Drenar alma")
-            return string.format("#showtooltip\n/cast [mod:alt, nochanneling] %s\n/cast [mod:ctrl] %s\n/cast [mod:shift] %s\n/cast %s",
+            return string.format("/cast [mod:alt,nochanneling] %s; [mod:ctrl] %s; [mod:shift] %s; %s",
                 drain, corr, (haunt or ua), sb)
         elseif spec == 2 then -- Demonology
-            local meta = GetIfKnown(47241, "Metamorfosis")
             local aura = GetIfKnown(50589, "Aura de inmolación")
             local cleave = GetIfKnown(50581, "Hender sombras")
             local immo = GetIfKnown(348, "Inmolar")
             local sf = GetIfKnown(6353, "Fuego de alma")
             local incin = GetIfKnown(29722, "Incinerar") or GetIfKnown(686, "Descarga de las Sombras")
-            local prefix = "#showtooltip\n"
-            if meta then
-                prefix = prefix .. string.format("/cast [form:1] %s\n/cast [form:1] %s\n", aura, cleave)
-            end
-            return prefix .. string.format("/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s", immo, sf, incin)
+            return string.format("/cast [form:1] %s\n/cast [form:1] %s\n/cast [mod:shift] %s; [mod:ctrl] %s; %s",
+                aura, cleave, immo, sf, incin)
         else -- Destruction
             local immo = GetIfKnown(348, "Inmolar")
             local conflag = GetIfKnown(17962, "Conflagrar")
             local cb = GetIfKnown(50796, "Descarga de Caos")
             local incin = GetIfKnown(29722, "Incinerar")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 immo, conflag, cb, incin)
         end
         
@@ -171,19 +167,19 @@ end
         if spec == 1 then -- Blood
             local hs = GetIfKnown(55050, "Golpe en el corazón") or GetIfKnown(45902, "Golpe sangriento")
             local ds = GetIfKnown(49998, "Golpe mortal")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s%s",
                 it, ps, ds, hs, suffix)
         elseif spec == 2 then -- Frost
             local ob = GetIfKnown(49020, "Asolar")
             local fs = GetIfKnown(49143, "Golpe de Escarcha")
             local hb = GetIfKnown(49184, "Explosión aullante")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s%s",
                 it, ps, (hb or fs), ob, suffix)
         else -- Unholy
             local ss = GetIfKnown(55090, "Golpe de la Plaga")
             local dc = GetIfKnown(47541, "Espiral de la muerte")
             local pest = GetIfKnown(50842, "Pestilencia")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s%s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s%s",
                 it, ps, dc, (ss or pest), suffix)
         end
 
@@ -195,21 +191,21 @@ end
             local hs = GetIfKnown(48782, "Choque Sagrado")
             local hl = GetIfKnown(48782, "Luz Sagrada")
             local fol = GetIfKnown(48785, "Destello de Luz")
-            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [@mouseover,help][help][@player] %s",
+            return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [@mouseover,help][help][@player] %s",
                 hs, hl, fol)
         elseif spec == 2 then -- Protection
             local hotr = GetIfKnown(53595, "Martillo de rectitud")
             local sor = GetIfKnown(53600, "Escudo de rectitud")
             local cons = GetIfKnown(26573, "Consagración")
             local hs = GetIfKnown(20925, "Escudo sagrado")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 hotr, cons, hs, sor)
         else -- Retribution
             local cs = GetIfKnown(35395, "Golpe de cruzado")
             local ds = GetIfKnown(53385, "Tormenta divina")
             local judge = GetIfKnown(53408, "Sentencia de sabiduría") or GetIfKnown(20271, "Sentencia de luz")
             local exo = GetIfKnown(879, "Exorcismo")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 ds, judge, exo, cs)
         end
 
@@ -221,20 +217,20 @@ end
             local ab = GetIfKnown(30451, "Descarga Arcana")
             local am = GetIfKnown(5143, "Misiles Arcanos")
             local abarr = GetIfKnown(44425, "Tromba Arcana")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; %s",
                 am, abarr, ab)
         elseif spec == 2 then -- Fire
             local fb = GetIfKnown(133, "Bola de Fuego")
             local lb = GetIfKnown(44457, "Bomba viva")
             local pyro = GetIfKnown(11366, "Piroexplosión")
             local scorch = GetIfKnown(2948, "Agostar")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 lb, pyro, scorch, fb)
         else -- Frost
             local fb = GetIfKnown(116, "Descarga de Escarcha")
             local il = GetIfKnown(30455, "Lanza de hielo")
             local df = GetIfKnown(44572, "Congelación profunda")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; %s",
                 il, df, fb)
         end
 
@@ -246,20 +242,20 @@ end
             local mut = GetIfKnown(1329, "Mutilar")
             local env = GetIfKnown(32645, "Envenenar")
             local hfb = GetIfKnown(63848, "Hambre de sangre")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; %s",
                 env, hfb, mut)
         elseif spec == 2 then -- Combat
             local ss = GetIfKnown(1752, "Golpe siniestro")
             local evis = GetIfKnown(2098, "Eviscerar")
             local snd = GetIfKnown(5171, "Hacer picadillo")
             local ks = GetIfKnown(51690, "Asesinato múltiple")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 evis, snd, ks, ss)
         else -- Subtlety
             local hemo = GetIfKnown(16511, "Hemorragia")
             local evis = GetIfKnown(2098, "Eviscerar")
             local step = GetIfKnown(36554, "Paso de las Sombras")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; %s",
                 evis, step, hemo)
         end
 
@@ -268,24 +264,23 @@ end
     -- -----------------------------------------------------------------------
     elseif class == "HUNTER" then
         local steady = GetIfKnown(56641, "Disparo firme")
-        local serpent = GetIfKnown(1978, "Picadura de serpiente")
         local kill = GetIfKnown(53351, "Disparo mortal")
         
         if spec == 1 then -- Beast Mastery
             local bw = GetIfKnown(19574, "Cólera de las bestias")
             local kc = GetIfKnown(34026, "Matar")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
-                bw, kc, serpent, kill, steady)
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s\n/cast !Disparo automático",
+                bw, kc, kill, steady)
         elseif spec == 2 then -- Marksmanship
             local chim = GetIfKnown(53209, "Disparo de quimera")
             local aimed = GetIfKnown(19434, "Disparo de puntería")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
-                chim, aimed, serpent, steady)
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s\n/cast !Disparo automático",
+                chim, aimed, kill, steady)
         else -- Survival
             local exp = GetIfKnown(53301, "Disparo explosivo")
             local ba = GetIfKnown(3674, "Flecha negra")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
-                exp, ba, serpent, steady)
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s\n/cast !Disparo automático",
+                exp, ba, kill, steady)
         end
 
     -- -----------------------------------------------------------------------
@@ -297,21 +292,21 @@ end
             local op = GetIfKnown(7384, "Abrumar")
             local rend = GetIfKnown(772, "Desgarrar")
             local exe = GetIfKnown(5308, "Ejecutar")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
-                ms, op, rend, exe)
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
+                ms, op, exe, rend)
         elseif spec == 2 then -- Fury
             local bt = GetIfKnown(23881, "Sed de sangre")
             local ww = GetIfKnown(1680, "Torbellino")
             local slam = GetIfKnown(1464, "Embate")
             local hs = GetIfKnown(78, "Golpe heroico")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast %s\n/cast !%s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; %s\n/cast !%s",
                 ww, slam, bt, hs)
         else -- Protection
             local ss = GetIfKnown(23922, "Embate con escudo")
             local rev = GetIfKnown(6572, "Revancha")
             local shock = GetIfKnown(46968, "Ola de choque")
             local dev = GetIfKnown(20243, "Devastar") or GetIfKnown(7386, "Hender armadura")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 ss, rev, shock, dev)
         end
 
@@ -324,20 +319,20 @@ end
             local fs = GetIfKnown(8050, "Choque de llamas")
             local cl = GetIfKnown(421, "Cadena de relámpagos")
             local lb = GetIfKnown(403, "Descarga de relámpagos")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 lv, fs, cl, lb)
         elseif spec == 2 then -- Enhancement
             local ss = GetIfKnown(17364, "Golpe de tormenta")
             local ll = GetIfKnown(60103, "Látigo de lava")
             local es = GetIfKnown(8042, "Choque de tierra")
             local lb = GetIfKnown(403, "Descarga de relámpagos")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 ll, es, lb, ss)
         else -- Restoration
             local ch = GetIfKnown(1064, "Sanación en cadena")
             local rip = GetIfKnown(61295, "Mareas vivas")
             local lhw = GetIfKnown(8004, "Ola de sanación menor")
-            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [@mouseover,help][help][@player] %s",
+            return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [@mouseover,help][help][@player] %s",
                 ch, rip, lhw)
         end
 
@@ -350,21 +345,21 @@ end
             local pen = GetIfKnown(47540, "Penitencia")
             local fh = GetIfKnown(2061, "Sanación relámpago")
             local pom = GetIfKnown(33076, "Rezo de alivio")
-            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+            return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [mod:alt,@mouseover,help][mod:alt] %s; [@mouseover,help][help][@player] %s",
                 pws, pen, pom, fh)
         elseif spec == 2 then -- Holy
             local coh = GetIfKnown(34861, "Círculo de sanación")
             local pom = GetIfKnown(33076, "Rezo de alivio")
             local renew = GetIfKnown(139, "Renovar")
             local fh = GetIfKnown(2061, "Sanación relámpago")
-            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+            return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [mod:alt,@mouseover,help][mod:alt] %s; [@mouseover,help][help][@player] %s",
                 coh, pom, renew, fh)
         else -- Shadow
             local mf = GetIfKnown(15407, "Tortura mental")
             local vt = GetIfKnown(34914, "Toque vampírico")
             local dp = GetIfKnown(2944, "Peste devoradora")
             local mb = GetIfKnown(8092, "Explosión mental")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast [nochanneling] %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; [nochanneling] %s",
                 vt, dp, mb, mf)
         end
 
@@ -377,7 +372,7 @@ end
             local sf = GetIfKnown(2912, "Fuego estelar")
             local mf = GetIfKnown(8921, "Fuego lunar")
             local is = GetIfKnown(5570, "Enjambre de insectos")
-            return string.format("#showtooltip\n/cast [mod:shift] %s\n/cast [mod:ctrl] %s\n/cast [mod:alt] %s\n/cast %s",
+            return string.format("/cast [mod:shift] %s; [mod:ctrl] %s; [mod:alt] %s; %s",
                 sf, mf, is, wrath)
         elseif spec == 2 then -- Feral (Bear & Cat Form Support)
             local bearMaul = GetIfKnown(6807, "Magullar")
@@ -385,20 +380,19 @@ end
             local catMangle = GetIfKnown(33876, "Destrozar (gato)")
             local catRip = GetIfKnown(1079, "Destripar")
             local catBite = GetIfKnown(22568, "Mordedura feroz")
-            local catRoar = GetIfKnown(52610, "Rugido salvaje")
-            return string.format("#showtooltip\n/cast [form:1, mod:shift] %s\n/cast [form:1] %s\n/cast [form:3, mod:shift] %s\n/cast [form:3, mod:ctrl] %s\n/cast [form:3, mod:alt] %s\n/cast [form:3] %s\n/cast [noform] %s",
-                bearMangle, bearMaul, catRip, catBite, catRoar, catMangle, GetIfKnown(5176, "Cólera"))
+            return string.format("/cast [form:1,mod:shift] %s; [form:1] %s; [form:3,mod:shift] %s; [form:3,mod:ctrl] %s; [form:3] %s; %s",
+                bearMangle, bearMaul, catRip, catBite, catMangle, GetIfKnown(5176, "Cólera"))
         else -- Restoration
             local rej = GetIfKnown(774, "Rejuvenecimiento")
             local lb = GetIfKnown(33763, "Flor de vida")
             local wg = GetIfKnown(48438, "Crecimiento salvaje") or GetIfKnown(18562, "Alivio presto")
             local reg = GetIfKnown(8936, "Recrecimiento")
-            return string.format("#showtooltip\n/cast [mod:shift, @mouseover,help][mod:shift] %s\n/cast [mod:ctrl, @mouseover,help][mod:ctrl] %s\n/cast [mod:alt, @mouseover,help][mod:alt] %s\n/cast [@mouseover,help][help][@player] %s",
+            return string.format("/cast [mod:shift,@mouseover,help][mod:shift] %s; [mod:ctrl,@mouseover,help][mod:ctrl] %s; [mod:alt,@mouseover,help][mod:alt] %s; [@mouseover,help][help][@player] %s",
                 rej, lb, wg, reg)
         end
     end
     
-    return "/startattack"
+    return nil
 end
 
 -- ===========================================================================
@@ -413,7 +407,7 @@ function S.MacroGen:GetClassMacros(class, spec)
     local potion = self:GetSmartItem(33447, "Poción de sanación rúnica")
     local hearthstone = self:GetSmartItem(6948, "Piedra de hogar")
 
-    -- [NEW v8.0.0] Smart Utilities Integration
+    -- Smart Utilities Integration
     local intBody = self:GetSmartInterrupt(class)
     if intBody then table.insert(macros, { Name = "SeqInt", Body = intBody }) end
     
@@ -426,43 +420,43 @@ function S.MacroGen:GetClassMacros(class, spec)
      -- WARLOCK
     if class == "WARLOCK" then
         local opener = self:GetSmartSpell(172, "Corrupción") 
-        if spec == 2 then opener = "Metaformosis" end 
+        if spec == 2 then opener = "Metamorfosis" end 
         if spec == 3 then opener = self:GetSmartSpell(348, "Inmolar") end 
 
         table.insert(macros, { Name = "SeqStart",  Body = "#showtooltip " .. opener .. "\n/cleartarget [dead][help]\n/targetenemy\n/petattack\n/startattack\n/cast " .. opener })
         table.insert(macros, { Name = "SeqHeal",   Body = "#showtooltip " .. healthstone .. "\n/cast [btn:2] Crear piedra de salud\n/cast [mod:shift] Canalizar salud\n/use [nomod] " .. healthstone .. "\n/use [nomod] " .. potion })
-        table.insert(macros, { Name = "SeqPet",    Body = "#showtooltip\n/petattack [nomod,btn:1]\n/petfollow [nomod,btn:2]\n/cast [mod:shift,target=mouseover,exists] Devorar magia; [mod:shift,target=focus,exists] Devorar magia; [mod:shift] Devorar magia\n/cast [mod:shift,target=mouseover,exists] Seducción; [mod:shift,target=focus,exists] Seducción; [mod:shift] Seducción\n/cast [mod:shift,target=mouseover,exists] Bloqueo de hechizo; [mod:shift,target=focus,exists] Bloqueo de hechizo; [mod:shift] Bloqueo de hechizo" })
+        table.insert(macros, { Name = "SeqPet",    Body = "#showtooltip\n/petattack [nomod]\n/petfollow [mod:alt]\n/cast [@mouseover,harm][@focus,harm][] Bloqueo de hechizo\n/cast [@mouseover,harm][@focus,harm][] Seducción\n/cast [@player,mod:shift] Devorar magia\n/cast [mod:shift] Sacrificio" })
         
         local banish = self:GetSmartSpell(710, "Desterrar")
-        if banish then table.insert(macros, { Name = "SeqBanish", Body = "#showtooltip " .. banish .. "\n/cast [target=mouseover,exists,harm] " .. banish .. "; [target=focus,exists,harm] " .. banish .. "; " .. banish }) end
+        if banish then table.insert(macros, { Name = "SeqBanish", Body = "#showtooltip " .. banish .. "\n/cast [mod:shift,@focus,harm,nodead][@mouseover,harm,nodead][] " .. banish }) end
         local fear = self:GetSmartSpell(5782, "Miedo")
-        if fear then table.insert(macros, { Name = "SeqFear",   Body = "#showtooltip " .. fear .. "\n/cast [target=mouseover,exists,harm] " .. fear .. "; [target=focus,exists,harm] " .. fear .. "; " .. fear }) end
-        table.insert(macros, { Name = "SeqDispel", Body = "#showtooltip Devorar magia\n/cast [mod:alt,target=player] Devorar magia; [target=mouseover,help,exists] Devorar magia; Devorar magia" })
-        table.insert(macros, { Name = "SeqBurst",  Body = "#showtooltip\n/use 10\n/use 13\n/use 14\n/use Poción de velocidad\n/cast Metaformosis\n/cast [mod:shift] Eficacia interna" })
+        if fear then table.insert(macros, { Name = "SeqFear",   Body = "#showtooltip " .. fear .. "\n/cast [mod:shift,@focus,harm,nodead][@mouseover,harm,nodead][] " .. fear }) end
+        table.insert(macros, { Name = "SeqDispel", Body = "#showtooltip Devorar magia\n/cast [mod:alt,@player][@mouseover,help,nodead][] Devorar magia" })
+        
+        local meta = self:GetSmartSpell(47241, "Metamorfosis")
+        local aura = self:GetSmartSpell(50589, "Aura de inmolación")
+        table.insert(macros, { Name = "SeqBurst",  Body = "#showtooltip\n/use 10\n/use 13\n/use 14\n/use Poción de velocidad\n/cast " .. (meta or "Metamorfosis") .. "\n/cast " .. (aura or "Aura de inmolación") })
 
     -- DEATH KNIGHT
     elseif class == "DEATHKNIGHT" then
         local grip = self:GetSmartSpell(49576, "Atracción letal")
-        table.insert(macros, { Name = "SeqGrip", Body = "#showtooltip " .. grip .. "\n/cast [target=focus,exists,harm] " .. grip .. "; [target=mouseover,exists,harm] " .. grip .. "; " .. grip })
-        local freeze = self:GetSmartSpell(47528, "Helada mental")
-        local strang = self:GetSmartSpell(47476, "Estrangular")
-        table.insert(macros, { Name = "SeqInt",  Body = "#showtooltip " .. freeze .. "\n/cast [target=focus,exists,harm] " .. freeze .. "; [target=mouseover,exists,harm] " .. freeze .. "; " .. freeze .. "\n/cast [mod:shift] " .. strang })
+        table.insert(macros, { Name = "SeqGrip", Body = "#showtooltip " .. grip .. "\n/cast [mod:shift,@focus,harm,nodead][@mouseover,harm,nodead][] " .. grip })
         local tap = self:GetSmartSpell(48982, "Transfusión de runa")
         local pact = self:GetSmartSpell(48743, "Pacto de la muerte")
         table.insert(macros, { Name = "SeqHeal", Body = "#showtooltip " .. tap .. "\n/cast " .. tap .. "\n/cast [mod:shift] " .. pact .. "\n/use " .. potion })
         local dnd = self:GetSmartSpell(43265, "Muerte y descomposición")
         local pest = self:GetSmartSpell(50842, "Pestilencia")
-        table.insert(macros, { Name = "SeqAoE",  Body = "#showtooltip " .. dnd .. "\n/cast [mod:shift] " .. pest .. "\n/cast " .. dnd })
+        table.insert(macros, { Name = "SeqAoE",  Body = "#showtooltip " .. dnd .. "\n/cast [mod:shift] " .. pest .. "; " .. dnd })
         local strike = self:GetSmartSpell(45477, "Toque helado")
         table.insert(macros, { Name = "SeqStart", Body = "#showtooltip " .. strike .. "\n/startattack\n/petattack\n/cast " .. strike }) 
         
         local army = self:GetSmartSpell(42650, "Ejército de muertos")
-        if army then table.insert(macros, { Name = "SeqArmy", Body = "#showtooltip " .. army .. "\n/cast " .. army .. "\n/s ¡Salid mis pequeños! ¡A comer!\n/in 2 /s Cenizas a las cenizas..." }) end
+        if army then table.insert(macros, { Name = "SeqArmy", Body = "#showtooltip " .. army .. "\n/cast " .. army .. "\n/s ¡Salid mis pequeños! ¡A comer!" }) end
 
     -- PALADIN
     elseif class == "PALADIN" then
         local bub = self:GetSmartSpell(642, "Escudo divino") 
-        table.insert(macros, { Name = "SeqBubble", Body = "#showtooltip " .. bub .. "\n/stopcasting\n/cast " .. bub .. "\n/s ¡Inmunidad Diplomática!\n/use " .. hearthstone })
+        table.insert(macros, { Name = "SeqBubble", Body = "#showtooltip " .. bub .. "\n/stopcasting\n/cast " .. bub .. "\n/cancelaura [mod:alt] " .. bub .. "\n/s ¡Escudo divino activo!" })
         if spec == 1 then
              local shock = self:GetSmartSpell(48782, "Choque Sagrado")
              table.insert(macros, { Name = "SeqHeal", Body = "#showtooltip " .. shock .. "\n/cast [@mouseover,help][help][@player] " .. shock .. "\n/s ¡Luz salvadora sobre %t!" })
@@ -475,29 +469,29 @@ function S.MacroGen:GetClassMacros(class, spec)
     -- WARRIOR
     elseif class == "WARRIOR" then
         local wall = self:GetSmartSpell(871, "Muro de escudo")
-        table.insert(macros, { Name = "SeqWall", Body = "#showtooltip " .. wall .. "\n/cast " .. wall .. "\n/s ¡Muro de Escudos activado! ¡No pasarán!" })
+        table.insert(macros, { Name = "SeqWall", Body = "#showtooltip " .. wall .. "\n/cast [stance:1/3] Actitud defensiva\n/cast " .. wall .. "\n/s ¡Muro de escudo activado!" })
         
     -- HUNTER
     elseif class == "HUNTER" then
         local md = self:GetSmartSpell(34477, "Redirección")
-        table.insert(macros, { Name = "SeqMD", Body = "#showtooltip " .. md .. "\n/cast [@focus,help][@pet,exists] " .. md .. "\n/s Redirigiendo amenaza hacia %t." })
+        table.insert(macros, { Name = "SeqMD", Body = "#showtooltip " .. md .. "\n/cast [@focus,help,nodead][@pet,exists,nodead][@mouseover,help,nodead][] " .. md .. "\n/s Redirección sobre %t." })
         
     -- ROGUE
     elseif class == "ROGUE" then
          local tricks = self:GetSmartSpell(57934, "Secretos del oficio")
-         table.insert(macros, { Name = "SeqTricks", Body = "#showtooltip " .. tricks .. "\n/cast [@focus,help][@target,help] " .. tricks .. "\n/s Secretos para %t..." })
+         table.insert(macros, { Name = "SeqTricks", Body = "#showtooltip " .. tricks .. "\n/cast [@focus,help,nodead][@mouseover,help,nodead][] " .. tricks .. "\n/s Secretos para %t..." })
          
     -- PRIEST
     elseif class == "PRIEST" then
          local hymn = self:GetSmartSpell(64843, "Himno divino")
-         table.insert(macros, { Name = "SeqHymn", Body = "#showtooltip " .. hymn .. "\n/cast " .. hymn .. "\n/s ¡Escuchad la canción del olvido!\n/in 8 /s Himno finalizado." })
+         table.insert(macros, { Name = "SeqHymn", Body = "#showtooltip " .. hymn .. "\n/cast " .. hymn .. "\n/s ¡Himno divino activo! ¡Sanación masiva!" })
         
     -- SHAMAN
     elseif class == "SHAMAN" then
         local lust = self:GetSmartSpell(2825, "Ansia de sangre")
         if not lust then lust = self:GetSmartSpell(32182, "Heroísmo") end 
         if lust then
-             table.insert(macros, { Name = "SeqLust", Body = "#showtooltip " .. lust .. "\n/cast " .. lust .. "\n/y ¡¡FURIA PARA EL SÉQUITO!! (BL/Hero)" })
+             table.insert(macros, { Name = "SeqLust", Body = "#showtooltip " .. lust .. "\n/cast " .. lust .. "\n/y ¡¡FURIA PARA EL SÉQUITO!! (Heroísmo / BL)" })
         end
         if spec == 2 then
              local wolves = self:GetSmartSpell(51533, "Espíritu feral")
@@ -505,15 +499,15 @@ function S.MacroGen:GetClassMacros(class, spec)
         end
         if spec == 3 then
              local tide = self:GetSmartSpell(16190, "Marea de maná")
-             table.insert(macros, { Name = "SeqTide", Body = "#showtooltip " .. tide .. "\n/cast " .. tide .. "\n/s ¡Marea de Maná! ¡Bebed!" })
+             table.insert(macros, { Name = "SeqTide", Body = "#showtooltip " .. tide .. "\n/cast " .. tide .. "\n/s ¡Marea de Maná activa! ¡Bebed!" })
         end
 
     -- MAGE
     elseif class == "MAGE" then
          local tableSpell = self:GetSmartSpell(43987, "Ritual de refrigerio")
-         table.insert(macros, { Name = "SeqTable", Body = "#showtooltip " .. tableSpell .. "\n/cast " .. tableSpell .. "\n/y ¡Mesita del Sequito! ¡Comed, malditos!\n/in 5 /s La mesa está puesta." })
+         table.insert(macros, { Name = "SeqTable", Body = "#showtooltip " .. tableSpell .. "\n/cast " .. tableSpell .. "\n/y ¡Mesita del Sequito! ¡Comed y bebed!" })
          local remove = self:GetSmartSpell(475, "Eliminar maldición")
-         table.insert(macros, { Name = "SeqDecurse", Body = "#showtooltip " .. remove .. "\n/cast [target=mouseover,help,exists] " .. remove .. "; [target=player] " .. remove })
+         table.insert(macros, { Name = "SeqDecurse", Body = "#showtooltip " .. remove .. "\n/cast [@mouseover,help,nodead][@player] " .. remove })
 
     -- DRUID
     elseif class == "DRUID" then
@@ -525,19 +519,25 @@ function S.MacroGen:GetClassMacros(class, spec)
               if randomText then rezText = randomText:gsub("<target>", "%%t") end
          end
          
-         table.insert(macros, { Name = "SeqRez", Body = "#showtooltip " .. rez .. "\n/cast " .. rez .. "\n/s " .. rezText })
+         table.insert(macros, { Name = "SeqRez", Body = "#showtooltip " .. rez .. "\n/stopcasting\n/cast [@mouseover,help,dead][] " .. rez .. "\n/s " .. rezText })
          local innervate = self:GetSmartSpell(29166, "Estimular")
-         table.insert(macros, { Name = "SeqInnervate", Body = "#showtooltip " .. innervate .. "\n/cast [@mouseover,help][help][@player] " .. innervate })
+         table.insert(macros, { Name = "SeqInnervate", Body = "#showtooltip " .. innervate .. "\n/cast [@mouseover,help,nodead][help][@player] " .. innervate })
     end
 
-    -- INTELLIGENT ROTATION MACRO (Now Covers ALL Classes)
+    -- INTELLIGENT ROTATION MACRO (Covers ALL 10 Classes and 30 Specs)
     local rotBody = self:GetNecrosisRotation(class, spec)
     if rotBody then
-        table.insert(macros, { Name = "SeqRot", Body = "#showtooltip\n/startattack\n/petattack\n" .. rotBody })
+        local header = "#showtooltip\n"
+        if class == "WARRIOR" or class == "ROGUE" or class == "DEATHKNIGHT" or (class == "PALADIN" and spec ~= 1) or (class == "DRUID" and spec == 2) or (class == "SHAMAN" and spec == 2) then
+            header = header .. "/startattack\n"
+        elseif class == "HUNTER" then
+            header = header .. "/startattack\n"
+        end
+        if class == "WARLOCK" or class == "HUNTER" or class == "DEATHKNIGHT" then
+            header = header .. "/petattack\n"
+        end
+        table.insert(macros, { Name = "SeqRot", Body = header .. rotBody })
     end
-    
-    -- MOUNT (Handled by Smart Utility above)
-    -- Legacy code removed to prevent duplicates
 
     return macros
 end
@@ -598,16 +598,20 @@ function S.MacroGen:GenerateClassMacros()
     
     -- 3. CREATE / UPDATE Desired Macros
     for _, mac in ipairs(desired) do
+        local body = mac.Body
+        if #body > 255 then
+            body = body:sub(1, 255)
+        end
         local macroID = GetMacroIndexByName(mac.Name)
         
         if macroID > 0 then
             -- Update existing
-            EditMacro(macroID, mac.Name, 1, mac.Body)
+            EditMacro(macroID, mac.Name, 1, body)
         else
             -- Create new (finding space)
             local numAccount, numChar = GetNumMacros()
             if numChar < 18 then
-                CreateMacro(mac.Name, 1, mac.Body, 1) -- 1 = per character
+                CreateMacro(mac.Name, 1, body, 1) -- 1 = per character
             else
                 print("|cFFFF0000Sequito Error:|r Espacio lleno (18/18). No se pudo crear: " .. mac.Name)
             end

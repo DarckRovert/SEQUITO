@@ -77,12 +77,12 @@ Aplica el CC principal de tu clase manteniendo el control del combate:
 ## 🔮 Brujo (Warlock - Necrosis Core)
 
 - **[SeqStart]:** Opener según rama de talentos (Inmolar, Corrupción o Metamorfosis).
-- **[SeqPet]:** Control total de esbirro con un solo botón: Clic ataca, Clic derecho sigue, Shift usa habilidad especial (Imp: Huida, Voidwalker: Sacrificio, Súcubo: Seducción, Felhunter: Bloqueo/Devorar magia).
+- **[SeqPet]:** Control total de esbirro con un solo botón: Clic normal ataca, Alt sigue, y lanza habilidades especiales según el demonio invocado (Manáfago: Bloqueo de hechizo a foco/mouseover o Devorar magia en jugador con Shift; Súcubo: Seducción; Abisario: Sacrificio con Shift).
 - **[SeqHeal]:** Piedra de salud en clic primario; en Shift canaliza salud hacia el demonio.
 - **[SeqBanish]:** Desterrar con prioridad Focus > Mouseover > Objetivo.
 - **[SeqFear]:** Miedo rápido a foco o mouseover sin deseleccionar el objetivo primario.
-- **[SeqDispel]:** Devorar magia sobre aliados o enemigos.
-- **[SeqBurst]:** Metamorfosis + Aura de inmolación + Hender sombras (Demonología) o CDs ofensivos.
+- **[SeqDispel]:** Devorar magia sobre aliados o en el propio jugador con Alt.
+- **[SeqBurst]:** Metamorfosis con Aura de inmolación, uso sincronizado de abalorios (ranuras 13 y 14), guantes de ingeniería (ranura 10) y Poción de velocidad.
 - **[SeqRot]:**
   - *Aflicción:* Descarga de las Sombras; Shift para Poseer/Aflicción inestable; Ctrl para Corrupción; Alt para Drenar alma en fase de ejecución (<25%).
   - *Demonología:* Incinerar/Descarga; Shift para Inmolar; Ctrl para Fuego de alma (proc Diezmar); transformado en demonio activa Aura + Hender sombras.
@@ -92,7 +92,7 @@ Aplica el CC principal de tu clase manteniendo el control del combate:
 
 ## 🛡️ Paladín (Paladin)
 
-- **[SeqBubble]:** Escudo divino + uso de Piedra de hogar ("Bubble Hearth") con frase inmersiva.
+- **[SeqBubble]:** Escudo divino con `/stopcasting` e inmunidad de emergencia; permite cancelación instantánea con tecla Alt (`/cancelaura [mod:alt] Escudo divino`) para no perder aggro de bosses.
 - **[SeqPull]:** Escudo de vengador para tanques con aviso por chat.
 - **[SeqHeal]:** Choque Sagrado en Shift, Luz Sagrada en Ctrl, Destello de Luz con mouseover y jugador.
 - **[SeqRot]:**
