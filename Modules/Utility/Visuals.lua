@@ -96,30 +96,37 @@ end
 function FX:OnUpdate(elapsed)
     if not self:GetOption("heartbeatEnabled") then return end
     
-    local hp = UnitHealth("player")
-    local max = UnitHealthMax("player")
-    local pct = (hp / max) * 100
+    self.throttle = (self.throttle or 0) + elapsed
+    if self.throttle < 0.04 then return end
+    self.throttle = 0
     
     local sphere = S.Sphere
     if not sphere then return end
     
+    local hp = UnitHealth("player")
+    local max = UnitHealthMax("player")
+    local pct = (max and max > 0) and ((hp / max) * 100) or 100
+    
     if pct <= 35 and not UnitIsDeadOrGhost("player") then
+        self.isPulsing = true
         -- Pulsar Rojo
         local speed = 5
         if pct < 20 then speed = 10 end -- Más rápido si es crítico
         
         local sine = math.sin(GetTime() * speed)
-        local red = 1.0
-        local others = 0.5 + (0.5 * sine) -- Oscila entre 0 y 1
+        local others = (sine + 1) / 2 -- Oscila entre 0 y 1
         
-        -- En realidad queremos que el rojo sea dominante y lo demás baje
-        -- Rojo fijo (1), Verde/Azul bajan a 0
-        others = (sine + 1) / 2 -- 0 a 1
-        
-        sphere:GetNormalTexture():SetVertexColor(1, others, others)
-    else
-        -- Restaurar color normal
-        sphere:GetNormalTexture():SetVertexColor(1, 1, 1)
+        local tex = sphere:GetNormalTexture()
+        if tex then
+            tex:SetVertexColor(1, others, others)
+        end
+    elseif self.isPulsing then
+        -- Restaurar color normal solo una vez al salir del estado crítico
+        self.isPulsing = false
+        local tex = sphere:GetNormalTexture()
+        if tex then
+            tex:SetVertexColor(1, 1, 1)
+        end
     end
 end
 

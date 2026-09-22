@@ -35,12 +35,78 @@ if not IsInGroup then
     end
 end
 
--- Addon Message wrapper for PvP modules (FocusFire, DefensiveAlerts, CCCoordinator)
+-- Addon Message wrapper for modules
 function S:SendAddonMessage(prefix, message, channel, target)
     if RegisterAddonMessagePrefix then
         RegisterAddonMessagePrefix(prefix)
     end
     SendAddonMessage(prefix, message, channel, target)
+end
+
+-- Chunked messaging engine to safely transmit arbitrary payloads (>255 bytes) in WoW 3.3.5a
+function S:SendChunkedAddonMessage(prefix, message, channel, target, chunkSize)
+    if not message or message == "" then return end
+    chunkSize = chunkSize or 190
+    
+    if RegisterAddonMessagePrefix then
+        RegisterAddonMessagePrefix(prefix)
+    end
+    
+    if #message <= chunkSize then
+        SendAddonMessage(prefix, "RAW:" .. message, channel, target)
+        return
+    end
+    
+    local msgID = tostring(time()) .. "_" .. math.random(1000, 9999)
+    local totalChunks = math.ceil(#message / chunkSize)
+    
+    for i = 1, totalChunks do
+        local startIdx = (i - 1) * chunkSize + 1
+        local endIdx = math.min(i * chunkSize, #message)
+        local chunk = string.sub(message, startIdx, endIdx)
+        -- Protocol: CHK:ID:INDEX:TOTAL:PAYLOAD
+        local packet = string.format("CHK:%s:%d:%d:%s", msgID, i, totalChunks, chunk)
+        SendAddonMessage(prefix, packet, channel, target)
+    end
+end
+
+-- Receiver buffer for chunked addon messages
+S.ChunkBuffers = {}
+
+function S:ReceiveChunkedAddonMessage(prefix, message, sender, onCompleteCallback)
+    if not message or not onCompleteCallback then return end
+    
+    if message:sub(1, 4) == "RAW:" then
+        onCompleteCallback(message:sub(5), sender)
+        return
+    end
+    
+    if message:sub(1, 4) == "CHK:" then
+        local _, id, idx, total, payload = strsplit(":", message, 5)
+        idx = tonumber(idx)
+        total = tonumber(total)
+        if not id or not idx or not total or not payload then return end
+        
+        local bufferKey = prefix .. "_" .. tostring(sender) .. "_" .. id
+        if not S.ChunkBuffers[bufferKey] then
+            S.ChunkBuffers[bufferKey] = { parts = {}, count = 0, total = total, time = GetTime() }
+        end
+        
+        local buf = S.ChunkBuffers[bufferKey]
+        if not buf.parts[idx] then
+            buf.parts[idx] = payload
+            buf.count = buf.count + 1
+        end
+        
+        if buf.count == buf.total then
+            local completePayload = table.concat(buf.parts, "")
+            S.ChunkBuffers[bufferKey] = nil
+            onCompleteCallback(completePayload, sender)
+        end
+    else
+        -- Fallback for un-prefixed/legacy payloads
+        onCompleteCallback(message, sender)
+    end
 end
 
 -- Database Defaults
@@ -214,8 +280,18 @@ function S:OnEnable()
         "AutoSync", "ContextEngine", "SmartDefaults"
     }
 
+    local _, playerClass = UnitClass("player")
+    local classRestrictions = {
+        Coven = "WARLOCK",
+        Soulstones = "WARLOCK",
+        Runes = "DEATHKNIGHT",
+    }
+
     for _, moduleName in ipairs(modules) do
-        if S[moduleName] and S[moduleName].Initialize then
+        local requiredClass = classRestrictions[moduleName]
+        if requiredClass and requiredClass ~= playerClass then
+            -- Skip module not applicable to current class (memory & CPU saving)
+        elseif S[moduleName] and S[moduleName].Initialize then
             local status, err = pcall(function() S[moduleName]:Initialize() end)
             if not status then
                 print("|cFFFF0000Sequito Error|r: Fallo al iniciar modulo " .. moduleName .. ": " .. tostring(err))

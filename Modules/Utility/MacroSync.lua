@@ -494,7 +494,13 @@ function S.MacroSync:OnEvent(event, ...)
         local prefix, msg, channel, sender = ...
         if prefix == self.Prefix then
             if sender == UnitName("player") then return end
-            self:ParseMessage(msg, sender)
+            if S.ReceiveChunkedAddonMessage then
+                S:ReceiveChunkedAddonMessage(prefix, msg, sender, function(completeMsg, sdr)
+                    S.MacroSync:ParseMessage(completeMsg, sdr)
+                end)
+            else
+                self:ParseMessage(msg, sender)
+            end
         end
     elseif event == "PLAYER_ENTERING_WORLD" then
         -- Delay para asegurar que DB esté cargada
@@ -514,15 +520,27 @@ end
 -- COMUNICACIÓN
 -- ===========================================================================
 function S.MacroSync:Broadcast(msg)
-    if GetNumRaidMembers() > 0 then
-        SendAddonMessage(self.Prefix, msg, "RAID")
-    elseif GetNumPartyMembers() > 0 then
-        SendAddonMessage(self.Prefix, msg, "PARTY")
+    if S.SendChunkedAddonMessage then
+        if GetNumRaidMembers() > 0 then
+            S:SendChunkedAddonMessage(self.Prefix, msg, "RAID")
+        elseif GetNumPartyMembers() > 0 then
+            S:SendChunkedAddonMessage(self.Prefix, msg, "PARTY")
+        end
+    else
+        if GetNumRaidMembers() > 0 then
+            SendAddonMessage(self.Prefix, msg, "RAID")
+        elseif GetNumPartyMembers() > 0 then
+            SendAddonMessage(self.Prefix, msg, "PARTY")
+        end
     end
 end
 
 function S.MacroSync:SendWhisper(msg, target)
-    SendAddonMessage(self.Prefix, msg, "WHISPER", target)
+    if S.SendChunkedAddonMessage then
+        S:SendChunkedAddonMessage(self.Prefix, msg, "WHISPER", target)
+    else
+        SendAddonMessage(self.Prefix, msg, "WHISPER", target)
+    end
 end
 
 function S.MacroSync:ParseMessage(msg, sender)
